@@ -117,6 +117,20 @@ Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, dest
 - Makefile: pas de backend Metal; frameworks AppKit/OpenGL; une seule `put_image_to_window` par frame
 - Couleurs: alpha forcé à 0xFF pour l’affichage correct sur macOS
 - Skeleton: modules, stubs parser/raycast prêts à implémenter
+- Libft: gérée en tant que sous-module Git (`libft`) pour une collaboration propre
+
+### Note: sous-module `libft`
+
+- Pourquoi: éviter d’embarquer un dépôt Git imbriqué non déclaré, et synchroniser facilement les mises à jour de `libft` entre machines.
+- Clonage du projet avec les sous-modules:
+  - Option A (recommandée): `git clone --recurse-submodules git@github.com:hugoganet/cub3D.git`
+  - Option B (si déjà cloné):
+    - `git submodule init`
+    - `git submodule update`
+- Mettre à jour `libft` (récupérer les derniers commits du submodule):
+  - `git submodule update --remote libft`
+  - Puis commiter dans ce repo la nouvelle révision du submodule si souhaité.
+  - Astuce: fixer une branche de suivi dans `.gitmodules` si besoin.
 
 ## 9) Étapes suivantes (recommandées)
 
