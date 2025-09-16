@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+*.dSYM/
+
+# Build artifacts
+cub3D
+*.o
+*.a
+*.out
+*.log
+
+# Libft build outputs
+libft/libft.a
+libft/**/*.o
+
+# MiniLibX (OpenGL) build outputs
+minilibx_opengl/libmlx.a
+minilibx_opengl/*.o
+minilibx_opengl/*.dSYM/
+
+# VS Code / tooling
+.vscode/
+.clangd/
+.ccls-cache/
+.clang-format
+
+# Local tools/cache
+.claude/
