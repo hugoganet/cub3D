@@ -1,3 +1,141 @@
 #include "cub3d.h"
+#include "libft.h"
 
-// TODO: flood fill and adjacency validations
+int find_player(t_app *app)
+{
+	int i, j;
+	int player_count = 0;
+	char player_char = 0;
+
+	i = 0;
+	while (i < app->map.height)
+	{
+		j = 0;
+		while (app->map.grid[i] && app->map.grid[i][j])
+		{
+			char c = app->map.grid[i][j];
+			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+			{
+				player_count++;
+				player_char = c;
+				app->player.pos.x = (double)j + 0.5;
+				app->player.pos.y = (double)i + 0.5;
+
+				// Set direction based on player orientation
+				if (c == 'N') { app->player.dir.x = 0; app->player.dir.y = -1; }
+				else if (c == 'S') { app->player.dir.x = 0; app->player.dir.y = 1; }
+				else if (c == 'E') { app->player.dir.x = 1; app->player.dir.y = 0; }
+				else if (c == 'W') { app->player.dir.x = -1; app->player.dir.y = 0; }
+			}
+			j++;
+		}
+		i++;
+	}
+
+	if (player_count == 0)
+		error_exit(app, "No player found in map (need N, S, E, or W)");
+
+	if (player_count > 1)
+		error_exit(app, "Multiple players found in map (only one allowed)");
+
+	printf("✓ Player found at (%.1f, %.1f) facing %c\n",
+		   app->player.pos.x, app->player.pos.y, player_char);
+
+	return (0);
+}
+
+int check_valid_chars(t_app *app)
+{
+	int i, j;
+
+	i = 0;
+	while (i < app->map.height)
+	{
+		j = 0;
+		while (app->map.grid[i] && app->map.grid[i][j])
+		{
+			char c = app->map.grid[i][j];
+			if (c != '0' && c != '1' && c != ' ' &&
+				c != 'N' && c != 'S' && c != 'E' && c != 'W')
+			{
+				printf("Invalid character '%c' at line %d, col %d\n", c, i, j);
+				error_exit(app, "Invalid character in map");
+			}
+			j++;
+		}
+		i++;
+	}
+
+	printf("✓ All characters in map are valid\n");
+	return (0);
+}
+
+int is_wall_or_void(t_app *app, int x, int y)
+{
+	// Outside map bounds = considered wall
+	if (y < 0 || y >= app->map.height)
+		return (1);
+
+	if (x < 0 || !app->map.grid[y] || x >= (int)ft_strlen(app->map.grid[y]))
+		return (1);
+
+	// Wall or space = OK
+	if (app->map.grid[y][x] == '1' || app->map.grid[y][x] == ' ')
+		return (1);
+
+	return (0);
+}
+
+int check_map_closed(t_app *app)
+{
+	int i, j;
+
+	i = 0;
+	while (i < app->map.height)
+	{
+		j = 0;
+		while (app->map.grid[i] && app->map.grid[i][j])
+		{
+			char c = app->map.grid[i][j];
+
+			// If it's a floor or player, check if surrounded properly
+			if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
+			{
+				// Check all 4 directions
+				if (!is_wall_or_void(app, j-1, i) || !is_wall_or_void(app, j+1, i) ||
+					!is_wall_or_void(app, j, i-1) || !is_wall_or_void(app, j, i+1))
+				{
+					// If adjacent to void, check borders
+					if (i == 0 || i == app->map.height - 1 || j == 0 ||
+						j == (int)ft_strlen(app->map.grid[i]) - 1)
+					{
+						printf("Map not closed at (%d, %d)\n", j, i);
+						error_exit(app, "Map is not properly closed by walls");
+					}
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+
+	printf("✓ Map is properly closed\n");
+	return (0);
+}
+
+int validate_map(t_app *app)
+{
+	printf("🔍 Validating map...\n");
+
+	// 1. Check valid characters
+	check_valid_chars(app);
+
+	// 2. Find and validate player
+	find_player(app);
+
+	// 3. Check if map is closed
+	check_map_closed(app);
+
+	printf("✅ Map validation successful!\n");
+	return (0);
+}

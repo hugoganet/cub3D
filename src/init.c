@@ -16,7 +16,9 @@ static int create_frame(t_app *app, int w, int h)
 
 int app_init(t_app *app, int w, int h)
 {
-	ft_bzero(app, sizeof(*app));
+	// Sauvegarder les données importantes
+	app->win_w = w;
+	app->win_h = h;
 	app->mlx = mlx_init();
 	if (!app->mlx)
 		return (ft_putendl_fd("Error\nmlx_init failed", 2), -1);
@@ -26,10 +28,12 @@ int app_init(t_app *app, int w, int h)
 	if (create_frame(app, w, h) != 0)
 		return (ft_putendl_fd("Error\nmlx_new_image failed", 2), -1);
 
-	// Default player (will be overridden by parser)
-	app->player.pos = (t_vec2){2.5, 2.5};
-	app->player.dir = (t_vec2){-1.0, 0.0};
-	app->player.plane = (t_vec2){0.0, 0.66};
+    // Le joueur est déjà initialisé par find_player() dans validate_map()
+    // Pas besoin de le réinitialiser ici !
+	// // Default player (will be overridden by parser)
+	// app->player.pos = (t_vec2){2.5, 2.5};
+	// app->player.dir = (t_vec2){-1.0, 0.0};
+	// app->player.plane = (t_vec2){0.0, 0.66};
 	return (0);
 }
 

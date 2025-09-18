@@ -42,7 +42,8 @@ void init_defaults(t_app *app)
  * 4. GESTION D'ERREUR
  *    - Si le parsing échoue → nettoie la mémoire et retourne 1
  *    - Si tout va bien → retourne 0 (succès)
- *
+ * 5. VALIDATION DE LA MAP
+ * 		- Verifie si la map est correcte et jouable
  * RETOUR :
  * - 0 : Parsing réussi, l'app est prête pour le jeu
  * - 1 : Erreur détectée, le programme doit s'arrêter
@@ -51,18 +52,27 @@ void init_defaults(t_app *app)
 
 int	parsing(t_app *app, int argc, char **argv)
 {
+	// ÉTAPE 1 : Valider les arguments
 	if (parse_input(app, argc, argv) == 1)
 		return 1;
-	// Initialiser l'app de base
+
+	// ÉTAPE 2 : Initialiser l'app AVANT le parsing
 	ft_memset(app, 0, sizeof(t_app));
 	init_defaults(app);
+
+	// ÉTAPE 3 : Parser le fichier .cub
 	if (parse_cub_file(app, argv[1]) == 1)
 	{
 		app_destroy(app, 1);
 		return (1);
 	}
+
+	// ÉTAPE 4 : Valider la map
+	validate_map(app);
+
 	return 0;
 }
+
 int	parse_input(t_app *app, int argc, char **argv)
 {
 	(void)app;

@@ -95,6 +95,14 @@ typedef struct s_app
 	double rot_speed;
 } t_app;
 
+typedef struct s_parse_counters
+{
+    int texture_count;
+    int color_count;
+    int map_started;
+    int map_line_index;
+} t_parse_counters;
+
 // Entry points
 int app_init(t_app *app, int w, int h);
 void app_destroy(t_app *app, int code);
@@ -129,7 +137,13 @@ int parse_color_line(t_app *app, char *line);
 int count_map_lines(const char *path);
 int init_map(t_app *app, const char *path);
 int add_map_line(t_app *app, char *line, int line_index);
-
+int is_empty_line(char *line);
+void parse_single_line(t_app *app, char *line, t_parse_counters *counters, const char *path);
+int validate_map(t_app *app);
+int check_map_closed(t_app *app);
+int is_wall_or_void(t_app *app, int x, int y);
+int check_valid_chars(t_app *app);
+int find_player(t_app *app);
 
 // GNL
 char *get_next_line(int fd);

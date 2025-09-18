@@ -37,6 +37,7 @@ SRC	:= \
 	$(SRCDIR)/parser/parsing_utils.c \
 	$(SRCDIR)/utils/errors.c \
 	get_next_line/gnl.c \
+	$(SRCDIR)/parser/validate_map.c \
 	$(SRCDIR)/utils/mem.c
 
 # Placeholders for future implementation (compiled but may be unused for now)
@@ -44,7 +45,6 @@ SRC += \
 	$(SRCDIR)/render/raycast.c \
 	$(SRCDIR)/render/dda.c \
 	$(SRCDIR)/parser/parse_headers.c \
-	$(SRCDIR)/parser/validate_map.c \
 	$(SRCDIR)/parser/colors.c \
 	$(SRCDIR)/utils/math.c
 
