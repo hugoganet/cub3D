@@ -11,18 +11,16 @@ SRCDIR		:= src
 LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
-### MiniLibX configuration (OpenGL only on macOS)
-# Prefer local MLX checkout if present; override with MLX_DIR=/path/to/mlx
-MLX_DIR		?= minilibx_opengl
-MLX_LIB_SUB	:= $(MLX_DIR)/lib
-MLX_INC		:= $(MLX_DIR)/include
+MLX_DIR		?= minilibx-linux
+MLX_LIB_SUB	:= $(MLX_DIR)
+MLX_INC		:= $(MLX_DIR)
 
-# Search both MLX root and lib/ for the library
-MLX_LDIRS	:= -L$(MLX_DIR) -L$(MLX_LIB_SUB)
-MLX_FLAGS	:= $(MLX_LDIRS) -lmlx -framework OpenGL -framework AppKit
+MLX_LDIRS	:= -L$(MLX_DIR)
+MLX_FLAGS	:= $(MLX_LDIRS) -lmlx -lXext -lX11 -lm
+INCS		:= -I$(INCDIR) -I$(MLX_INC) -I$(MLX_DIR)
 
 # Also include $(MLX_DIR) to handle MLX trees where mlx.h is at repo root
-INCS		:= -I$(INCDIR) -I$(MLX_INC) -I$(MLX_DIR) -I$(LIBFT_DIR)/includes
+INCS := -I$(INCDIR) -I$(MLX_INC) -I$(MLX_DIR) -I$(LIBFT_DIR)/includes -I$(LIBFT_DIR)
 
 SRC	:= \
 	$(SRCDIR)/main.c \
@@ -32,7 +30,13 @@ SRC	:= \
 	$(SRCDIR)/render/draw.c \
 	$(SRCDIR)/render/textures.c \
 	$(SRCDIR)/parser/parse_file.c \
+	$(SRCDIR)/parser/parse_input.c \
+	$(SRCDIR)/parser/parse_tex.c \
+	$(SRCDIR)/parser/parse_map.c \
+	$(SRCDIR)/parser/parse_color.c \
+	$(SRCDIR)/parser/parsing_utils.c \
 	$(SRCDIR)/utils/errors.c \
+	get_next_line/gnl.c \
 	$(SRCDIR)/utils/mem.c
 
 # Placeholders for future implementation (compiled but may be unused for now)
@@ -40,7 +44,6 @@ SRC += \
 	$(SRCDIR)/render/raycast.c \
 	$(SRCDIR)/render/dda.c \
 	$(SRCDIR)/parser/parse_headers.c \
-	$(SRCDIR)/parser/parse_map.c \
 	$(SRCDIR)/parser/validate_map.c \
 	$(SRCDIR)/parser/colors.c \
 	$(SRCDIR)/utils/math.c

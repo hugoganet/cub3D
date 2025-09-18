@@ -3,6 +3,10 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
 
 // Forward declarations for MiniLibX types to avoid including mlx.h in headers
 typedef struct s_mlx s_mlx;
@@ -38,6 +42,11 @@ typedef struct s_textures
 	t_img south;
 	t_img west;
 	t_img east;
+	// chemins des fichiers
+	char *north_path;
+	char *south_path;
+	char *west_path;
+	char *east_path;
 	bool loaded;
 } t_textures;
 
@@ -105,8 +114,29 @@ int load_textures(t_app *app);
 void free_textures(t_app *app);
 
 // Parser
+void init_defaults(t_app *app);
+int parse_texture_line(t_app *app, char *line);
 int parse_cub_file(t_app *app, const char *path);
+int parsing(t_app *app, int argc, char **argv);
+int parse_input(t_app *app, int argc, char **argv);
+int count_lines(const char *filename);
+int is_map_line(char *line);
+int is_color_line(char *line);
+int is_texture_line(char *line);
+int parse_rgb_values(const char *rgb_str, t_color *color);
+char *extract_rgb_string(char *line);
+int parse_color_line(t_app *app, char *line);
+int count_map_lines(const char *path);
+int init_map(t_app *app, const char *path);
+int add_map_line(t_app *app, char *line, int line_index);
 
+
+// GNL
+char *get_next_line(int fd);
+char	*freebuff(char **principal_buff);
+char	*ft_new_buff(char *principal_buff);
+char	*ft_create_line(char *principal_buff);
+char	*ft_explore_text(char *principal_buff, int fd);
 // Utils
 void error_exit(t_app *app, const char *msg);
 void free_split(char **arr);
