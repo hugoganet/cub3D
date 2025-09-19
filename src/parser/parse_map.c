@@ -3,102 +3,108 @@
 
 int count_map_lines(const char *path)
 {
-	int fd;
-	char *line;
-	int map_lines = 0;
-	int map_started = 0;
+    int fd;
+    char *line;
+    int map_lines = 0;
+    int map_started = 0;
 
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (-1);
+    fd = open(path, O_RDONLY);
+    if (fd < 0)
+        return (-1);
 
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		// Skip empty lines
-		if (ft_strlen(line) == 0 || line[0] == '\n')
-		{
-			free(line);
-			continue;
-		}
+    printf("🔍 Counting map lines...\n");
 
-		// Check if we've reached the map section
-		if (is_map_line(line))
-		{
-			map_started = 1;
-			map_lines++;
-		}
-		else if (map_started)
-		{
-			// If we were in map section and hit non-map line, stop counting
-			free(line);
-			break;
-		}
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("  COUNT: line='%s' (len=%d)\n", line, (int)ft_strlen(line));
 
-		free(line);
-	}
+        // Skip empty lines
+        if (ft_strlen(line) == 0 || line[0] == '\n')
+        {
+            printf("  → SKIPPING empty line\n");
+            free(line);
+            continue;
+        }
 
-	close(fd);
-	return (map_lines);
+        // Check if we've reached the map section
+        if (is_map_line(line))
+        {
+            map_started = 1;
+            map_lines++;
+            printf("  → MAP LINE %d: '%s'\n", map_lines, line);
+        }
+        else if (map_started)
+        {
+            printf("  → END of map section\n");
+            free(line);
+            break;
+        }
+        else
+        {
+            printf("  → NON-MAP line\n");
+        }
+
+        free(line);
+    }
+
+    close(fd);
+    printf("✓ Total map lines counted: %d\n", map_lines);
+    return (map_lines);
 }
 
-int init_map(t_app *app, const char *path)
+int init_map(t_app *app)
 {
-	int map_lines;
+    // PAS de count_map_lines() ! On va allouer dynamiquement
 
-	// Compter le nombre de lignes de la map
-	map_lines = count_map_lines(path);
-	if (map_lines <= 0)
-		error_exit(app, "No valid map found");
+    // Commencer avec une taille raisonnable
+    app->map.height = 0;
+    app->map.width = 0;
+    app->map.grid = NULL; // Sera alloué dans add_map_line
 
-	// Allouer le tableau de pointeurs pour les lignes
-	app->map.grid = malloc(sizeof(char *) * (map_lines + 1));
-	if (!app->map.grid)
-		error_exit(app, "Memory allocation failed for map");
-
-	// Initialiser
-	app->map.height = map_lines;
-	app->map.width = 0;  // Will be determined when we add lines
-
-	// Initialiser tous les pointeurs à NULL
-	for (int i = 0; i <= map_lines; i++)
-		app->map.grid[i] = NULL;
-
-	printf("✓ Map initialized: %d lines allocated\n", map_lines);
-	return (0);
+    printf("✓ Map initialized: dynamic allocation\n");
+    return (0);
 }
 
 int add_map_line(t_app *app, char *line, int line_index)
 {
-	int len;
-	char *map_line;
-	int i, j;
+    int len;
+    char *map_line;
+    char **new_grid;
+    int i, j;
 
-	if (!line)
-		return (1);
+    if (!line)
+        return (1);
 
-	// Calculer la longueur sans le \n
-	len = ft_strlen(line);
-	if (len > 0 && line[len - 1] == '\n')
-		len--;
+    // Calculer la longueur sans le \n
+    len = ft_strlen(line);
+    if (len > 0 && line[len - 1] == '\n')
+        len--;
 
-	// Allouer et copier la ligne
-	map_line = malloc(len + 1);
-	if (!map_line)
-		error_exit(app, "Memory allocation failed for map line");
+    // Allouer et copier la ligne
+    map_line = malloc(len + 1);
+    if (!map_line)
+        error_exit(app, "Memory allocation failed for map line");
 
-	// Copier en ignorant le \n
-	j = 0;
-	for (i = 0; i < len; i++)
-		map_line[j++] = line[i];
-	map_line[j] = '\0';
+    // Copier en ignorant le \n
+    j = 0;
+    for (i = 0; i < len; i++)
+        map_line[j++] = line[i];
+    map_line[j] = '\0';
 
-	// Stocker dans la map
-	app->map.grid[line_index] = map_line;
+    // Réallouer le tableau si nécessaire
+    new_grid = realloc(app->map.grid, sizeof(char *) * (line_index + 2));
+    if (!new_grid)
+        error_exit(app, "Memory reallocation failed for map");
 
-	// Mettre à jour la largeur si nécessaire
-	if (len > app->map.width)
-		app->map.width = len;
+    app->map.grid = new_grid;
+    app->map.grid[line_index] = map_line;
+    app->map.grid[line_index + 1] = NULL; // Terminer avec NULL
 
-	printf("✓ Added map line %d: '%s' (len=%d)\n", line_index, map_line, len);
-	return (0);
+    // Mettre à jour les dimensions
+    app->map.height = line_index + 1;
+    if (len > app->map.width)
+        app->map.width = len;
+
+    printf("✓ Added map line %d: '%s' (len=%d)\n", line_index, map_line, len);
+    return (0);
 }

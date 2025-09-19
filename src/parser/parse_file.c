@@ -2,49 +2,49 @@
 #include "libft.h"
 
 
-void parse_single_line(t_app *app, char *line, t_parse_counters *counters, const char *path)
+void parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 {
-	// Parser les textures
-	if (is_texture_line(line) && !counters->map_started)
-	{
-		printf("Found texture: %s", line);
-		parse_texture_line(app, line);
-		counters->texture_count++;
-	}
-	// Parser les couleurs
-	else if (is_color_line(line) && !counters->map_started)
-	{
-		printf("Found color: %s", line);
-		parse_color_line(app, line);
-		counters->color_count++;
-	}
-	// Parser la map
-	else if (is_map_line(line))
-	{
-		if (!counters->map_started)
-		{
-			printf("Map section started\n");
-			counters->map_started = 1;
-			init_map(app, path);
-		}
-		printf("Map line: %s", line);
-		add_map_line(app, line, counters->map_line_index);
-		counters->map_line_index++;
-	}
-	else
-	{
-		printf("Unknown line format: %s", line);
-		error_exit(app, "Invalid file format");
-	}
+    printf("DEBUG: Processing line: '%s' (len=%d)\n", line, (int)ft_strlen(line));
+
+    // Parser les textures
+    if (is_texture_line(line) && !counters->map_started)
+    {
+        printf("Found texture: %s", line);
+        parse_texture_line(app, line);
+        counters->texture_count++;
+    }
+    // Parser les couleurs
+    else if (is_color_line(line) && !counters->map_started)
+    {
+        printf("Found color: %s", line);
+        parse_color_line(app, line);
+        counters->color_count++;
+    }
+    // Parser la map
+    else if (is_map_line(line))
+    {
+        printf("DEBUG: Map line detected: '%s'\n", line);
+        if (!counters->map_started)
+        {
+            printf("Map section started\n");
+            counters->map_started = 1;
+            init_map(app);
+        }
+        printf("Map line: %s", line);
+        add_map_line(app, line, counters->map_line_index);
+        counters->map_line_index++;
+    }
+    else
+    {
+        printf("Unknown line format: %s", line);
+        error_exit(app, "Invalid file format");
+    }
 }
 
 int is_empty_line(char *line)
 {
 	return (ft_strlen(line) == 0 || line[0] == '\n');
 }
-
-
-
 
 
 
@@ -78,23 +78,21 @@ int parse_cub_file(t_app *app, const char *path)
 {
 	int fd;
 	char *line;
-	int line_count;
 	t_parse_counters counters = {0};
 	// Ouvrir le fichier
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		error_exit(app, "Cannot open file");
 
-	// Compter les lignes pour allouer la map
-	line_count = count_lines(path);
-	if (line_count < 0)
-		error_exit(app, "Error reading file");
-
    // Lire le fichier ligne par ligne
 	while ((line = get_next_line(fd)) != NULL)
 	{
-		if (!is_empty_line(line))
-			parse_single_line(app, line, &counters, path);
+		if (is_empty_line(line))
+	    {
+        	free(line);
+        	continue;  // Ignorer complètement les lignes vides
+    	}
+		parse_single_line(app, line, &counters);
 		free(line);
 	}
 

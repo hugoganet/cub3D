@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-static void apply_movement(t_app *app)
+void apply_movement(t_app *app)
 {
 	double ms = app->move_speed;
 	double rs = app->rot_speed;
@@ -52,10 +52,16 @@ static void apply_movement(t_app *app)
 
 int app_loop(t_app *app)
 {
-	apply_movement(app);
-	render_frame(app);
-	mlx_put_image_to_window(app->mlx, app->win, app->frame.ptr, 0, 0);
-	return (0);
+    // Fond noir
+    fill_background(app, 0x000000);
+
+    // Dessiner la minimap
+    render_minimap(app);
+
+    // Afficher le frame
+    mlx_put_image_to_window(app->mlx, app->win, app->frame.ptr, 0, 0);
+
+    return (0);
 }
 
 int close_window(t_app *app)

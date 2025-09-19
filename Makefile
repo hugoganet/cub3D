@@ -28,6 +28,7 @@ SRC	:= \
 	$(SRCDIR)/loop.c \
 	$(SRCDIR)/input/keys.c \
 	$(SRCDIR)/render/draw.c \
+	$(SRCDIR)/render/minimap.c \
 	$(SRCDIR)/render/textures.c \
 	$(SRCDIR)/parser/parse_file.c \
 	$(SRCDIR)/parser/parse_input.c \
