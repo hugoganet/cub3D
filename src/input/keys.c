@@ -1,16 +1,10 @@
 #include "cub3d.h"
-#include <stdlib.h>
 
-#define KEY_ESC 65307
-#define KEY_W 119
-#define KEY_A 97
-#define KEY_S 115
-#define KEY_D 100
-#define KEY_LEFT 65361
-#define KEY_RIGHT 65363
-
+// Fonction appelée quand une touche est pressée
 int key_press(int keycode, t_app *app)
 {
+	printf("🔵 Key pressed: %d\n", keycode);  // Debug pour voir les codes
+
 	if (keycode == KEY_ESC)
 		close_window(app);
 	else if (keycode == KEY_W)
@@ -28,8 +22,11 @@ int key_press(int keycode, t_app *app)
 	return (0);
 }
 
+// Fonction appelée quand une touche est relâchée
 int key_release(int keycode, t_app *app)
 {
+	printf("🔴 Key released: %d\n", keycode);  // Debug
+
 	if (keycode == KEY_W)
 		app->keys.w = false;
 	else if (keycode == KEY_A)

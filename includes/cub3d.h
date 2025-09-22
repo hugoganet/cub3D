@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include "libft.h"
+#include <math.h>
 
 /* ========================================================================== */
 /*                             CONSTANTS                                     */
@@ -227,6 +229,14 @@ void	free_textures(t_app *app);
 int		key_press(int keycode, t_app *app);
 int		key_release(int keycode, t_app *app);
 int		close_window(t_app *app);
+bool	is_valid_position(t_app *app, double x, double y);
+void	print_player_debug(t_app *app);
+void	print_keys_debug(t_app *app);
+void	move_player_forward_backward(t_app *app, int direction);
+void	move_player_strafe(t_app *app, int direction);
+void	update_player_movement(t_app *app);
+void	rotate_player(t_app *app, int direction);
+void	move_player(t_app *app, double move_x, double move_y);
 
 // ============================================================================
 //                              UTILITIES
