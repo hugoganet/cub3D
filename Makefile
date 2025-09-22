@@ -37,7 +37,6 @@ SRC	:= \
 	$(SRCDIR)/parser/parse_color.c \
 	$(SRCDIR)/parser/parsing_utils.c \
 	$(SRCDIR)/utils/errors.c \
-	get_next_line/gnl.c \
 	$(SRCDIR)/parser/validate_map.c \
 	$(SRCDIR)/utils/mem.c
 

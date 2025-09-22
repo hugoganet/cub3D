@@ -109,6 +109,15 @@ Avantages:
   - Les modifications de fichiers sont synchronisées automatiquement dans les deux sens
   - Le dossier `.claude/` est synchronisé pour maintenir les configurations cohérentes
 
+- **MLX_INIT TROUBLESHOOTING** (CRITIQUE):
+  - Si `mlx_init failed`: TOUJOURS vérifier `DISPLAY` en premier
+  - Test rapide: `env DISPLAY=:0 ./cub3D maps/sample.cub`
+  - Diagnostic: créer test minimal avec `mlx_init()` seul
+  - Root cause: MLX nécessite connexion X11 valide pour initialiser
+  - **Solution permanente**: Alias configuré dans ~/.bashrc
+    - Usage: `cub3d maps/sample.cub` (DISPLAY automatiquement défini)
+    - Si l'alias ne marche pas: `source ~/.bashrc` ou nouvelle session SSH
+
 Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, destruction) dans des fonctions dédiées pour limiter les différences entre plateformes.
 
 ## 6) État actuel et prochaines étapes
