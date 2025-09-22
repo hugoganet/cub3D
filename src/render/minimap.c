@@ -75,9 +75,19 @@ void render_minimap(t_app *app)
 
 void get_ray_direction(t_app *app, int ray_index, int total_rays, t_vec2 *ray_dir)
 {
-    double camera_x = 2 * ray_index / (double)total_rays - 1;
-    ray_dir->x = app->player.dir.x + app->player.plane.x * camera_x;
-    ray_dir->y = app->player.dir.y + app->player.plane.y * camera_x;
+    // Spread rays from -30° to +30° (60° total FOV)
+    double fov_radians = M_PI / 3.0; // 60 degrees in radians
+    double angle_step = fov_radians / (total_rays - 1);
+    double ray_angle = -fov_radians / 2.0 + ray_index * angle_step;
+
+    // Get player's current direction angle
+    double player_angle = atan2(app->player.dir.y, app->player.dir.x);
+
+    // Calculate final ray angle
+    double final_angle = player_angle + ray_angle;
+
+    ray_dir->x = cos(final_angle);
+    ray_dir->y = sin(final_angle);
 }
 
 void render_minimap_rays(t_app *app)

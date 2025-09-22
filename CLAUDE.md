@@ -142,7 +142,7 @@ Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, dest
 4. **Minimap fonctionnelle**: affichage temps réel, position joueur, murs/sols
 5. **Architecture modulaire**: parser/, render/, input/, utils/ opérationnels
 6. **Cross-platform**: switch macOS OpenGL → Linux X11, Makefile adapté
-7. **Ray visualization sur minimap**: 20 rayons verts montrant FOV du joueur, DDA pour collision murs, ligne Bresenham
+7. **Ray visualization sur minimap**: 20 rayons verts étalés sur 60° FOV (-30° à +30°), DDA pour collision murs
 
 ### 🔄 À faire
 1. **Raycasting 3D**: DDA, distance perpendiculaire, murs colorés
