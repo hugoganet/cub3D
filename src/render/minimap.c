@@ -1,5 +1,6 @@
 #include "cub3d.h"
 #include "libft.h"
+#include <math.h>
 
 void draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
 {
@@ -68,5 +69,38 @@ void render_minimap(t_app *app)
         y++;
     }
 
+    render_minimap_rays(app);
     draw_player_on_minimap(app);
+}
+
+void get_ray_direction(t_app *app, int ray_index, int total_rays, t_vec2 *ray_dir)
+{
+    double camera_x = 2 * ray_index / (double)total_rays - 1;
+    ray_dir->x = app->player.dir.x + app->player.plane.x * camera_x;
+    ray_dir->y = app->player.dir.y + app->player.plane.y * camera_x;
+}
+
+void render_minimap_rays(t_app *app)
+{
+    int i;
+    t_vec2 ray_dir;
+    t_vec2 hit_point;
+
+    i = 0;
+    while (i < MINIMAP_RAY_COUNT)
+    {
+        get_ray_direction(app, i, MINIMAP_RAY_COUNT, &ray_dir);
+
+        if (cast_minimap_ray(app, ray_dir, &hit_point))
+        {
+            int player_screen_x = MINIMAP_OFFSET_X + (int)(app->player.pos.x * MINIMAP_SCALE);
+            int player_screen_y = MINIMAP_OFFSET_Y + (int)(app->player.pos.y * MINIMAP_SCALE);
+            int hit_screen_x = MINIMAP_OFFSET_X + (int)(hit_point.x * MINIMAP_SCALE);
+            int hit_screen_y = MINIMAP_OFFSET_Y + (int)(hit_point.y * MINIMAP_SCALE);
+
+            draw_line(app, player_screen_x, player_screen_y,
+                     hit_screen_x, hit_screen_y, COLOR_RAY);
+        }
+        i++;
+    }
 }
