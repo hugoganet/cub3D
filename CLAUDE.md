@@ -70,33 +70,66 @@ Avantages:
 
 ## 5) Cross-plateforme: macOS et Linux
 
-- macOS (début du dev):
+### Environnement de développement
+
+- **macOS (machine hôte)**:
   - MiniLibX OpenGL (frameworks AppKit/OpenGL)
   - Pixels: ARGB32; penser à mettre alpha = 0xFF pour voir les couleurs (fait dans `rgb_to_int`)
-- Linux (bientôt: VM + Valgrind):
+  - Chemin du projet: `/Users/hugoganet/Code/42/cub3D`
+
+- **Linux VM (machine virtuelle)**:
+  - IP: `192.168.64.5`
+  - Utilisateur: `hganet`
+  - Chemin du projet: `/home/hganet/cub3D`
   - MiniLibX X11 (libXext, libX11, libm, zlib)
-  - Il faudra adapter le Makefile:
-    - Remplacer frameworks par `-lmlx -lXext -lX11 -lm -lz` et inclure `-I/usr/include` / `-L/usr/lib` selon l’install
-    - Option: garder deux branches de Makefile (macOS/Linux) basculées via une variable d’environnement (`OS=linux`)
-  - Valgrind:
-    - Utile pour traquer les fuites dans parser, textures, map, images MLX
-    - Attention: certaines libs graphiques peuvent bruiter la sortie; focus sur vos allocations (map, strings, textures)
+  - Makefile adapté: `-lmlx -lXext -lX11 -lm -lz` et `-I/usr/include` / `-L/usr/lib`
+  - Valgrind disponible pour détecter les fuites mémoire
+
+### Synchronisation et connectivité
+
+- **SSH**:
+  - Clé SSH: `~/.ssh/vm_dev` (doit être chargée dans l'agent SSH: `ssh-add ~/.ssh/vm_dev`)
+  - Connexion: `ssh hganet@192.168.64.5`
+
+- **Mutagen**:
+  - Synchronisation bidirectionnelle entre macOS et Linux VM
+  - Session: `cub3d-sync` synchronise `/Users/hugoganet/Code/42/cub3D` ↔ `/home/hganet/cub3D`
+  - Fichiers ignorés: `.git/` (les dossiers git ne sont pas synchronisés)
+  - Configuration globale: `~/.mutagen/.mutagen.yml` (ignore automatiquement `*.o`, `*.a`, `.DS_Store`, etc.)
+  - Commandes utiles:
+    - `mutagen sync list cub3d-sync` - vérifier l'état de la synchronisation
+    - `mutagen sync flush cub3d-sync` - forcer une synchronisation
+    - `mutagen sync terminate cub3d-sync` - arrêter la session
+
+- **Important pour le debug**:
+  - Si la synchronisation ne fonctionne pas, vérifier:
+    1. SSH agent a la clé: `ssh-add -l` (sinon: `ssh-add ~/.ssh/vm_dev`)
+    2. Connexion SSH fonctionne: `ssh hganet@192.168.64.5 'echo OK'`
+    3. Mutagen est connecté: `mutagen sync list cub3d-sync | grep Connected`
+  - Les modifications de fichiers sont synchronisées automatiquement dans les deux sens
+  - Le dossier `.claude/` est synchronisé pour maintenir les configurations cohérentes
 
 Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, destruction) dans des fonctions dédiées pour limiter les différences entre plateformes.
 
-## 6) Roadmap incrémentale
+## 6) État actuel et prochaines étapes
 
-1. Boot minimal (fait): fenêtre, fond ciel/sol, boucle, entrées basiques
-2. Parser `.cub` (à faire):
-   - En-têtes (textures/couleurs)
-   - Map (collecte, pad, validation), position + direction/plane
-3. Raycasting sans textures (à faire):
-   - DDA, distance perpendiculaire, murs en couleurs unies par côté
-4. Texturage murs (à faire):
-   - `wallX`, `texX`, pas vertical; chargement XPM; sampling `addr/bpp/line_len`
-5. Collision (à faire): grid + petite hitbox
-6. Linux/Valgrind (à prévoir tôt):
-   - Adapter Makefile Linux, tester `make`, puis valgrind sur parsing et fermeture propre
+### ✅ Implémenté
+1. **Boot minimal**: fenêtre, boucle MLX, entrées basiques
+2. **Parser complet**:
+   - Parse headers (textures NO/SO/WE/EA, couleurs F/C)
+   - Parse et validation map avec flood-fill
+   - Position et direction joueur (N/S/E/W → dir/plane)
+   - Gestion erreurs avec cleanup mémoire
+3. **Validation robuste**: caractères autorisés, map fermée, spawn unique
+4. **Minimap fonctionnelle**: affichage temps réel, position joueur, murs/sols
+5. **Architecture modulaire**: parser/, render/, input/, utils/ opérationnels
+6. **Cross-platform**: switch macOS OpenGL → Linux X11, Makefile adapté
+
+### 🔄 À faire
+1. **Raycasting 3D**: DDA, distance perpendiculaire, murs colorés
+2. **Texturage murs**: chargement XPM, wallX/texX, sampling vertical
+3. **Mouvement joueur**: collision grid-based, rotation, strafe
+4. **Tests Valgrind**: validation mémoire sur parsing/cleanup
 
 ## 7) Gestion des ressources et erreurs
 
@@ -111,20 +144,14 @@ Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, dest
   - `mlx_destroy_window` (et `mlx_destroy_display` sur Linux)
   - `free` sur map et structures
 
-## 8) Décisions actées dans ce dépôt
+## 8) Configuration actuelle
 
-- MiniLibX: dossier local `minilibx_opengl` (OpenGL), intégré au build
-- Makefile: pas de backend Metal; frameworks AppKit/OpenGL; une seule `put_image_to_window` par frame
-- Couleurs: alpha forcé à 0xFF pour l'affichage correct sur macOS
-- Skeleton: modules, stubs parser/raycast prêts à implémenter
-- Libft: intégrée directement dans le dépôt (dossier `libft`) pour simplifier la gestion du projet
-
-## 9) Étapes suivantes (recommandées)
-
-- Implémenter le parser (headers → map → validation) + erreurs propres
-- Écrire un test map minimal (déjà `maps/sample.cub`) et quelques maps de bords (trous, espaces, spawns multiples)
-- Implémenter DDA + murs plats, puis texturage
-- Préparer Makefile Linux et vérification Valgrind (dès que parser est en place)
+- **MiniLibX**: Linux X11 (submodule `minilibx-linux`)
+- **Libft**: intégrée directement (dossier `libft/`) avec ft_printf, get_next_line
+- **Build**: Makefile Linux compatible, link `-lmlx -lXext -lX11 -lm -lz`
+- **Parser**: modules complets pour .cub (colors.c, parse_tex.c, validate_map.c, etc.)
+- **Structures**: `t_app`, `t_player`, `t_map` définies et utilisées
+- **Maps test**: `sample.cub` (valide), `error.cub` (test erreurs)
 
 ---
 
