@@ -153,9 +153,102 @@ Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, dest
   - `mlx_destroy_window` (et `mlx_destroy_display` sur Linux)
   - `free` sur map et structures
 
-## 8) Configuration actuelle
+## 8) Workflow Git pour collaboration 42
 
-- **MiniLibX**: Linux X11 (submodule `minilibx-linux`)
+### Structure des branches
+
+Le projet utilise un workflow Git structuré pour faciliter la collaboration entre les membres de l'équipe:
+
+```
+main                    # Branche principale (production)
+  └── consolidation     # Branche d'intégration
+        ├── hugo/*      # Branches de features Hugo
+        └── nicolas/*   # Branches de features Nicolas
+```
+
+### Règles de nommage des branches
+
+- **Format**: `<prenom>/<nom-feature>`
+- **Exemples**:
+  - `hugo/raycasting`
+  - `hugo/textures`
+  - `nicolas/minimap`
+  - `nicolas/collision`
+
+### Processus de développement
+
+1. **Création de feature branch**:
+   ```bash
+   git checkout consolidation
+   git pull origin consolidation
+   git checkout -b hugo/ma-feature
+   ```
+
+2. **Développement**:
+   - Travailler sur sa branche feature
+   - Commits réguliers avec messages Commitizen
+   - Push vers origin: `git push -u origin hugo/ma-feature`
+
+3. **Pull Request vers consolidation**:
+   - Quand la feature est terminée, créer une PR de `hugo/ma-feature` → `consolidation`
+   - Titre PR: `feat(scope): description` (style Commitizen)
+   - Description: liste des changements principaux
+   - Assigner le coéquipier pour review
+
+4. **Review et merge dans consolidation**:
+   - Le coéquipier review la PR
+   - Discussion si nécessaire
+   - Merge dans `consolidation` après validation
+
+5. **Intégration dans main**:
+   - Quand les deux features sont merged dans `consolidation`
+   - Tester l'intégration complète
+   - Créer une PR de `consolidation` → `main`
+   - Les deux coéquipiers approuvent avant merge
+
+### Commandes Git essentielles pour l'IA
+
+- **Créer une nouvelle branche feature**:
+  ```bash
+  git checkout consolidation && git pull
+  git checkout -b <nom>/<feature>
+  ```
+
+- **Créer une Pull Request**:
+  ```bash
+  gh pr create --base consolidation --title "type(scope): description"
+  ```
+
+- **Lister les PR ouvertes**:
+  ```bash
+  gh pr list
+  ```
+
+- **Voir le statut d'une PR**:
+  ```bash
+  gh pr view <numero>
+  ```
+
+### Instructions pour l'IA
+
+1. **TOUJOURS** créer des branches avec le format `<prenom>/<feature>`
+2. **JAMAIS** pusher directement sur `main` ou `consolidation`
+3. **TOUJOURS** créer une PR pour merger dans `consolidation`
+4. **NE PAS** merger de `consolidation` vers `main` sans validation explicite
+5. **UTILISER** les commandes `gh` pour gérer les PR programmatiquement
+6. **RESPECTER** le style Commitizen pour tous les commits et PR
+
+### Résolution de conflits
+
+En cas de conflit lors du merge dans `consolidation`:
+1. Pull la dernière version de `consolidation`
+2. Merger `consolidation` dans la feature branch
+3. Résoudre les conflits localement
+4. Push et mettre à jour la PR
+
+## 9) Configuration actuelle
+
+- **MiniLibX**: Linux X11 (intégrée directement, plus de submodule)
 - **Libft**: intégrée directement (dossier `libft/`) avec ft_printf, get_next_line
 - **Build**: Makefile Linux compatible, link `-lmlx -lXext -lX11 -lm -lz`
 - **Parser**: modules complets pour .cub (colors.c, parse_tex.c, validate_map.c, etc.)
@@ -164,4 +257,4 @@ Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, dest
 
 ---
 
-Ce plan permet de livrer rapidement un rendu minimal et d’itérer en sécurité, tout en garantissant la portabilité macOS ↔ Linux et la compatibilité avec Valgrind dès que possible.
+Ce plan permet de livrer rapidement un rendu minimal et d'itérer en sécurité, tout en garantissant la portabilité macOS ↔ Linux et la compatibilité avec Valgrind dès que possible.
