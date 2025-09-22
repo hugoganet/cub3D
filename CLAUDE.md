@@ -70,33 +70,75 @@ Avantages:
 
 ## 5) Cross-plateforme: macOS et Linux
 
-- macOS (début du dev):
+### Environnement de développement
+
+- **macOS (machine hôte)**:
   - MiniLibX OpenGL (frameworks AppKit/OpenGL)
   - Pixels: ARGB32; penser à mettre alpha = 0xFF pour voir les couleurs (fait dans `rgb_to_int`)
-- Linux (bientôt: VM + Valgrind):
+  - Chemin du projet: `/Users/hugoganet/Code/42/cub3D`
+
+- **Linux VM (machine virtuelle)**:
+  - IP: `192.168.64.5`
+  - Utilisateur: `hganet`
+  - Chemin du projet: `/home/hganet/cub3D`
   - MiniLibX X11 (libXext, libX11, libm, zlib)
-  - Il faudra adapter le Makefile:
-    - Remplacer frameworks par `-lmlx -lXext -lX11 -lm -lz` et inclure `-I/usr/include` / `-L/usr/lib` selon l’install
-    - Option: garder deux branches de Makefile (macOS/Linux) basculées via une variable d’environnement (`OS=linux`)
-  - Valgrind:
-    - Utile pour traquer les fuites dans parser, textures, map, images MLX
-    - Attention: certaines libs graphiques peuvent bruiter la sortie; focus sur vos allocations (map, strings, textures)
+  - Makefile adapté: `-lmlx -lXext -lX11 -lm -lz` et `-I/usr/include` / `-L/usr/lib`
+  - Valgrind disponible pour détecter les fuites mémoire
+
+### Synchronisation et connectivité
+
+- **SSH**:
+  - Clé SSH: `~/.ssh/vm_dev` (doit être chargée dans l'agent SSH: `ssh-add ~/.ssh/vm_dev`)
+  - Connexion: `ssh hganet@192.168.64.5`
+
+- **Mutagen**:
+  - Synchronisation bidirectionnelle entre macOS et Linux VM
+  - Session: `cub3d-sync` synchronise `/Users/hugoganet/Code/42/cub3D` ↔ `/home/hganet/cub3D`
+  - Fichiers ignorés: `.git/` (les dossiers git ne sont pas synchronisés)
+  - Configuration globale: `~/.mutagen/.mutagen.yml` (ignore automatiquement `*.o`, `*.a`, `.DS_Store`, etc.)
+  - Commandes utiles:
+    - `mutagen sync list cub3d-sync` - vérifier l'état de la synchronisation
+    - `mutagen sync flush cub3d-sync` - forcer une synchronisation
+    - `mutagen sync terminate cub3d-sync` - arrêter la session
+
+- **Important pour le debug**:
+  - Si la synchronisation ne fonctionne pas, vérifier:
+    1. SSH agent a la clé: `ssh-add -l` (sinon: `ssh-add ~/.ssh/vm_dev`)
+    2. Connexion SSH fonctionne: `ssh hganet@192.168.64.5 'echo OK'`
+    3. Mutagen est connecté: `mutagen sync list cub3d-sync | grep Connected`
+  - Les modifications de fichiers sont synchronisées automatiquement dans les deux sens
+  - Le dossier `.claude/` est synchronisé pour maintenir les configurations cohérentes
+
+- **MLX_INIT TROUBLESHOOTING** (CRITIQUE):
+  - Si `mlx_init failed`: TOUJOURS vérifier `DISPLAY` en premier
+  - Test rapide: `env DISPLAY=:0 ./cub3D maps/sample.cub`
+  - Diagnostic: créer test minimal avec `mlx_init()` seul
+  - Root cause: MLX nécessite connexion X11 valide pour initialiser
+  - **Solution permanente**: Alias configuré dans ~/.bashrc
+    - Usage: `cub3d maps/sample.cub` (DISPLAY automatiquement défini)
+    - Si l'alias ne marche pas: `source ~/.bashrc` ou nouvelle session SSH
 
 Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, destruction) dans des fonctions dédiées pour limiter les différences entre plateformes.
 
-## 6) Roadmap incrémentale
+## 6) État actuel et prochaines étapes
 
-1. Boot minimal (fait): fenêtre, fond ciel/sol, boucle, entrées basiques
-2. Parser `.cub` (à faire):
-   - En-têtes (textures/couleurs)
-   - Map (collecte, pad, validation), position + direction/plane
-3. Raycasting sans textures (à faire):
-   - DDA, distance perpendiculaire, murs en couleurs unies par côté
-4. Texturage murs (à faire):
-   - `wallX`, `texX`, pas vertical; chargement XPM; sampling `addr/bpp/line_len`
-5. Collision (à faire): grid + petite hitbox
-6. Linux/Valgrind (à prévoir tôt):
-   - Adapter Makefile Linux, tester `make`, puis valgrind sur parsing et fermeture propre
+### ✅ Implémenté
+1. **Boot minimal**: fenêtre, boucle MLX, entrées basiques
+2. **Parser complet**:
+   - Parse headers (textures NO/SO/WE/EA, couleurs F/C)
+   - Parse et validation map avec flood-fill
+   - Position et direction joueur (N/S/E/W → dir/plane)
+   - Gestion erreurs avec cleanup mémoire
+3. **Validation robuste**: caractères autorisés, map fermée, spawn unique
+4. **Minimap fonctionnelle**: affichage temps réel, position joueur, murs/sols
+5. **Architecture modulaire**: parser/, render/, input/, utils/ opérationnels
+6. **Cross-platform**: switch macOS OpenGL → Linux X11, Makefile adapté
+
+### 🔄 À faire
+1. **Raycasting 3D**: DDA, distance perpendiculaire, murs colorés
+2. **Texturage murs**: chargement XPM, wallX/texX, sampling vertical
+3. **Mouvement joueur**: collision grid-based, rotation, strafe
+4. **Tests Valgrind**: validation mémoire sur parsing/cleanup
 
 ## 7) Gestion des ressources et erreurs
 
@@ -111,21 +153,108 @@ Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, dest
   - `mlx_destroy_window` (et `mlx_destroy_display` sur Linux)
   - `free` sur map et structures
 
-## 8) Décisions actées dans ce dépôt
+## 8) Workflow Git pour collaboration 42
 
-- MiniLibX: dossier local `minilibx_opengl` (OpenGL), intégré au build
-- Makefile: pas de backend Metal; frameworks AppKit/OpenGL; une seule `put_image_to_window` par frame
-- Couleurs: alpha forcé à 0xFF pour l'affichage correct sur macOS
-- Skeleton: modules, stubs parser/raycast prêts à implémenter
-- Libft: intégrée directement dans le dépôt (dossier `libft`) pour simplifier la gestion du projet
+### Structure des branches
 
-## 9) Étapes suivantes (recommandées)
+Le projet utilise un workflow Git structuré pour faciliter la collaboration entre les membres de l'équipe:
 
-- Implémenter le parser (headers → map → validation) + erreurs propres
-- Écrire un test map minimal (déjà `maps/sample.cub`) et quelques maps de bords (trous, espaces, spawns multiples)
-- Implémenter DDA + murs plats, puis texturage
-- Préparer Makefile Linux et vérification Valgrind (dès que parser est en place)
+```
+main                    # Branche principale (production)
+  └── consolidation     # Branche d'intégration
+        ├── hugo/*      # Branches de features Hugo
+        └── nicolas/*   # Branches de features Nicolas
+```
+
+### Règles de nommage des branches
+
+- **Format**: `<prenom>/<nom-feature>`
+- **Exemples**:
+  - `hugo/raycasting`
+  - `hugo/textures`
+  - `nicolas/minimap`
+  - `nicolas/collision`
+
+### Processus de développement
+
+1. **Création de feature branch**:
+   ```bash
+   git checkout consolidation
+   git pull origin consolidation
+   git checkout -b hugo/ma-feature
+   ```
+
+2. **Développement**:
+   - Travailler sur sa branche feature
+   - Commits réguliers avec messages Commitizen
+   - Push vers origin: `git push -u origin hugo/ma-feature`
+
+3. **Pull Request vers consolidation**:
+   - Quand la feature est terminée, créer une PR de `hugo/ma-feature` → `consolidation`
+   - Titre PR: `feat(scope): description` (style Commitizen)
+   - Description: liste des changements principaux
+   - Assigner le coéquipier pour review
+
+4. **Review et merge dans consolidation**:
+   - Le coéquipier review la PR
+   - Discussion si nécessaire
+   - Merge dans `consolidation` après validation
+
+5. **Intégration dans main**:
+   - Quand les deux features sont merged dans `consolidation`
+   - Tester l'intégration complète
+   - Créer une PR de `consolidation` → `main`
+   - Les deux coéquipiers approuvent avant merge
+
+### Commandes Git essentielles pour l'IA
+
+- **Créer une nouvelle branche feature**:
+  ```bash
+  git checkout consolidation && git pull
+  git checkout -b <nom>/<feature>
+  ```
+
+- **Créer une Pull Request**:
+  ```bash
+  gh pr create --base consolidation --title "type(scope): description"
+  ```
+
+- **Lister les PR ouvertes**:
+  ```bash
+  gh pr list
+  ```
+
+- **Voir le statut d'une PR**:
+  ```bash
+  gh pr view <numero>
+  ```
+
+### Instructions pour l'IA
+
+1. **TOUJOURS** créer des branches avec le format `<prenom>/<feature>`
+2. **JAMAIS** pusher directement sur `main` ou `consolidation`
+3. **TOUJOURS** créer une PR pour merger dans `consolidation`
+4. **NE PAS** merger de `consolidation` vers `main` sans validation explicite
+5. **UTILISER** les commandes `gh` pour gérer les PR programmatiquement
+6. **RESPECTER** le style Commitizen pour tous les commits et PR
+
+### Résolution de conflits
+
+En cas de conflit lors du merge dans `consolidation`:
+1. Pull la dernière version de `consolidation`
+2. Merger `consolidation` dans la feature branch
+3. Résoudre les conflits localement
+4. Push et mettre à jour la PR
+
+## 9) Configuration actuelle
+
+- **MiniLibX**: Linux X11 (intégrée directement, plus de submodule)
+- **Libft**: intégrée directement (dossier `libft/`) avec ft_printf, get_next_line
+- **Build**: Makefile Linux compatible, link `-lmlx -lXext -lX11 -lm -lz`
+- **Parser**: modules complets pour .cub (colors.c, parse_tex.c, validate_map.c, etc.)
+- **Structures**: `t_app`, `t_player`, `t_map` définies et utilisées
+- **Maps test**: `sample.cub` (valide), `error.cub` (test erreurs)
 
 ---
 
-Ce plan permet de livrer rapidement un rendu minimal et d’itérer en sécurité, tout en garantissant la portabilité macOS ↔ Linux et la compatibilité avec Valgrind dès que possible.
+Ce plan permet de livrer rapidement un rendu minimal et d'itérer en sécurité, tout en garantissant la portabilité macOS ↔ Linux et la compatibilité avec Valgrind dès que possible.
