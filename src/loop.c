@@ -52,16 +52,28 @@ void apply_movement(t_app *app)
 
 int app_loop(t_app *app)
 {
-    // Fond noir
-    fill_background(app, 0x000000);
+	// NOUVEAU: Traiter les déplacements
+	update_player_movement(app);
 
-    // Dessiner la minimap
-    render_minimap(app);
+	// Debug : afficher position joueur
+	static int frame_count = 0;
+	if (frame_count % 30 == 0)  // Moins fréquent pour pas spammer
+	{
+		print_player_debug(app);
+		print_keys_debug(app);
+	}
+	frame_count++;
 
-    // Afficher le frame
-    mlx_put_image_to_window(app->mlx, app->win, app->frame.ptr, 0, 0);
+	// Fond noir
+	fill_background(app, 0x000000);
 
-    return (0);
+	// Dessiner la minimap
+	render_minimap(app);
+
+	// Afficher le frame
+	mlx_put_image_to_window(app->mlx, app->win, app->frame.ptr, 0, 0);
+
+	return (0);
 }
 
 int close_window(t_app *app)

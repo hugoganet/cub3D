@@ -27,6 +27,7 @@ SRC	:= \
 	$(SRCDIR)/init.c \
 	$(SRCDIR)/loop.c \
 	$(SRCDIR)/input/keys.c \
+	$(SRCDIR)/input/movement.c \
 	$(SRCDIR)/render/draw.c \
 	$(SRCDIR)/render/minimap.c \
 	$(SRCDIR)/render/textures.c \
