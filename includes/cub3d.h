@@ -159,7 +159,6 @@ typedef struct	s_app
 	// Graphics
 	t_img		frame;
 	t_textures	tex;
-	t_textures	textures;
 
 	// Game world
 	t_map		map;
@@ -253,6 +252,8 @@ void	draw_line(t_app *app, int x0, int y0, int x1, int y1, int color);
 // Texture management
 int		load_textures(t_app *app);
 void	free_textures(t_app *app);
+int		get_texture_pixel(t_img *texture, int x, int y);
+t_img	*get_wall_texture(t_app *app, int side, t_vec2 ray_dir);
 
 int		color_to_int(t_color color);
 void	draw_ceiling(t_app *app);
@@ -289,6 +290,8 @@ int		get_wall_side(int step_x, int step_y, int side);
 double	calculate_wall_height(double perp_dist, int screen_h);
 void	calculate_wall_bounds(int height, int screen_h, int *draw_start, int *draw_end);
 void	draw_wall_column(t_app *app, int x, int draw_start, int draw_end, int color);
+void	draw_textured_wall_column(t_app *app, int x, int draw_start, int draw_end, t_ray_hit *hit);
+int		get_texture_coord_x(double wall_x, t_img *texture);
 int		get_wall_color(int wall_face);
 
 // ============================================================================

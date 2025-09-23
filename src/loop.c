@@ -58,11 +58,11 @@ int app_loop(t_app *app)
 	// Fond noir
 	fill_background(app, 0x000000);
 
-	// Render 3D view (raycasted walls)
-	render_3d_view(app);
-
-    // 2. AJOUTER : Dessiner sol/plafond
+    // Render background first (sol/plafond)
     render_background(app);
+
+	// Then render 3D view (raycasted walls) on top
+	render_3d_view(app);
 	
 	// Dessiner la minimap (on top of 3D view)
 	render_minimap(app);

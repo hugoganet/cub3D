@@ -35,6 +35,29 @@ void render_3d_view(t_app *app)
     t_vec2 ray_dir;
     t_ray_hit hit;
 
+    // Check if textures are loaded
+    if (!app->tex.loaded)
+    {
+        printf("⚠️ Textures not loaded, using solid colors\n");
+        // Fallback to solid color rendering
+        x = 0;
+        while (x < app->win_w)
+        {
+            calculate_ray_dir(app, x, &ray_dir);
+            if (cast_ray(app, ray_dir, &hit))
+            {
+                int wall_height = (int)calculate_wall_height(hit.perp_dist, app->win_h);
+                int draw_start, draw_end;
+                calculate_wall_bounds(wall_height, app->win_h, &draw_start, &draw_end);
+                int color = get_wall_color(hit.wall_face);
+                draw_wall_column(app, x, draw_start, draw_end, color);
+            }
+            x++;
+        }
+        return;
+    }
+
+    // Textured rendering
     x = 0;
     while (x < app->win_w)
     {
@@ -51,11 +74,8 @@ void render_3d_view(t_app *app)
             int draw_start, draw_end;
             calculate_wall_bounds(wall_height, app->win_h, &draw_start, &draw_end);
 
-            // Get wall color based on which face was hit
-            int color = get_wall_color(hit.wall_face);
-
-            // Draw the vertical wall strip
-            draw_wall_column(app, x, draw_start, draw_end, color);
+            // Draw the textured vertical wall strip
+            draw_textured_wall_column(app, x, draw_start, draw_end, &hit);
         }
         x++;
     }

@@ -5,8 +5,8 @@ void init_defaults(t_app *app)
 {
 	app->win_w = 1024;
 	app->win_h = 768;
-	app->move_speed = 0.01;
-	app->rot_speed = 0.01;
+	app->move_speed = 0.05;
+	app->rot_speed = 0.05;
 	app->floor = (t_color){50, 50, 50};
 	app->ceil = (t_color){135, 206, 235};
 	app->keys = (t_keys){0};
