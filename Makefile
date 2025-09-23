@@ -31,6 +31,7 @@ SRC	:= \
 	$(SRCDIR)/render/draw.c \
 	$(SRCDIR)/render/minimap.c \
 	$(SRCDIR)/render/textures.c \
+	$(SRCDIR)/render/background.c \
 	$(SRCDIR)/parser/parse_file.c \
 	$(SRCDIR)/parser/parse_input.c \
 	$(SRCDIR)/parser/parse_tex.c \

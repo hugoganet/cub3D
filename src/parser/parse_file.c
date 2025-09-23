@@ -4,7 +4,7 @@
 
 void parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 {
-    printf("DEBUG: Processing line: '%s' (len=%d)\n", line, (int)ft_strlen(line));
+    // printf("DEBUG: Processing line: '%s' (len=%d)\n", line, (int)ft_strlen(line));
 
     // Parser les textures
     if (is_texture_line(line) && !counters->map_started)
@@ -23,14 +23,14 @@ void parse_single_line(t_app *app, char *line, t_parse_counters *counters)
     // Parser la map
     else if (is_map_line(line))
     {
-        printf("DEBUG: Map line detected: '%s'\n", line);
+        // printf("DEBUG: Map line detected: '%s'\n", line);
         if (!counters->map_started)
         {
             printf("Map section started\n");
             counters->map_started = 1;
             init_map(app);
         }
-        printf("Map line: %s", line);
+        // printf("Map line: %s", line);
         add_map_line(app, line, counters->map_line_index);
         counters->map_line_index++;
     }
