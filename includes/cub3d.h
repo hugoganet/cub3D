@@ -139,6 +139,7 @@ typedef struct	s_app
 	// Graphics
 	t_img		frame;
 	t_textures	tex;
+	t_textures	textures;
 
 	// Game world
 	t_map		map;

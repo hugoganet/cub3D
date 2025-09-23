@@ -22,6 +22,12 @@ int app_init(t_app *app, int w, int h)
 	app->mlx = mlx_init();
 	if (!app->mlx)
 		return (ft_putendl_fd("Error\nmlx_init failed", 2), -1);
+	// Charger les textures après MLX init
+    if (load_textures(app) != 0)
+    {
+        printf("❌ Failed to load textures\n");
+        return (1);
+    }
 	app->win = mlx_new_window(app->mlx, w, h, "cub3D");
 	if (!app->win)
 		return (ft_putendl_fd("Error\nmlx_new_window failed", 2), -1);
