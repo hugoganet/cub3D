@@ -11,6 +11,9 @@ SRCDIR		:= src
 LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
+BUILDDIR	:= build
+OBJDIR		:= $(BUILDDIR)/obj
+
 MLX_DIR		?= minilibx-linux
 MLX_LIB_SUB	:= $(MLX_DIR)
 MLX_INC		:= $(MLX_DIR)
@@ -51,7 +54,7 @@ SRC += \
 	$(SRCDIR)/parser/colors.c \
 	$(SRCDIR)/utils/math.c
 
-OBJ	:= $(SRC:.c=.o)
+OBJ	:= $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
 
 .PHONY: all clean fclean re run debug mlx
 
@@ -71,16 +74,20 @@ mlx:
 		echo "[INFO] No local MiniLibX at '$(MLX_DIR)'. If using system MLX, set MLX_DIR accordingly."; \
 	fi
 
-%.o: %.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
-	@rm -f $(OBJ)
+	@rm -rf $(OBJDIR)
+	@echo "Cleaned object files"
 
 fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@rm -rf $(BUILDDIR)
 	@rm -f $(NAME)
+	@echo "Cleaned build directory and binary"
 
 re: fclean all
 
