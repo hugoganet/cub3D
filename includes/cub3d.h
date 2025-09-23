@@ -27,11 +27,16 @@
 #define MINIMAP_OFFSET_X	50
 #define MINIMAP_OFFSET_Y	50
 
+// Ray visualization settings
+#define MINIMAP_RAY_COUNT	20
+#define MINIMAP_RAY_LENGTH	50
+
 // Colors
 #define COLOR_WALL			0xFFFFFF
 #define COLOR_FLOOR			0x404040
 #define COLOR_PLAYER		0xFF0000
 #define COLOR_BORDER		0x808080
+#define COLOR_RAY			0x00FF00
 
 // Key codes (adjust according to your system)
 #define KEY_W				119
@@ -217,6 +222,12 @@ void	draw_rect(t_app *app, int x, int y, int w, int h, int color);
 void	render_minimap(t_app *app);
 void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color);
 void	draw_player_on_minimap(t_app *app);
+
+// Ray visualization
+void	render_minimap_rays(t_app *app);
+int		cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
+void	get_ray_direction(t_app *app, int ray_index, int total_rays, t_vec2 *ray_dir);
+void	draw_line(t_app *app, int x0, int y0, int x1, int y1, int color);
 
 // Texture management
 int		load_textures(t_app *app);
