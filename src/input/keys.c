@@ -3,8 +3,6 @@
 // Fonction appelée quand une touche est pressée
 int key_press(int keycode, t_app *app)
 {
-	printf("🔵 Key pressed: %d\n", keycode);  // Debug pour voir les codes
-
 	if (keycode == KEY_ESC)
 		close_window(app);
 	else if (keycode == KEY_W)
@@ -25,8 +23,6 @@ int key_press(int keycode, t_app *app)
 // Fonction appelée quand une touche est relâchée
 int key_release(int keycode, t_app *app)
 {
-	printf("🔴 Key released: %d\n", keycode);  // Debug
-
 	if (keycode == KEY_W)
 		app->keys.w = false;
 	else if (keycode == KEY_A)

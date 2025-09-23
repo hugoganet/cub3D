@@ -26,25 +26,6 @@ bool is_valid_position(t_app *app, double x, double y)
 	return (true);  // Position valide
 }
 
-// Fonction pour afficher la position du joueur (debug)
-void print_player_debug(t_app *app)
-{
-	printf("🎮 Player: pos(%.2f, %.2f) dir(%.2f, %.2f)\n",
-		   app->player.pos.x, app->player.pos.y,
-		   app->player.dir.x, app->player.dir.y);
-}
-
-// Fonction pour afficher l'état des touches (debug)
-void print_keys_debug(t_app *app)
-{
-	if (app->keys.w || app->keys.a || app->keys.s || app->keys.d ||
-		app->keys.left || app->keys.right)
-	{
-		printf("⌨️  Keys: W:%d A:%d S:%d D:%d ←:%d →:%d\n",
-			   app->keys.w, app->keys.a, app->keys.s, app->keys.d,
-			   app->keys.left, app->keys.right);
-	}
-}
 
 
 /**
@@ -80,7 +61,6 @@ void rotate_player(t_app *app, int direction)
 	app->player.plane.x = app->player.plane.x * cos(angle) - app->player.plane.y * sin(angle);
 	app->player.plane.y = old_plane_x * sin(angle) + app->player.plane.y * cos(angle);
 
-	printf("🔄 Rotated to dir(%.2f, %.2f)\n", app->player.dir.x, app->player.dir.y);
 }
 
 /**
@@ -101,9 +81,6 @@ void move_player(t_app *app, double move_x, double move_y)
 {
 	double new_x = app->player.pos.x + move_x * app->move_speed;
 	double new_y = app->player.pos.y + move_y * app->move_speed;
-
-	printf("🚶 Trying to move by (%.2f, %.2f) to (%.2f, %.2f)\n",
-		   move_x * app->move_speed, move_y * app->move_speed, new_x, new_y);
 
 	// Vérifier collision X séparément
 	if (is_valid_position(app, new_x, app->player.pos.y))

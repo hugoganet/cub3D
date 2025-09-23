@@ -1,6 +1,13 @@
 #include "cub3d.h"
 #include "libft.h"
 
+
+/**
+ * @brief Parse les valeurs RGB depuis une chaîne "R,G,B"
+ * @param rgb_str Chaîne contenant "R,G,B"
+ * @param color Structure t_color à remplir
+ * @return 0 si succès, 1 si erreur
+ */
 int parse_rgb_values(const char *rgb_str, t_color *color)
 {
 	char **rgb_parts;
@@ -40,6 +47,11 @@ int parse_rgb_values(const char *rgb_str, t_color *color)
 	return (0);
 }
 
+/**
+ * @brief Extrait la partie RGB d'une ligne "F R,G,B" ou "C R,G,B"
+ * @param line Ligne complète à parser
+ * @return Chaîne "R,G,B" ou NULL si erreur
+ */
 char *extract_rgb_string(char *line)
 {
 	char *rgb_str;
@@ -72,6 +84,13 @@ char *extract_rgb_string(char *line)
 	return (rgb_str);
 }
 
+
+/**
+ * @brief Parse une ligne de couleur complète (F ou C)
+ * @param app Structure principale
+ * @param line Ligne à parser ("F R,G,B" ou "C R,G,B")
+ * @return 0 si succès
+ */
 int parse_color_line(t_app *app, char *line)
 {
 	char *rgb_str;

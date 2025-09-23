@@ -55,21 +55,15 @@ int app_loop(t_app *app)
 	// NOUVEAU: Traiter les déplacements
 	update_player_movement(app);
 
-	// Debug : afficher position joueur
-	static int frame_count = 0;
-	if (frame_count % 30 == 0)  // Moins fréquent pour pas spammer
-	{
-		print_player_debug(app);
-		print_keys_debug(app);
-	}
-	frame_count++;
-
 	// Fond noir
 	fill_background(app, 0x000000);
 
 	// Render 3D view (raycasted walls)
 	render_3d_view(app);
 
+    // 2. AJOUTER : Dessiner sol/plafond
+    render_background(app);
+	
 	// Dessiner la minimap (on top of 3D view)
 	render_minimap(app);
 

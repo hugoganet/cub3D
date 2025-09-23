@@ -159,6 +159,7 @@ typedef struct	s_app
 	// Graphics
 	t_img		frame;
 	t_textures	tex;
+	t_textures	textures;
 
 	// Game world
 	t_map		map;
@@ -253,6 +254,10 @@ void	draw_line(t_app *app, int x0, int y0, int x1, int y1, int color);
 int		load_textures(t_app *app);
 void	free_textures(t_app *app);
 
+int		color_to_int(t_color color);
+void	draw_ceiling(t_app *app);
+void	draw_floor(t_app *app);
+void	render_background(t_app *app);
 // ============================================================================
 //                              INPUT HANDLING
 // ============================================================================
@@ -261,8 +266,6 @@ int		key_press(int keycode, t_app *app);
 int		key_release(int keycode, t_app *app);
 int		close_window(t_app *app);
 bool	is_valid_position(t_app *app, double x, double y);
-void	print_player_debug(t_app *app);
-void	print_keys_debug(t_app *app);
 void	move_player_forward_backward(t_app *app, int direction);
 void	move_player_strafe(t_app *app, int direction);
 void	update_player_movement(t_app *app);
