@@ -44,6 +44,8 @@ SRC	:= \
 # Placeholders for future implementation (compiled but may be unused for now)
 SRC += \
 	$(SRCDIR)/render/raycast.c \
+	$(SRCDIR)/render/raycasting.c \
+	$(SRCDIR)/render/projection.c \
 	$(SRCDIR)/render/dda.c \
 	$(SRCDIR)/parser/parse_headers.c \
 	$(SRCDIR)/parser/colors.c \

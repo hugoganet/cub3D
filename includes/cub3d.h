@@ -118,6 +118,26 @@ typedef struct	s_keys
 	bool	right;
 }	t_keys;
 
+// Raycasting structures
+typedef struct	s_ray_hit
+{
+	double	perp_dist;
+	int		side;
+	int		wall_face;
+	double	wall_x;
+	int		map_x;
+	int		map_y;
+}	t_ray_hit;
+
+// Wall faces for different shading
+enum e_wall_face
+{
+	FACE_NORTH = 0,
+	FACE_SOUTH = 1,
+	FACE_EAST = 2,
+	FACE_WEST = 3
+};
+
 // Parser helper
 typedef struct	s_parse_counters
 {
@@ -248,6 +268,25 @@ void	move_player_strafe(t_app *app, int direction);
 void	update_player_movement(t_app *app);
 void	rotate_player(t_app *app, int direction);
 void	move_player(t_app *app, double move_x, double move_y);
+
+// ============================================================================
+//                              RAYCASTING
+// ============================================================================
+
+// DDA algorithm
+int		cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit);
+int		cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
+
+// 3D Raycasting
+void	render_3d_view(t_app *app);
+void	calculate_ray_dir(t_app *app, int x, t_vec2 *ray_dir);
+int		get_wall_side(int step_x, int step_y, int side);
+
+// 3D Projection
+double	calculate_wall_height(double perp_dist, int screen_h);
+void	calculate_wall_bounds(int height, int screen_h, int *draw_start, int *draw_end);
+void	draw_wall_column(t_app *app, int x, int draw_start, int draw_end, int color);
+int		get_wall_color(int wall_face);
 
 // ============================================================================
 //                              UTILITIES

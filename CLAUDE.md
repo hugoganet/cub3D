@@ -143,12 +143,18 @@ Conseil: isoler toute la gestion MLX (création image, `mlx_get_data_addr`, dest
 5. **Architecture modulaire**: parser/, render/, input/, utils/ opérationnels
 6. **Cross-platform**: switch macOS OpenGL → Linux X11, Makefile adapté
 7. **Ray visualization sur minimap**: 20 rayons verts étalés sur 60° FOV (-30° à +30°), DDA pour collision murs
+8. **🎯 RAYCASTING 3D COMPLET**:
+   - DDA algorithm étendu avec `t_ray_hit` structure
+   - Projection 3D: calcul hauteurs murs, perspective correcte
+   - Camera plane initialisé pour 60° FOV
+   - 1024 rayons (1 par colonne écran) avec couleurs debug par face (N/S/E/W)
+   - Rendu temps réel: background → 3D walls → minimap overlay
 
 ### 🔄 À faire
-1. **Raycasting 3D**: DDA, distance perpendiculaire, murs colorés
-2. **Texturage murs**: chargement XPM, wallX/texX, sampling vertical
-3. **Mouvement joueur**: collision grid-based, rotation, strafe
-4. **Tests Valgrind**: validation mémoire sur parsing/cleanup
+1. **Texturage murs**: chargement XPM, wallX/texX, sampling vertical (interface prête pour Nico)
+2. **Mouvement avec collision**: grid-based collision detection
+3. **Tests Valgrind**: validation mémoire sur parsing/cleanup
+4. **Intégration avec branche Nicolas**: merger système background + textures
 
 ## 7) Gestion des ressources et erreurs
 
@@ -262,8 +268,17 @@ En cas de conflit lors du merge dans `consolidation`:
 - **Libft**: intégrée directement (dossier `libft/`) avec ft_printf, get_next_line
 - **Build**: Makefile Linux compatible, link `-lmlx -lXext -lX11 -lm -lz`
 - **Parser**: modules complets pour .cub (colors.c, parse_tex.c, validate_map.c, etc.)
-- **Structures**: `t_app`, `t_player`, `t_map` définies et utilisées
+- **Structures**: `t_app`, `t_player`, `t_map`, `t_ray_hit` définies et utilisées
 - **Maps test**: `sample.cub` (valide), `error.cub` (test erreurs)
+
+### 📁 Fichiers Raycasting 3D (Hugo)
+- **`src/render/raycasting.c`**: boucle principale 1024 colonnes, calcul directions rayons
+- **`src/render/projection.c`**: maths 3D (hauteurs murs, bounds écran, rendu colonnes)
+- **`src/render/dda.c`**: algorithme DDA étendu avec `t_ray_hit` pour infos complètes
+- **`includes/cub3d.h`**: structures `t_ray_hit`, enums faces murs, prototypes fonctions
+- **`src/parser/validate_map.c`**: 🐛 **FIX CRITIQUE** - initialisation camera plane par orientation
+- **`src/loop.c`**: intégration `render_3d_view()` entre background et minimap
+- **`Makefile`**: ajout nouveaux fichiers sources
 
 ---
 
