@@ -1,7 +1,7 @@
 #include "cub3d.h"
 #include <math.h>
 
-int cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point)
+int cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit)
 {
     int map_x = (int)app->player.pos.x;
     int map_y = (int)app->player.pos.y;
@@ -36,10 +36,10 @@ int cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point)
         side_dist_y = (map_y + 1.0 - app->player.pos.y) * delta_dist_y;
     }
 
-    int hit = 0;
+    int wall_hit = 0;
     int side;
 
-    while (hit == 0)
+    while (wall_hit == 0)
     {
         if (side_dist_x < side_dist_y)
         {
@@ -56,10 +56,10 @@ int cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point)
 
         if (map_x < 0 || map_y < 0 || map_x >= app->map.width ||
             map_y >= app->map.height)
-            hit = 1;
+            wall_hit = 1;
         else if (app->map.grid[map_y] && map_x < (int)ft_strlen(app->map.grid[map_y]) &&
                  app->map.grid[map_y][map_x] == '1')
-            hit = 1;
+            wall_hit = 1;
     }
 
     double perp_wall_dist;
@@ -68,8 +68,46 @@ int cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point)
     else
         perp_wall_dist = (map_y - app->player.pos.y + (1 - step_y) / 2) / ray_dir.y;
 
-    hit_point->x = app->player.pos.x + perp_wall_dist * ray_dir.x;
-    hit_point->y = app->player.pos.y + perp_wall_dist * ray_dir.y;
+    hit->perp_dist = perp_wall_dist;
+    hit->side = side;
+    hit->map_x = map_x;
+    hit->map_y = map_y;
+
+    // Determine which wall face was hit
+    if (side == 0)
+    {
+        if (step_x > 0)
+            hit->wall_face = FACE_WEST;
+        else
+            hit->wall_face = FACE_EAST;
+    }
+    else
+    {
+        if (step_y > 0)
+            hit->wall_face = FACE_NORTH;
+        else
+            hit->wall_face = FACE_SOUTH;
+    }
+
+    // Calculate wall X coordinate for texturing
+    if (side == 0)
+        hit->wall_x = app->player.pos.y + perp_wall_dist * ray_dir.y;
+    else
+        hit->wall_x = app->player.pos.x + perp_wall_dist * ray_dir.x;
+    hit->wall_x -= floor(hit->wall_x);
+
+    return (1);
+}
+
+int cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point)
+{
+    t_ray_hit hit;
+
+    if (!cast_ray(app, ray_dir, &hit))
+        return (0);
+
+    hit_point->x = app->player.pos.x + hit.perp_dist * ray_dir.x;
+    hit_point->y = app->player.pos.y + hit.perp_dist * ray_dir.y;
 
     return (1);
 }

@@ -21,11 +21,27 @@ int find_player(t_app *app)
 				app->player.pos.x = (double)j + 0.5;
 				app->player.pos.y = (double)i + 0.5;
 
-				// Set direction based on player orientation
-				if (c == 'N') { app->player.dir.x = 0; app->player.dir.y = -1; }
-				else if (c == 'S') { app->player.dir.x = 0; app->player.dir.y = 1; }
-				else if (c == 'E') { app->player.dir.x = 1; app->player.dir.y = 0; }
-				else if (c == 'W') { app->player.dir.x = -1; app->player.dir.y = 0; }
+				// Set direction and camera plane based on player orientation
+				if (c == 'N')
+				{
+					app->player.dir.x = 0; app->player.dir.y = -1;
+					app->player.plane.x = 0.66; app->player.plane.y = 0;
+				}
+				else if (c == 'S')
+				{
+					app->player.dir.x = 0; app->player.dir.y = 1;
+					app->player.plane.x = -0.66; app->player.plane.y = 0;
+				}
+				else if (c == 'E')
+				{
+					app->player.dir.x = 1; app->player.dir.y = 0;
+					app->player.plane.x = 0; app->player.plane.y = 0.66;
+				}
+				else if (c == 'W')
+				{
+					app->player.dir.x = -1; app->player.dir.y = 0;
+					app->player.plane.x = 0; app->player.plane.y = -0.66;
+				}
 			}
 			j++;
 		}

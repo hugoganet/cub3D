@@ -67,7 +67,10 @@ int app_loop(t_app *app)
 	// Fond noir
 	fill_background(app, 0x000000);
 
-	// Dessiner la minimap
+	// Render 3D view (raycasted walls)
+	render_3d_view(app);
+
+	// Dessiner la minimap (on top of 3D view)
 	render_minimap(app);
 
 	// Afficher le frame
