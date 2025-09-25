@@ -23,9 +23,9 @@
 #define DEFAULT_WIN_HEIGHT	768
 
 // Minimap settings
-#define MINIMAP_SCALE		15
-#define MINIMAP_OFFSET_X	50
-#define MINIMAP_OFFSET_Y	50
+#define MINIMAP_SCALE		10
+#define MINIMAP_OFFSET_X	25
+#define MINIMAP_OFFSET_Y	25
 
 // Ray visualization settings
 #define MINIMAP_RAY_COUNT	20
