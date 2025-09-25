@@ -5,7 +5,6 @@ int find_player(t_app *app)
 {
 	int i, j;
 	int player_count = 0;
-	char player_char = 0;
 
 	i = 0;
 	while (i < app->map.height)
@@ -17,7 +16,6 @@ int find_player(t_app *app)
 			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 			{
 				player_count++;
-				player_char = c;
 				app->player.pos.x = (double)j + 0.5;
 				app->player.pos.y = (double)i + 0.5;
 
