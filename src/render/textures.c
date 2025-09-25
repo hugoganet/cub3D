@@ -25,7 +25,10 @@ int load_single_texture(t_app *app, char *path, t_img *texture)
 	texture->ptr = mlx_xpm_file_to_image(app->mlx, path, &width, &height);
 	if (!texture->ptr)
 	{
-		printf("❌ Failed to load texture: %s\n", path);
+		// Fixed: proper Error message format for texture loading failures
+		ft_putstr_fd("Error\n", 2);
+		ft_putstr_fd("Failed to load texture: ", 2);
+		ft_putendl_fd(path, 2);
 		return (1);
 	}
 
@@ -33,8 +36,12 @@ int load_single_texture(t_app *app, char *path, t_img *texture)
 								  &texture->line_len, &texture->endian);
 	if (!texture->addr)
 	{
-		printf("❌ Failed to get texture data: %s\n", path);
+		// Fixed: proper Error message format and cleanup texture ptr on addr failure
+		ft_putstr_fd("Error\n", 2);
+		ft_putstr_fd("Failed to get texture data: ", 2);
+		ft_putendl_fd(path, 2);
 		mlx_destroy_image(app->mlx, texture->ptr);
+		texture->ptr = NULL; // Ensures cleanup
 		return (1);
 	}
 
@@ -55,21 +62,43 @@ int load_single_texture(t_app *app, char *path, t_img *texture)
  */
 int load_textures(t_app *app)
 {
+	// Fixed: load textures with proper error handling and cleanup
 	// Charger texture Nord
-	if (load_single_texture(app, app->tex.north_path, &app->tex.north))  // ← tex.north_path
+	if (load_single_texture(app, app->tex.north_path, &app->tex.north))
 		return (1);
 
 	// Charger texture Sud
-	if (load_single_texture(app, app->tex.south_path, &app->tex.south))  // ← tex.south_path
+	if (load_single_texture(app, app->tex.south_path, &app->tex.south))
+	{
+		// Cleanup: destroy previously loaded north texture
+		if (app->tex.north.ptr)
+			mlx_destroy_image(app->mlx, app->tex.north.ptr);
 		return (1);
+	}
 
 	// Charger texture Ouest
-	if (load_single_texture(app, app->tex.west_path, &app->tex.west))    // ← tex.west_path
+	if (load_single_texture(app, app->tex.west_path, &app->tex.west))
+	{
+		// Cleanup: destroy previously loaded textures
+		if (app->tex.north.ptr)
+			mlx_destroy_image(app->mlx, app->tex.north.ptr);
+		if (app->tex.south.ptr)
+			mlx_destroy_image(app->mlx, app->tex.south.ptr);
 		return (1);
+	}
 
 	// Charger texture Est
-	if (load_single_texture(app, app->tex.east_path, &app->tex.east))    // ← tex.east_path
+	if (load_single_texture(app, app->tex.east_path, &app->tex.east))
+	{
+		// Cleanup: destroy previously loaded textures
+		if (app->tex.north.ptr)
+			mlx_destroy_image(app->mlx, app->tex.north.ptr);
+		if (app->tex.south.ptr)
+			mlx_destroy_image(app->mlx, app->tex.south.ptr);
+		if (app->tex.west.ptr)
+			mlx_destroy_image(app->mlx, app->tex.west.ptr);
 		return (1);
+	}
 
 	app->tex.loaded = true;  // ← Marquer comme chargé
 	return (0);

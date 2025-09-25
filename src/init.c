@@ -23,11 +23,9 @@ int app_init(t_app *app, int w, int h)
 	if (!app->mlx)
 		return (ft_putendl_fd("Error\nmlx_init failed", 2), -1);
 	// Charger les textures après MLX init
-    if (load_textures(app) != 0)
-    {
-        printf("❌ Failed to load textures\n");
-        return (1);
-    }
+	// Fixed: remove duplicate error message (already printed in load_textures)
+	if (load_textures(app) != 0)
+		return (1);
 	app->win = mlx_new_window(app->mlx, w, h, "cub3D");
 	if (!app->win)
 		return (ft_putendl_fd("Error\nmlx_new_window failed", 2), -1);
@@ -63,6 +61,13 @@ void app_destroy(t_app *app, int code)
 		mlx_destroy_image(app->mlx, app->frame.ptr);
 	if (app->win)
 		mlx_destroy_window(app->mlx, app->win);
+	// Fixed: properly destroy MLX context to prevent memory leak
+	if (app->mlx)
+	{
+		mlx_destroy_display(app->mlx);
+		free(app->mlx);
+		app->mlx = NULL;
+	}
 	free_map(app);
 	(void)code;
 }
