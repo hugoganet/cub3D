@@ -199,7 +199,7 @@ void	error_exit(t_app *app, const char *msg);
 int		parsing(t_app *app, int argc, char **argv);
 int		parse_input(t_app *app, int argc, char **argv);
 int		parse_cub_file(t_app *app, const char *path);
-void	parse_single_line(t_app *app, char *line, t_parse_counters *counters);
+int	parse_single_line(t_app *app, char *line, t_parse_counters *counters);
 
 // Texture parsing
 int		parse_texture_line(t_app *app, char *line);

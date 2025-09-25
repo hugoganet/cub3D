@@ -2,7 +2,9 @@
 #include "libft.h"
 
 
-void parse_single_line(t_app *app, char *line, t_parse_counters *counters)
+// Fixed: Changed return type from void to int for proper error handling
+// This allows caller to manage memory cleanup before error_exit
+int parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 {
     // printf("DEBUG: Processing line: '%s' (len=%d)\n", line, (int)ft_strlen(line));
 
@@ -34,8 +36,9 @@ void parse_single_line(t_app *app, char *line, t_parse_counters *counters)
     else
     {
         printf("Unknown line format: %s", line);
-        error_exit(app, "Invalid file format");
+        return (-1); // Return error instead of calling error_exit directly
     }
+    return (0); // Success
 }
 
 int is_empty_line(char *line)
@@ -89,7 +92,16 @@ int parse_cub_file(t_app *app, const char *path)
         	free(line);
         	continue;  // Ignorer complètement les lignes vides
     	}
-		parse_single_line(app, line, &counters);
+		// Parse line and check for errors
+		if (parse_single_line(app, line, &counters) != 0)
+		{
+			// Fixed: memory leak in error path - ensure line is freed before exit
+			// Memory management principle: every malloc needs corresponding free
+			free(line);          // Free current line returned by get_next_line
+			gnl_free(NULL);      // Clean up get_next_line static buffer
+			close(fd);           // Close file descriptor to avoid resource leak
+			error_exit(app, "Invalid file format");
+		}
 		free(line);
 	}
     gnl_free(NULL);

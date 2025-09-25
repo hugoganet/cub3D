@@ -13,7 +13,10 @@ void free_split(char **arr)
 
 void *gnl_free(void *p)
 {
-	if (p)
+	// Clean up get_next_line static buffer when p is NULL
+	if (!p)
+		get_next_line(-1);  // Trigger static buffer cleanup
+	else
 		free(p);
 	return (NULL);
 }

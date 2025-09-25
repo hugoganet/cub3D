@@ -119,7 +119,17 @@ char	*get_next_line(int fd)
 	static char	*buffered_data;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	// Cleanup static buffer when called with fd < 0
+	if (fd < 0)
+	{
+		if (buffered_data)
+		{
+			free(buffered_data);
+			buffered_data = NULL;
+		}
+		return (NULL);
+	}
+	if (BUFFER_SIZE <= 0)
 		return (NULL);
 	// Read and store in buffer
 	buffered_data = read_and_store(fd, buffered_data);
