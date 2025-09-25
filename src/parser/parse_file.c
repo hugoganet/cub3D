@@ -9,14 +9,12 @@ void parse_single_line(t_app *app, char *line, t_parse_counters *counters)
     // Parser les textures
     if (is_texture_line(line) && !counters->map_started)
     {
-        printf("Found texture: %s", line);
         parse_texture_line(app, line);
         counters->texture_count++;
     }
     // Parser les couleurs
     else if (is_color_line(line) && !counters->map_started)
     {
-        printf("Found color: %s", line);
         parse_color_line(app, line);
         counters->color_count++;
     }
@@ -26,7 +24,6 @@ void parse_single_line(t_app *app, char *line, t_parse_counters *counters)
         // printf("DEBUG: Map line detected: '%s'\n", line);
         if (!counters->map_started)
         {
-            printf("Map section started\n");
             counters->map_started = 1;
             init_map(app);
         }
@@ -95,7 +92,7 @@ int parse_cub_file(t_app *app, const char *path)
 		parse_single_line(app, line, &counters);
 		free(line);
 	}
-
+    gnl_free(NULL);
 	close(fd);
 
 	// Vérifier que tous les éléments sont présents
@@ -108,6 +105,5 @@ int parse_cub_file(t_app *app, const char *path)
 	if (!counters.map_started)
 		error_exit(app, "No map found in file");
 
-	printf("✓ File parsed successfully!\n");
 	return (0);
 }

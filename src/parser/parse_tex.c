@@ -45,24 +45,19 @@ int parse_texture_line(t_app *app, char *line)
 	if (ft_strncmp(line, "NO ", 3) == 0)
 	{
 		app->tex.north_path = ft_strdup(path);
-		printf("✓ North texture: %s\n", path);
 	}
 	else if (ft_strncmp(line, "SO ", 3) == 0)
 	{
 		app->tex.south_path = ft_strdup(path);
-		printf("✓ South texture: %s\n", path);
 	}
 	else if (ft_strncmp(line, "WE ", 3) == 0)
 	{
 		app->tex.west_path = ft_strdup(path);
-		printf("✓ West texture: %s\n", path);
 	}
 	else if (ft_strncmp(line, "EA ", 3) == 0)
 	{
 		app->tex.east_path = ft_strdup(path);
-		printf("✓ East texture: %s\n", path);
 	}
-
 	free(path);
 	return (0);
 }

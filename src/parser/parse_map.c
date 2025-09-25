@@ -48,7 +48,6 @@ int count_map_lines(const char *path)
     }
 
     close(fd);
-    printf("✓ Total map lines counted: %d\n", map_lines);
     return (map_lines);
 }
 
@@ -61,7 +60,6 @@ int init_map(t_app *app)
     app->map.width = 0;
     app->map.grid = NULL; // Sera alloué dans add_map_line
 
-    printf("✓ Map initialized: dynamic allocation\n");
     return (0);
 }
 
@@ -105,6 +103,5 @@ int add_map_line(t_app *app, char *line, int line_index)
     if (len > app->map.width)
         app->map.width = len;
 
-    printf("✓ Added map line %d: '%s' (len=%d)\n", line_index, map_line, len);
     return (0);
 }

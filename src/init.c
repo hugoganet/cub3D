@@ -43,13 +43,26 @@ int app_init(t_app *app, int w, int h)
 	return (0);
 }
 
+void free_map(t_app *app)
+{
+    if (!app->map.grid)
+        return;
+    for (int i = 0; i < app->map.height; ++i)
+        free(app->map.grid[i]);
+    free(app->map.grid);
+    app->map.grid = NULL;
+    app->map.height = 0;
+    app->map.width = 0;
+}
+
 void app_destroy(t_app *app, int code)
 {
 	free_textures(app);
+	gnl_free(NULL);
 	if (app->frame.ptr)
 		mlx_destroy_image(app->mlx, app->frame.ptr);
 	if (app->win)
 		mlx_destroy_window(app->mlx, app->win);
-	// On macOS, mlx pointer is managed by the framework; no mlx_destroy_display
+	free_map(app);
 	(void)code;
 }

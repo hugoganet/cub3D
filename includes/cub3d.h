@@ -312,4 +312,5 @@ char	*ft_new_buff(char *principal_buff);
 char	*ft_create_line(char *principal_buff);
 char	*ft_explore_text(char *principal_buff, int fd);
 
+void	free_map(t_app *app);
 #endif // CUB3D_H

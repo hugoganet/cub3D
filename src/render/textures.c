@@ -22,8 +22,6 @@ int load_single_texture(t_app *app, char *path, t_img *texture)
 {
 	int width, height;
 
-	printf("🖼️ Loading texture: %s\n", path);
-
 	texture->ptr = mlx_xpm_file_to_image(app->mlx, path, &width, &height);
 	if (!texture->ptr)
 	{
@@ -42,8 +40,6 @@ int load_single_texture(t_app *app, char *path, t_img *texture)
 
 	texture->w = width;
 	texture->h = height;
-
-	printf("✅ Texture loaded: %dx%d pixels\n", width, height);
 	return (0);
 }
 
@@ -59,8 +55,6 @@ int load_single_texture(t_app *app, char *path, t_img *texture)
  */
 int load_textures(t_app *app)
 {
-	printf("🎨 Loading wall textures...\n");
-
 	// Charger texture Nord
 	if (load_single_texture(app, app->tex.north_path, &app->tex.north))  // ← tex.north_path
 		return (1);
@@ -78,7 +72,6 @@ int load_textures(t_app *app)
 		return (1);
 
 	app->tex.loaded = true;  // ← Marquer comme chargé
-	printf("🎉 All textures loaded successfully!\n");
 	return (0);
 }
 
@@ -97,9 +90,29 @@ void free_textures(t_app *app)
 		mlx_destroy_image(app->mlx, app->tex.west.ptr);
 	if (app->tex.east.ptr)
 		mlx_destroy_image(app->mlx, app->tex.east.ptr);
-
+    // AJOUTER : Libérer les chemins de textures
+    if (app->tex.north_path)
+    {
+        free(app->tex.north_path);
+        app->tex.north_path = NULL;
+    }
+    if (app->tex.south_path)
+    {
+        free(app->tex.south_path);
+        app->tex.south_path = NULL;
+    }
+    if (app->tex.east_path)
+    {
+        free(app->tex.east_path);
+        app->tex.east_path = NULL;
+    }
+    if (app->tex.west_path)
+    {
+        free(app->tex.west_path);
+        app->tex.west_path = NULL;
+    }
 	app->tex.loaded = false;  // ← Marquer comme non chargé
-	printf("🗑️ Textures freed\n");
+
 }
 
 /**

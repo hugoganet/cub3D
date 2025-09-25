@@ -54,9 +54,6 @@ int find_player(t_app *app)
 	if (player_count > 1)
 		error_exit(app, "Multiple players found in map (only one allowed)");
 
-	printf("✓ Player found at (%.1f, %.1f) facing %c\n",
-		   app->player.pos.x, app->player.pos.y, player_char);
-
 	return (0);
 }
 
@@ -82,7 +79,6 @@ int check_valid_chars(t_app *app)
 		i++;
 	}
 
-	printf("✓ All characters in map are valid\n");
 	return (0);
 }
 
@@ -135,14 +131,11 @@ int check_map_closed(t_app *app)
 		i++;
 	}
 
-	printf("✓ Map is properly closed\n");
 	return (0);
 }
 
 int validate_map(t_app *app)
 {
-	printf("🔍 Validating map...\n");
-
 	// 1. Check valid characters
 	check_valid_chars(app);
 
@@ -152,6 +145,5 @@ int validate_map(t_app *app)
 	// 3. Check if map is closed
 	check_map_closed(app);
 
-	printf("✅ Map validation successful!\n");
 	return (0);
 }

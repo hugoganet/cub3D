@@ -112,12 +112,10 @@ int parse_color_line(t_app *app, char *line)
 	if (ft_strncmp(line, "F ", 2) == 0)
 	{
 		app->floor = color;
-		printf("✓ Floor color: R=%d, G=%d, B=%d\n", color.r, color.g, color.b);
 	}
 	else if (ft_strncmp(line, "C ", 2) == 0)
 	{
 		app->ceil = color;
-		printf("✓ Ceiling color: R=%d, G=%d, B=%d\n", color.r, color.g, color.b);
 	}
 	else
 	{
