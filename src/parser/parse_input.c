@@ -13,7 +13,7 @@ void init_defaults(t_app *app)
 	app->tex.loaded = false;
 }
 
-/*
+/**
  * FONCTION PARSING - Déroulement étape par étape
  * ================================================
  *
