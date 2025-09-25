@@ -11,6 +11,15 @@ void init_defaults(t_app *app)
 	app->ceil = (t_color){135, 206, 235};
 	app->keys = (t_keys){0};
 	app->tex.loaded = false;
+	// Fixed: ensure texture structure is fully initialized
+	app->tex.north.ptr = NULL;
+	app->tex.south.ptr = NULL;
+	app->tex.west.ptr = NULL;
+	app->tex.east.ptr = NULL;
+	app->tex.north_path = NULL;
+	app->tex.south_path = NULL;
+	app->tex.west_path = NULL;
+	app->tex.east_path = NULL;
 }
 
 /**

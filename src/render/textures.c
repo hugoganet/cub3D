@@ -22,6 +22,12 @@ int load_single_texture(t_app *app, char *path, t_img *texture)
 {
 	int width, height;
 
+	// Fixed: initialize texture pointer to NULL for safe cleanup
+	texture->ptr = NULL;
+	texture->addr = NULL;
+	texture->w = 0;
+	texture->h = 0;
+
 	texture->ptr = mlx_xpm_file_to_image(app->mlx, path, &width, &height);
 	if (!texture->ptr)
 	{
@@ -72,7 +78,10 @@ int load_textures(t_app *app)
 	{
 		// Cleanup: destroy previously loaded north texture
 		if (app->tex.north.ptr)
+		{
 			mlx_destroy_image(app->mlx, app->tex.north.ptr);
+			app->tex.north.ptr = NULL; // Fixed: prevent double-free
+		}
 		return (1);
 	}
 
@@ -81,9 +90,15 @@ int load_textures(t_app *app)
 	{
 		// Cleanup: destroy previously loaded textures
 		if (app->tex.north.ptr)
+		{
 			mlx_destroy_image(app->mlx, app->tex.north.ptr);
+			app->tex.north.ptr = NULL; // Fixed: prevent double-free
+		}
 		if (app->tex.south.ptr)
+		{
 			mlx_destroy_image(app->mlx, app->tex.south.ptr);
+			app->tex.south.ptr = NULL; // Fixed: prevent double-free
+		}
 		return (1);
 	}
 
@@ -92,11 +107,20 @@ int load_textures(t_app *app)
 	{
 		// Cleanup: destroy previously loaded textures
 		if (app->tex.north.ptr)
+		{
 			mlx_destroy_image(app->mlx, app->tex.north.ptr);
+			app->tex.north.ptr = NULL; // Fixed: prevent double-free
+		}
 		if (app->tex.south.ptr)
+		{
 			mlx_destroy_image(app->mlx, app->tex.south.ptr);
+			app->tex.south.ptr = NULL; // Fixed: prevent double-free
+		}
 		if (app->tex.west.ptr)
+		{
 			mlx_destroy_image(app->mlx, app->tex.west.ptr);
+			app->tex.west.ptr = NULL; // Fixed: prevent double-free
+		}
 		return (1);
 	}
 
@@ -111,14 +135,27 @@ int load_textures(t_app *app)
  */
 void free_textures(t_app *app)
 {
-	if (app->tex.north.ptr)      // ← tex au lieu de textures
+	// Fixed: safe texture cleanup with double-free protection
+	if (app->tex.north.ptr)
+	{
 		mlx_destroy_image(app->mlx, app->tex.north.ptr);
+		app->tex.north.ptr = NULL;
+	}
 	if (app->tex.south.ptr)
+	{
 		mlx_destroy_image(app->mlx, app->tex.south.ptr);
+		app->tex.south.ptr = NULL;
+	}
 	if (app->tex.west.ptr)
+	{
 		mlx_destroy_image(app->mlx, app->tex.west.ptr);
+		app->tex.west.ptr = NULL;
+	}
 	if (app->tex.east.ptr)
+	{
 		mlx_destroy_image(app->mlx, app->tex.east.ptr);
+		app->tex.east.ptr = NULL;
+	}
     // AJOUTER : Libérer les chemins de textures
     if (app->tex.north_path)
     {

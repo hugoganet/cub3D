@@ -89,7 +89,7 @@ char *extract_rgb_string(char *line)
  * @brief Parse une ligne de couleur complète (F ou C)
  * @param app Structure principale
  * @param line Ligne à parser ("F R,G,B" ou "C R,G,B")
- * @return 0 si succès
+ * @return 0 si succès, 1 si erreur
  */
 int parse_color_line(t_app *app, char *line)
 {
@@ -99,13 +99,13 @@ int parse_color_line(t_app *app, char *line)
 	// Extraire la partie RGB de la ligne
 	rgb_str = extract_rgb_string(line);
 	if (!rgb_str)
-		error_exit(app, "Memory allocation failed");
+		return (1); // Fixed: return error instead of calling error_exit directly
 
 	// Parser les valeurs RGB
 	if (parse_rgb_values(rgb_str, &color) != 0)
 	{
-		free(rgb_str);
-		error_exit(app, "Invalid RGB values (must be 0-255)");
+		free(rgb_str); // Fixed: ensure cleanup before returning error
+		return (1); // Fixed: return error instead of calling error_exit directly
 	}
 
 	// Déterminer si c'est Floor ou Ceiling
@@ -119,8 +119,8 @@ int parse_color_line(t_app *app, char *line)
 	}
 	else
 	{
-		free(rgb_str);
-		error_exit(app, "Invalid color line format");
+		free(rgb_str); // Fixed: ensure cleanup before returning error
+		return (1); // Fixed: return error instead of calling error_exit directly
 	}
 
 	free(rgb_str);

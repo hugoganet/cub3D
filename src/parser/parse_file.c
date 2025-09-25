@@ -17,7 +17,9 @@ int parse_single_line(t_app *app, char *line, t_parse_counters *counters)
     // Parser les couleurs
     else if (is_color_line(line) && !counters->map_started)
     {
-        parse_color_line(app, line);
+        // Fixed: check return value and handle color parsing errors properly
+        if (parse_color_line(app, line) != 0)
+            return (-1); // Return error to allow proper cleanup in parse_cub_file
         counters->color_count++;
     }
     // Parser la map
@@ -100,7 +102,7 @@ int parse_cub_file(t_app *app, const char *path)
 			free(line);          // Free current line returned by get_next_line
 			gnl_free(NULL);      // Clean up get_next_line static buffer
 			close(fd);           // Close file descriptor to avoid resource leak
-			error_exit(app, "Invalid file format");
+			error_exit(app, "Invalid RGB values (must be 0-255)");
 		}
 		free(line);
 	}
