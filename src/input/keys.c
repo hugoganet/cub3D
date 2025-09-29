@@ -1,5 +1,16 @@
-#include "cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   keys.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 15:20:01 by hugoganet         #+#    #+#             */
+/*   Updated: 2025/09/29 15:20:02 by hugoganet        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "cub3d.h"
 
 /**
  * @brief Gestionnaire d'événements pour les touches pressées.
@@ -13,7 +24,7 @@
  * @param app Pointeur vers la structure de l'application.
  * @return int Retourne toujours 0 (requis par MiniLibX).
  */
-int key_press(int keycode, t_app *app)
+int	key_press(int keycode, t_app *app)
 {
 	if (keycode == KEY_ESC)
 		close_window(app);
@@ -44,7 +55,7 @@ int key_press(int keycode, t_app *app)
  * @param app Pointeur vers la structure de l'application.
  * @return int Retourne toujours 0 (requis par MiniLibX).
  */
-int key_release(int keycode, t_app *app)
+int	key_release(int keycode, t_app *app)
 {
 	if (keycode == KEY_W)
 		app->keys.w = false;

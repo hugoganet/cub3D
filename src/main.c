@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 13:32:16 by hugoganet         #+#    #+#             */
+/*   Updated: 2025/09/29 13:32:17 by hugoganet        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 #include <mlx.h>
@@ -13,9 +25,9 @@
  * @param argv Array of command-line argument strings.
  * @return int Returns 0 on success, non-zero on failure.
  */
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_app app;
+	t_app	app;
 
 	if (parsing(&app, argc, argv) != 0)
 		return (1);

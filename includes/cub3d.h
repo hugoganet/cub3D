@@ -175,6 +175,25 @@ typedef struct s_keys
 
 // Raycasting structures
 /**
+ * @brief Variables temporaires pour l'algorithme DDA.
+ *
+ * Structure contenant toutes les variables nécessaires au calcul
+ * DDA (Digital Differential Analyzer) pour le raycasting.
+ */
+typedef struct s_ray_vars
+{
+	int map_x;			/**< Coordonnée X actuelle dans la grille */
+	int map_y;			/**< Coordonnée Y actuelle dans la grille */
+	double delta_dist_x; /**< Distance entre intersections X */
+	double delta_dist_y; /**< Distance entre intersections Y */
+	int step_x;			/**< Direction du pas X (-1 ou 1) */
+	int step_y;			/**< Direction du pas Y (-1 ou 1) */
+	double side_dist_x;	/**< Distance jusqu'à prochaine intersection X */
+	double side_dist_y;	/**< Distance jusqu'à prochaine intersection Y */
+	int side;			/**< Côté touché (0=NS, 1=EO) */
+}	t_ray_vars;
+
+/**
  * @brief Résultat d'une collision de rayon avec un mur.
  *
  * Contient toutes les informations nécessaires pour le rendu d'une
@@ -326,24 +345,37 @@ void fill_background(t_app *app, int color);
 
 // Image manipulation
 void img_put_pixel(t_img *img, int x, int y, int color);
-void draw_rect(t_app *app, int x, int y, int w, int h, int color);
+void draw_rect(t_app *app, int *params, int color);
 
 // Minimap
 void render_minimap(t_app *app);
 void draw_minimap_tile(t_app *app, int map_x, int map_y, int color);
 void draw_player_on_minimap(t_app *app);
 
+// Minimap utilities
+int get_tile_color(char tile);
+void draw_minimap_border(t_app *app);
+void draw_minimap_ray(t_app *app, t_vec2 hit_point);
+
 // Ray visualization
 void render_minimap_rays(t_app *app);
 int cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
 void get_ray_direction(t_app *app, int ray_index, int total_rays, t_vec2 *ray_dir);
-void draw_line(t_app *app, int x0, int y0, int x1, int y1, int color);
+void draw_line(t_app *app, int *params, int color);
 
 // Texture management
 int load_textures(t_app *app);
 void free_textures(t_app *app);
+
+// Texture utilities
+int load_single_texture(t_app *app, char *path, t_img *texture);
 int get_texture_pixel(t_img *texture, int x, int y);
 t_img *get_wall_texture(t_app *app, int side, t_vec2 ray_dir);
+
+// Texture cleanup
+void cleanup_north_texture(t_app *app);
+void cleanup_north_south_textures(t_app *app);
+void cleanup_north_south_west_textures(t_app *app);
 
 int color_to_int(t_color color);
 void draw_ceiling(t_app *app);
@@ -377,10 +409,12 @@ void calculate_ray_dir(t_app *app, int x, t_vec2 *ray_dir);
 int get_wall_side(int step_x, int step_y, int side);
 
 // 3D Projection
-double calculate_wall_height(double perp_dist, int screen_h);
 void calculate_wall_bounds(int height, int screen_h, int *draw_start, int *draw_end);
-void draw_wall_column(t_app *app, int x, int draw_start, int draw_end, int color);
-void draw_textured_wall_column(t_app *app, int x, int draw_start, int draw_end, t_ray_hit *hit);
+void draw_wall_column(t_app *app, int *params, int color);
+void draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit);
+
+// Projection utilities
+double calculate_wall_height(double perp_dist, int screen_h);
 int get_texture_coord_x(double wall_x, t_img *texture);
 int get_wall_color(int wall_face);
 
