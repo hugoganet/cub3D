@@ -1,44 +1,59 @@
-# cub3D Skeleton
+# cub3D
 
-This is a Norm-friendly skeleton for the 42 `cub3D` project on macOS using MiniLibX and your existing `libft`.
+A 3D graphics project inspired by Wolfenstein 3D, built using ray-casting techniques.
 
-Status: minimal loop, background rendering, input flags; parser and raycasting are stubbed. Build verifies project structure and linkage.
+## About
 
-## Build
+cub3D is a first-person 3D maze exploration game developed as part of the 42 school curriculum. It implements a ray-casting engine from scratch using the MiniLibX graphics library to render textured walls, handle player movement, and create an immersive 3D environment from a 2D map.
 
-Requirements:
-- macOS
-- MiniLibX installed (lib at `/usr/local/lib`, headers at `/usr/local/include`) or set `MLX_DIR` to your local MLX root
-- `libft/` in this repo (already present)
+## Features
 
-Build:
+- **Ray-casting engine** for real-time 3D rendering
+- **Textured walls** with different textures for each cardinal direction
+- **Player movement** with collision detection
+- **Minimap** display with real-time position tracking
+- **Customizable maps** via `.cub` configuration files
 
-```
+## Requirements
+
+- C compiler (gcc/clang)
+- Make
+- MiniLibX library
+- X11 development libraries (Linux) or OpenGL (macOS)
+
+## Installation
+
+```bash
+git clone https://github.com/hugoganet/cub3D.git
+cd cub3D
 make
 ```
 
-Run:
+## Usage
 
-```
+```bash
 ./cub3D maps/sample.cub
 ```
 
-If you see MLX link errors, set `MLX_DIR`:
+### Controls
 
-```
-make MLX_DIR=/opt/homebrew
-```
+- **W/A/S/D** - Move forward/left/backward/right
+- **← / →** - Rotate camera
+- **ESC** - Exit game
 
-## Structure
+## Map Format
 
-- `includes/` headers
-- `src/` with submodules: `render`, `parser`, `input`, `utils`
-- `assets/textures/` for XPM textures
-- `maps/` example map
+Maps are defined in `.cub` files with:
+- Texture paths for walls (NO, SO, WE, EA)
+- Floor and ceiling colors (F, C)
+- 2D map layout using:
+  - `1` - Wall
+  - `0` - Empty space
+  - `N/S/E/W` - Player spawn position and orientation
 
-## Next steps
+## Authors
 
-- Implement `.cub` parsing (headers for textures/colors, then map), with validation
-- Implement raycasting (camera plane + DDA) and textured walls
-- Add collision using the parsed map
+- Hugo Ganet
+- Nicolas Crivelli
 
+*42 School Project*
