@@ -302,6 +302,13 @@ int find_player(t_app *app);
 int check_valid_chars(t_app *app);
 int check_map_closed(t_app *app);
 int is_wall_or_void(t_app *app, int x, int y);
+int	is_player_char(char c);
+void	set_player_orientation(t_app *app, char c);
+void	process_cell_for_player(t_app *app, int i, int j, int *player_count);
+void	orientation_north_or_south(t_app *app, char c);
+void	orientation_east_or_west(t_app *app, char c);
+int		is_at_map_edge(t_app *app, int x, int y);
+int		has_open_neighbor(t_app *app, int x, int y);
 
 // Parsing utilities
 int is_map_line(char *line);
