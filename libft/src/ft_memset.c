@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 16:50:19 by hganet            #+#    #+#             */
-/*   Updated: 2025/09/29 11:53:08 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/09/29 16:47:54 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
  * @param n The number of bytes to fill
  * @return A pointer to the filled string
  */
-void *ft_memset(void *s, int c, size_t n)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < n)

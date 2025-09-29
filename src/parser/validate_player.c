@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_player.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:47:11 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 15:58:21 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/09/29 16:44:00 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * - définit l'orientation du joueur via set_player_orientation().
  * Si la cellule ne contient pas un caractère de joueur, ne fait rien.
  *
- * @param app Pointeur vers la structure principale contenant la map et le player.
+ * @param app Ptr vers la structure principale contenant la map et le player.
  * @param i   Indice de ligne (y) dans la grille.
  * @param j   Indice de colonne (x) dans la grille.
  * @param player_count Pointeur vers le compteur de joueurs trouvé jusqu'ici.

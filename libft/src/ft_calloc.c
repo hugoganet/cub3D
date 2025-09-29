@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:24:24 by hganet            #+#    #+#             */
-/*   Updated: 2024/12/03 11:10:15 by hganet           ###   ########.fr       */
+/*   Updated: 2025/09/29 16:53:16 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
  * 		  and returns a pointer to the allocated memory.
  * 		  The memory is set to zero. 
  * 		  If nmemb or size is 0, then calloc() returns either NULL,
- * 		  or a unique pointer value that can later be successfully passed to free().
+ * 		  or a unique pointer value that can later 
+ * 		  be successfully passed to free().
  * @param nmemb Number of elements.
  * @param size Size of each element.
  * @return void* Pointer to the allocated memory.

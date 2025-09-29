@@ -6,20 +6,20 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 12:13:10 by hganet            #+#    #+#             */
-/*   Updated: 2025/02/27 15:46:42 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/09/29 16:54:10 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include<stdlib.h>
-# include<unistd.h>
-# include<stdio.h>
-# include<string.h>
-# include<limits.h>
-# include<stdint.h>
-#include <stdarg.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <string.h>
+# include <limits.h>
+# include <stdint.h>
+# include <stdarg.h>
 
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
@@ -56,5 +56,5 @@ void	ft_putnbr_fd(int n, int fd);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 int		ft_check_base(char *base);
-int 	ft_printf(const char *format, ...);
+int		ft_printf(const char *format, ...);
 #endif
