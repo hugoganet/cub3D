@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_color.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 12:35:37 by ncrivell          #+#    #+#             */
+/*   Updated: 2025/09/29 12:56:24 by ncrivell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 
@@ -11,22 +23,22 @@
  * @note On stocke les valeurs
  * @return 0 si succès, 1 si erreur
  */
-int parse_rgb_values(const char *rgb_str, t_color *color)
+int	parse_rgb_values(const char *rgb_str, t_color *color)
 {
-	char **rgb_parts;
-	int r, g, b;
+	char	**rgb_parts;
+	int		r;
+	int		g;
+	int		b;
+	int		count;
 
 	rgb_parts = ft_split(rgb_str, ',');
 	if (!rgb_parts)
 		return (1);
-	int count = 0;
+	count = 0;
 	while (rgb_parts[count])
 		count++;
 	if (count != 3)
-	{
-		free_split(rgb_parts);
-		return (1);
-	}
+		return (free_split(rgb_parts), 1);
 	r = ft_atoi(rgb_parts[0]);
 	g = ft_atoi(rgb_parts[1]);
 	b = ft_atoi(rgb_parts[2]);
@@ -42,65 +54,58 @@ int parse_rgb_values(const char *rgb_str, t_color *color)
 /**
  * @brief Extrait la partie RGB d'une ligne "F R,G,B" ou "C R,G,B"
  * @param line Ligne complète à parser
+ * @note Ignorer le préfixe (F ou C) et les espaces
+ * @note Trouver la fin (ignorer \n)
+ * @note Allouer et copier
  * @return Chaîne "R,G,B" ou NULL si erreur
  */
-char *extract_rgb_string(char *line)
+char	*extract_rgb_string(char *line)
 {
-	char *rgb_str;
-	int i, j, start;
+	char	*rgb_str;
+	int		i;
+	int		j;
+	int		start;
 
-	// Ignorer le préfixe (F ou C) et les espaces
 	i = 0;
 	while (line[i] && line[i] != ' ')
 		i++;
 	while (line[i] && line[i] == ' ')
 		i++;
-
-	// Début des valeurs RGB
 	start = i;
-
-	// Trouver la fin (ignorer \n)
 	while (line[i] && line[i] != '\n')
 		i++;
-
-	// Allouer et copier
 	rgb_str = malloc(i - start + 1);
 	if (!rgb_str)
 		return (NULL);
-
 	j = 0;
 	while (start < i)
 		rgb_str[j++] = line[start++];
 	rgb_str[j] = '\0';
-
 	return (rgb_str);
 }
-
 
 /**
  * @brief Parse une ligne de couleur complète (F ou C)
  * @param app Structure principale
  * @param line Ligne à parser ("F R,G,B" ou "C R,G,B")
+ * @note Extraire la partie RGB de la ligne
+ * @note Parser les valeurs RGB
+ * @note Déterminer si c'est Floor ou Ceiling
  * @return 0 si succès, 1 si erreur
  */
-int parse_color_line(t_app *app, char *line)
+int	parse_color_line(t_app *app, char *line)
 {
-	char *rgb_str;
-	t_color color;
+	char	*rgb_str;
+	t_color	color;
 
-	// Extraire la partie RGB de la ligne
 	rgb_str = extract_rgb_string(line);
 	if (!rgb_str)
-		return (1); // Fixed: return error instead of calling error_exit directly
-
-	// Parser les valeurs RGB
+		return (1);
 	if (parse_rgb_values(rgb_str, &color) != 0)
 	{
-		free(rgb_str); // Fixed: ensure cleanup before returning error
-		return (1); // Fixed: return error instead of calling error_exit directly
+		free(rgb_str);
+		return (1);
 	}
-
-	// Déterminer si c'est Floor ou Ceiling
 	if (ft_strncmp(line, "F ", 2) == 0)
 	{
 		app->floor = color;
@@ -111,10 +116,8 @@ int parse_color_line(t_app *app, char *line)
 	}
 	else
 	{
-		free(rgb_str); // Fixed: ensure cleanup before returning error
-		return (1); // Fixed: return error instead of calling error_exit directly
+		free(rgb_str);
+		return (1);
 	}
-
-	free(rgb_str);
-	return (0);
+	return (free(rgb_str), 0);
 }

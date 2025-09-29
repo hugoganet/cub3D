@@ -1,107 +1,102 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 13:02:24 by ncrivell          #+#    #+#             */
+/*   Updated: 2025/09/29 13:18:07 by ncrivell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 
-int count_map_lines(const char *path)
+// map.grid sera alloue dans add_map_line
+int	init_map(t_app *app)
 {
-    int fd;
-    char *line;
-    int map_lines = 0;
-    int map_started = 0;
-
-    fd = open(path, O_RDONLY);
-    if (fd < 0)
-        return (-1);
-
-    printf("🔍 Counting map lines...\n");
-
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("  COUNT: line='%s' (len=%d)\n", line, (int)ft_strlen(line));
-
-        // Skip empty lines
-        if (ft_strlen(line) == 0 || line[0] == '\n')
-        {
-            printf("  → SKIPPING empty line\n");
-            free(line);
-            continue;
-        }
-
-        // Check if we've reached the map section
-        if (is_map_line(line))
-        {
-            map_started = 1;
-            map_lines++;
-            printf("  → MAP LINE %d: '%s'\n", map_lines, line);
-        }
-        else if (map_started)
-        {
-            printf("  → END of map section\n");
-            free(line);
-            break;
-        }
-        else
-        {
-            printf("  → NON-MAP line\n");
-        }
-
-        free(line);
-    }
-
-    close(fd);
-    return (map_lines);
+	app->map.height = 0;
+	app->map.width = 0;
+	app->map.grid = NULL;
+	return (0);
 }
 
-int init_map(t_app *app)
+int	get_trimmed_len(char *line)
 {
-    // PAS de count_map_lines() ! On va allouer dynamiquement
+	int	len;
 
-    // Commencer avec une taille raisonnable
-    app->map.height = 0;
-    app->map.width = 0;
-    app->map.grid = NULL; // Sera alloué dans add_map_line
-
-    return (0);
+	if (!line)
+		return (0);
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		len--;
+	return (len);
 }
 
-int add_map_line(t_app *app, char *line, int line_index)
+char	*dup_map_line(t_app *app, char *line, int len)
 {
-    int len;
-    char *map_line;
-    char **new_grid;
-    int i, j;
+	char	*map_line;
+	int		i;
 
-    if (!line)
-        return (1);
+	map_line = malloc(len + 1);
+	if (!map_line)
+		error_exit(app, "Memory allocation failed for map line");
+	i = 0;
+	while (i < len)
+	{
+		map_line[i] = line[i];
+		i++;
+	}
+	map_line[i] = '\0';
+	return (map_line);
+}
 
-    // Calculer la longueur sans le \n
-    len = ft_strlen(line);
-    if (len > 0 && line[len - 1] == '\n')
-        len--;
+char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed)
+{
+	char	**new_grid;
 
-    // Allouer et copier la ligne
-    map_line = malloc(len + 1);
-    if (!map_line)
-        error_exit(app, "Memory allocation failed for map line");
+	new_grid = realloc(old_grid, sizeof(char *) * needed);
+	if (!new_grid)
+		error_exit(app, "Memory reallocation failed for map");
+	return (new_grid);
+}
 
-    // Copier en ignorant le \n
-    j = 0;
-    for (i = 0; i < len; i++)
-        map_line[j++] = line[i];
-    map_line[j] = '\0';
+/**
+ * @brief Ajoute une ligne formatée à la grille de la map.
+ *
+ * Cette version refactorisée utilise des helpers pour clarifier les étapes :
+ * - get_trimmed_len() : calcule la longueur effective sans '\n'
+ * - dup_map_line() : duplique la ligne dans une allocation propre
+ * - ensure_grid_capacity() : réalloue le tableau app->map.grid si nécessaire
+ *
+ * La fonction insère la nouvelle ligne à l'index spécifié, termine la grille
+ * par NULL, met à jour app->map.height et adapte app->map.width si la ligne
+ * est plus large que la largeur courante.
+ *
+ * En cas d'allocation échouée, les helpers appellent error_exit() (arrêt).
+ *
+ * @param app Pointeur vers la structure principale contenant app->map.
+ * @param line Chaîne à ajouter (peut contenir un '\n' final).
+ * @param line_index Index 0-based où insérer la ligne dans la grille.
+ * @return int 0 si succès, 1 si line == NULL (erreur non-fatale).
+ */
+int	add_map_line(t_app *app, char *line, int line_index)
+{
+	int		len;
+	char	*map_line;
+	char	**new_grid;
 
-    // Réallouer le tableau si nécessaire
-    new_grid = realloc(app->map.grid, sizeof(char *) * (line_index + 2));
-    if (!new_grid)
-        error_exit(app, "Memory reallocation failed for map");
-
-    app->map.grid = new_grid;
-    app->map.grid[line_index] = map_line;
-    app->map.grid[line_index + 1] = NULL; // Terminer avec NULL
-
-    // Mettre à jour les dimensions
-    app->map.height = line_index + 1;
-    if (len > app->map.width)
-        app->map.width = len;
-
-    return (0);
+	if (!line)
+		return (1);
+	len = get_trimmed_len(line);
+	map_line = dup_map_line(app, line, len);
+	new_grid = ensure_grid_capacity(app, app->map.grid, line_index + 2);
+	app->map.grid = new_grid;
+	app->map.grid[line_index] = map_line;
+	app->map.grid[line_index + 1] = NULL;
+	app->map.height = line_index + 1;
+	if (len > app->map.width)
+		app->map.width = len;
+	return (0);
 }
