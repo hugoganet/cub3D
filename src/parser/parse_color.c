@@ -1,11 +1,14 @@
 #include "cub3d.h"
 #include "libft.h"
 
-
 /**
  * @brief Parse les valeurs RGB depuis une chaîne "R,G,B"
  * @param rgb_str Chaîne contenant "R,G,B"
  * @param color Structure t_color à remplir
+ * @note On divise la chaîne par les virgules
+ * @note On verifie qu'on a exactement 3 valeurs
+ * @note On converti en entiers et valider (0-255)
+ * @note On stocke les valeurs
  * @return 0 si succès, 1 si erreur
  */
 int parse_rgb_values(const char *rgb_str, t_color *color)
@@ -13,37 +16,26 @@ int parse_rgb_values(const char *rgb_str, t_color *color)
 	char **rgb_parts;
 	int r, g, b;
 
-	// Diviser la chaîne par les virgules
 	rgb_parts = ft_split(rgb_str, ',');
 	if (!rgb_parts)
 		return (1);
-
-	// Vérifier qu'on a exactement 3 valeurs
 	int count = 0;
 	while (rgb_parts[count])
 		count++;
-
 	if (count != 3)
 	{
 		free_split(rgb_parts);
 		return (1);
 	}
-
-	// Convertir en entiers et valider (0-255)
 	r = ft_atoi(rgb_parts[0]);
 	g = ft_atoi(rgb_parts[1]);
 	b = ft_atoi(rgb_parts[2]);
-
 	free_split(rgb_parts);
-
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
 		return (1);
-
-	// Stocker les valeurs
 	color->r = r;
 	color->g = g;
 	color->b = b;
-
 	return (0);
 }
 

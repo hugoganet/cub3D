@@ -1,21 +1,22 @@
 #include "cub3d.h"
 #include <stdlib.h>
 
-void free_split(char **arr)
+void	free_split(char **arr)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!arr)
-		return;
+		return ;
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);
 }
 
-void *gnl_free(void *p)
+void	*gnl_free(void *p)
 {
-	// Clean up get_next_line static buffer when p is NULL
 	if (!p)
-		get_next_line(-1);  // Trigger static buffer cleanup
+		get_next_line(-1);
 	else
 		free(p);
 	return (NULL);

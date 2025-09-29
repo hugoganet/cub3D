@@ -1,7 +1,46 @@
 #include "cub3d.h"
 #include "libft.h"
 
-void init_defaults(t_app *app)
+/**
+ * @brief Fonction principale de parsing qui orchestre la validation et
+ *        l'analyse du fichier.
+ *
+ * Valide les arguments de ligne de commande, initialise la structure de
+ * l'application avec des valeurs par défaut, analyse le fichier .cub, et
+ * valide la carte résultante. Nettoie les ressources en cas d'échec.
+ *
+ * @param app Pointeur vers la structure de l'application à remplir.
+ * @param argc Nombre d'arguments de ligne de commande.
+ * @param argv Tableau des chaînes d'arguments de ligne de commande.
+ * @return int Retourne 0 en cas de succès, 1 en cas d'échec.
+ */
+int	parsing(t_app *app, int argc, char **argv)
+{
+	if (parse_input(argc, argv) == 1)
+		return (1);
+	ft_memset(app, 0, sizeof(t_app));
+	init_defaults(app);
+	if (parse_cub_file(app, argv[1]) == 1)
+	{
+		app_destroy(app, 1);
+		return (1);
+	}
+	validate_map(app);
+	return (0);
+}
+
+/**
+ * @brief Initialise la structure de l'application avec des valeurs par
+ *        défaut.
+ *
+ * Configure les dimensions par défaut de la fenêtre, les vitesses de
+ * mouvement et de rotation, les couleurs par défaut du sol et du plafond,
+ * remet à zéro l'état des touches, et initialise les pointeurs de texture
+ * et chemins à NULL/false.
+ *
+ * @param app Pointeur vers la structure de l'application à initialiser.
+ */
+void	init_defaults(t_app *app)
 {
 	app->win_w = 1024;
 	app->win_h = 768;
@@ -11,7 +50,6 @@ void init_defaults(t_app *app)
 	app->ceil = (t_color){135, 206, 235};
 	app->keys = (t_keys){0};
 	app->tex.loaded = false;
-	// Fixed: ensure texture structure is fully initialized
 	app->tex.north.ptr = NULL;
 	app->tex.south.ptr = NULL;
 	app->tex.west.ptr = NULL;
@@ -23,75 +61,26 @@ void init_defaults(t_app *app)
 }
 
 /**
- * FONCTION PARSING - Déroulement étape par étape
- * ================================================
+ * @brief Valide les arguments de ligne de commande et l'extension du
+ *        fichier.
  *
- * Cette fonction orchestre tout le processus de parsing du projet cub3D.
- * Elle suit un ordre logique pour valider et charger toutes les données nécessaires.
+ * Vérifie qu'exactement un argument est fourni, que le chemin du fichier
+ * est valide (au moins 5 caractères), et qu'il a une extension .cub.
+ * Affiche des messages d'erreur appropriés sur stderr en cas d'échec de
+ * validation.
  *
- * ÉTAPES :
- *
- * 1. VALIDATION DES ARGUMENTS
- *    - Vérifie que l'utilisateur a donné exactement 1 fichier .cub
- *    - Vérifie que le fichier a bien l'extension .cub
- *    - Si erreur → retourne 1 (échec)
- *
- * 2. INITIALISATION DE L'APPLICATION
- *    - Remet à zéro toute la structure t_app (sécurité)
- *    - Charge les valeurs par défaut (résolution, vitesses, couleurs...)
- *    - Prépare l'app pour recevoir les données du fichier
- *
- * 3. PARSING DU FICHIER .CUB  -> parse_cub_file(app, argv[1])
- *    - Ouvre et lit le fichier ligne par ligne
- *    - Parse les textures (NO, SO, WE, EA)
- *    - Parse les couleurs (F pour sol, C pour plafond)
- *    - Parse la carte 2D (murs et espaces)
- *    - Valide que tout est cohérent
- *
- * 4. GESTION D'ERREUR
- *    - Si le parsing échoue → nettoie la mémoire et retourne 1
- *    - Si tout va bien → retourne 0 (succès)
- * 5. VALIDATION DE LA MAP
- * 		- Verifie si la map est correcte et jouable
- * RETOUR :
- * - 0 : Parsing réussi, l'app est prête pour le jeu
- * - 1 : Erreur détectée, le programme doit s'arrêter
-*/
-
-
-int	parsing(t_app *app, int argc, char **argv)
+ * @param argc Nombre d'arguments de ligne de commande.
+ * @param argv Tableau des chaînes d'arguments de ligne de commande.
+ * @return int Retourne 0 en cas de succès, 1 en cas d'échec de validation.
+ */
+int	parse_input(int argc, char **argv)
 {
-	// ÉTAPE 1 : Valider les arguments
-	if (parse_input(app, argc, argv) == 1)
-		return 1;
-
-	// ÉTAPE 2 : Initialiser l'app AVANT le parsing
-	ft_memset(app, 0, sizeof(t_app));
-	init_defaults(app);
-
-	// ÉTAPE 3 : Parser le fichier .cub
-	if (parse_cub_file(app, argv[1]) == 1)
-	{
-		app_destroy(app, 1);
-		return (1);
-	}
-
-	// ÉTAPE 4 : Valider la map
-	validate_map(app);
-
-	return 0;
-}
-
-int	parse_input(t_app *app, int argc, char **argv)
-{
-	(void)app;
 	if (argc != 2)
 	{
 		ft_putendl_fd("Error", 2);
 		ft_putendl_fd("Usage: ./cub3D <map.cub>", 2);
 		return (1);
 	}
-	// Verifier l'extension du fichier
 	if (!argv[1] || ft_strlen(argv[1]) < 5)
 	{
 		ft_putendl_fd("Error", 2);

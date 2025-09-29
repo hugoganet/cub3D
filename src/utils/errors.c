@@ -2,7 +2,7 @@
 #include "libft.h"
 #include <stdlib.h>
 
-void error_exit(t_app *app, const char *msg)
+void	error_exit(t_app *app, const char *msg)
 {
 	ft_putendl_fd("Error", 2);
 	if (msg)
@@ -11,7 +11,7 @@ void error_exit(t_app *app, const char *msg)
 	exit(1);
 }
 
-int rgb_to_int(t_color c)
+int	rgb_to_int(t_color c)
 {
 	if (c.r < 0)
 		c.r = 0;
@@ -25,6 +25,5 @@ int rgb_to_int(t_color c)
 		c.b = 0;
 	if (c.b > 255)
 		c.b = 255;
-	/* MLX (macOS) usually expects ARGB32; set alpha to 0xFF to ensure visible pixels */
 	return ((0xFF << 24) | (c.r << 16) | (c.g << 8) | c.b);
 }

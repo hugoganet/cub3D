@@ -31,13 +31,6 @@ int app_init(t_app *app, int w, int h)
 		return (ft_putendl_fd("Error\nmlx_new_window failed", 2), -1);
 	if (create_frame(app, w, h) != 0)
 		return (ft_putendl_fd("Error\nmlx_new_image failed", 2), -1);
-
-    // Le joueur est déjà initialisé par find_player() dans validate_map()
-    // Pas besoin de le réinitialiser ici !
-	// // Default player (will be overridden by parser)
-	// app->player.pos = (t_vec2){2.5, 2.5};
-	// app->player.dir = (t_vec2){-1.0, 0.0};
-	// app->player.plane = (t_vec2){0.0, 0.66};
 	return (0);
 }
 

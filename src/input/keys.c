@@ -1,6 +1,18 @@
 #include "cub3d.h"
 
-// Fonction appelée quand une touche est pressée
+
+/**
+ * @brief Gestionnaire d'événements pour les touches pressées.
+ *
+ * Fonction de callback appelée par MiniLibX lorsqu'une touche est
+ * pressée. Met à jour l'état des touches dans la structure de
+ * l'application pour permettre la gestion de touches multiples
+ * simultanées. Gère également la touche d'échappement pour quitter.
+ *
+ * @param keycode Code de la touche pressée (défini dans cub3d.h).
+ * @param app Pointeur vers la structure de l'application.
+ * @return int Retourne toujours 0 (requis par MiniLibX).
+ */
 int key_press(int keycode, t_app *app)
 {
 	if (keycode == KEY_ESC)
@@ -20,7 +32,18 @@ int key_press(int keycode, t_app *app)
 	return (0);
 }
 
-// Fonction appelée quand une touche est relâchée
+/**
+ * @brief Gestionnaire d'événements pour les touches relâchées.
+ *
+ * Fonction de callback appelée par MiniLibX lorsqu'une touche est
+ * relâchée. Remet à false l'état de la touche correspondante dans
+ * la structure de l'application, permettant d'arrêter le mouvement
+ * ou la rotation du joueur.
+ *
+ * @param keycode Code de la touche relâchée (défini dans cub3d.h).
+ * @param app Pointeur vers la structure de l'application.
+ * @return int Retourne toujours 0 (requis par MiniLibX).
+ */
 int key_release(int keycode, t_app *app)
 {
 	if (keycode == KEY_W)

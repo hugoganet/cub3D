@@ -2,18 +2,25 @@
 #include "libft.h"
 #include <mlx.h>
 
-
-
+/**
+ * @brief Application entry point.
+ *
+ * Parses command-line arguments and map file, initializes the application and
+ * MiniLibX, registers input and loop hooks, starts the MLX event loop, and
+ * cleans up resources on exit.
+ *
+ * @param argc Number of command-line arguments.
+ * @param argv Array of command-line argument strings.
+ * @return int Returns 0 on success, non-zero on failure.
+ */
 int main(int argc, char **argv)
 {
 	t_app app;
 
 	if (parsing(&app, argc, argv) != 0)
-		return 1;
-	// Initialiser MLX après parsing réussi
+		return (1);
 	if (app_init(&app, app.win_w, app.win_h) != 0)
 	{
-		// Fixed: cleanup parsed data when texture loading fails
 		app_destroy(&app, 1);
 		return (1);
 	}
