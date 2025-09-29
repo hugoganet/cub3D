@@ -66,7 +66,7 @@
  *
  * Structure représentant un point ou un vecteur dans l'espace 2D.
  * Utilisée pour les positions, directions et vitesses.
- * 
+ *
  */
 typedef struct s_vec2
 {
@@ -300,7 +300,8 @@ int parse_cub_file(t_app *app, const char *path);
 int parse_single_line(t_app *app, char *line, t_parse_counters *counters);
 
 // Texture parsing
-int parse_texture_line(t_app *app, char *line);
+int 	parse_texture_line(t_app *app, char *line);
+char	*extract_path(char *line);
 
 // Color parsing
 int parse_color_line(t_app *app, char *line);
@@ -308,8 +309,11 @@ int parse_rgb_values(const char *rgb_str, t_color *color);
 char *extract_rgb_string(char *line);
 
 // Map parsing
-int init_map(t_app *app);
-int add_map_line(t_app *app, char *line, int line_index);
+int 	init_map(t_app *app);
+int 	add_map_line(t_app *app, char *line, int line_index);
+char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed);
+char	*dup_map_line(t_app *app, char *line, int len);
+int		get_trimmed_len(char *line);
 
 // Map validation
 int validate_map(t_app *app);
@@ -317,6 +321,13 @@ int find_player(t_app *app);
 int check_valid_chars(t_app *app);
 int check_map_closed(t_app *app);
 int is_wall_or_void(t_app *app, int x, int y);
+int	is_player_char(char c);
+void	set_player_orientation(t_app *app, char c);
+void	process_cell_for_player(t_app *app, int i, int j, int *player_count);
+void	orientation_north_or_south(t_app *app, char c);
+void	orientation_east_or_west(t_app *app, char c);
+int		is_at_map_edge(t_app *app, int x, int y);
+int		has_open_neighbor(t_app *app, int x, int y);
 
 // Parsing utilities
 int is_map_line(char *line);

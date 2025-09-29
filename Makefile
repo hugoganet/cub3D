@@ -38,6 +38,11 @@ SRC	:= \
 	$(SRCDIR)/render/texture_utils.c \
 	$(SRCDIR)/render/texture_cleanup.c \
 	$(SRCDIR)/render/background.c \
+	$(SRCDIR)/parser/check_map_closed.c \
+	$(SRCDIR)/parser/find_player.c \
+	$(SRCDIR)/parser/map_neighbors.c \
+	$(SRCDIR)/parser/validate_chars.c \
+	$(SRCDIR)/parser/validate_player.c \
 	$(SRCDIR)/parser/parse_file.c \
 	$(SRCDIR)/parser/parse_input.c \
 	$(SRCDIR)/parser/parse_tex.c \
@@ -45,7 +50,6 @@ SRC	:= \
 	$(SRCDIR)/parser/parse_color.c \
 	$(SRCDIR)/parser/parsing_utils.c \
 	$(SRCDIR)/utils/errors.c \
-	$(SRCDIR)/parser/validate_map.c \
 	$(SRCDIR)/utils/mem.c
 
 # Placeholders for future implementation (compiled but may be unused for now)
@@ -54,8 +58,6 @@ SRC += \
 	$(SRCDIR)/render/projection.c \
 	$(SRCDIR)/render/projection_utils.c \
 	$(SRCDIR)/render/dda.c \
-	$(SRCDIR)/parser/parse_headers.c \
-	$(SRCDIR)/parser/colors.c \
 	$(SRCDIR)/utils/math.c
 
 # Include missing render utility sources

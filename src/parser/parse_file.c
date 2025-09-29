@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_file.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 12:57:49 by ncrivell          #+#    #+#             */
+/*   Updated: 2025/09/29 13:01:00 by ncrivell         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 
@@ -14,7 +26,7 @@
  * @param counters Pointeur vers les compteurs de parsing.
  * @return int Retourne 0 en cas de succès, -1 en cas d'erreur.
  */
-int parse_single_line(t_app *app, char *line, t_parse_counters *counters)
+int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (is_texture_line(line) && !counters->map_started)
 	{
@@ -49,7 +61,7 @@ int parse_single_line(t_app *app, char *line, t_parse_counters *counters)
  * @param line Ligne à vérifier.
  * @return int Retourne 1 si la ligne est vide, 0 sinon.
  */
-int is_empty_line(char *line)
+int	is_empty_line(char *line)
 {
 	return (ft_strlen(line) == 0 || line[0] == '\n');
 }
@@ -67,7 +79,7 @@ int is_empty_line(char *line)
  * @param fd Descripteur de fichier pour fermeture en cas d'erreur.
  * @return int Retourne 0 pour continuer, 1 pour ligne vide, -1 erreur.
  */
-static int process_line(t_app *app, char *line, t_parse_counters *counters,
+static int	process_line(t_app *app, char *line, t_parse_counters *counters,
 						int fd)
 {
 	if (is_empty_line(line))
@@ -91,7 +103,7 @@ static int process_line(t_app *app, char *line, t_parse_counters *counters,
  * @param app Pointeur vers la structure de l'application.
  * @param counters Structure contenant les compteurs de parsing.
  */
-static void validate_parsing_completion(t_app *app,
+static void	validate_parsing_completion(t_app *app,
 										t_parse_counters *counters)
 {
 	if (counters->texture_count != 4)
@@ -117,15 +129,14 @@ static void validate_parsing_completion(t_app *app,
  * @see process_line() pour le traitement des lignes
  * @see validate_parsing_completion() pour la validation finale
  */
-int parse_cub_file(t_app *app, const char *path)
+int	parse_cub_file(t_app *app, const char *path)
 {
-	int fd;
-	char *line;
-	t_parse_counters counters;
-	int result;
+	t_parse_counters	counters;
+	int					fd;
+	char				*line;
+	int					result;
 
 	counters = (t_parse_counters){0};
-
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		error_exit(app, "Cannot open file");
@@ -137,7 +148,7 @@ int parse_cub_file(t_app *app, const char *path)
 		if (result == 1)
 		{
 			line = get_next_line(fd);
-			continue;
+			continue ;
 		}
 		line = get_next_line(fd);
 	}
