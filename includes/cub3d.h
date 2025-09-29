@@ -175,6 +175,25 @@ typedef struct s_keys
 
 // Raycasting structures
 /**
+ * @brief Variables temporaires pour l'algorithme DDA.
+ *
+ * Structure contenant toutes les variables nécessaires au calcul
+ * DDA (Digital Differential Analyzer) pour le raycasting.
+ */
+typedef struct s_ray_vars
+{
+	int map_x;			/**< Coordonnée X actuelle dans la grille */
+	int map_y;			/**< Coordonnée Y actuelle dans la grille */
+	double delta_dist_x; /**< Distance entre intersections X */
+	double delta_dist_y; /**< Distance entre intersections Y */
+	int step_x;			/**< Direction du pas X (-1 ou 1) */
+	int step_y;			/**< Direction du pas Y (-1 ou 1) */
+	double side_dist_x;	/**< Distance jusqu'à prochaine intersection X */
+	double side_dist_y;	/**< Distance jusqu'à prochaine intersection Y */
+	int side;			/**< Côté touché (0=NS, 1=EO) */
+}	t_ray_vars;
+
+/**
  * @brief Résultat d'une collision de rayon avec un mur.
  *
  * Contient toutes les informations nécessaires pour le rendu d'une

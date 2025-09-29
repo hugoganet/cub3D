@@ -3,27 +3,25 @@
 #include <mlx.h>
 #include <stdlib.h>
 
-static int create_frame(t_app *app, int w, int h)
+static int	create_frame(t_app *app, int w, int h)
 {
 	app->frame.ptr = mlx_new_image(app->mlx, w, h);
 	if (!app->frame.ptr)
 		return (-1);
-	app->frame.addr = mlx_get_data_addr(app->frame.ptr, &app->frame.bpp, &app->frame.line_len, &app->frame.endian);
+	app->frame.addr = mlx_get_data_addr(app->frame.ptr, &app->frame.bpp,
+			&app->frame.line_len, &app->frame.endian);
 	app->frame.w = w;
 	app->frame.h = h;
 	return (0);
 }
 
-int app_init(t_app *app, int w, int h)
+int	app_init(t_app *app, int w, int h)
 {
-	// Sauvegarder les données importantes
 	app->win_w = w;
 	app->win_h = h;
 	app->mlx = mlx_init();
 	if (!app->mlx)
 		return (ft_putendl_fd("Error\nmlx_init failed", 2), -1);
-	// Charger les textures après MLX init
-	// Fixed: remove duplicate error message (already printed in load_textures)
 	if (load_textures(app) != 0)
 		return (1);
 	app->win = mlx_new_window(app->mlx, w, h, "cub3D");
@@ -34,19 +32,25 @@ int app_init(t_app *app, int w, int h)
 	return (0);
 }
 
-void free_map(t_app *app)
+void	free_map(t_app *app)
 {
-    if (!app->map.grid)
-        return;
-    for (int i = 0; i < app->map.height; ++i)
-        free(app->map.grid[i]);
-    free(app->map.grid);
-    app->map.grid = NULL;
-    app->map.height = 0;
-    app->map.width = 0;
+	int	i;
+
+	if (!app->map.grid)
+		return ;
+	i = 0;
+	while (i < app->map.height)
+	{
+		free(app->map.grid[i]);
+		i++;
+	}
+	free(app->map.grid);
+	app->map.grid = NULL;
+	app->map.height = 0;
+	app->map.width = 0;
 }
 
-void app_destroy(t_app *app, int code)
+void	app_destroy(t_app *app, int code)
 {
 	free_textures(app);
 	gnl_free(NULL);
@@ -54,7 +58,6 @@ void app_destroy(t_app *app, int code)
 		mlx_destroy_image(app->mlx, app->frame.ptr);
 	if (app->win)
 		mlx_destroy_window(app->mlx, app->win);
-	// Fixed: properly destroy MLX context to prevent memory leak
 	if (app->mlx)
 	{
 		mlx_destroy_display(app->mlx);

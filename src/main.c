@@ -13,9 +13,9 @@
  * @param argv Array of command-line argument strings.
  * @return int Returns 0 on success, non-zero on failure.
  */
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_app app;
+	t_app	app;
 
 	if (parsing(&app, argc, argv) != 0)
 		return (1);
