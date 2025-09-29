@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 13:32:32 by hugoganet         #+#    #+#             */
+/*   Updated: 2025/09/29 13:32:33 by hugoganet        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static void	draw_rect_loop(t_app *app, int *coords, int color)
@@ -18,14 +30,14 @@ static void	draw_rect_loop(t_app *app, int *coords, int color)
 	}
 }
 
-void	draw_rect(t_app *app, int x, int y, int w, int h, int color)
+void	draw_rect(t_app *app, int *params, int color)
 {
 	int	coords[4];
 
-	coords[0] = x;
-	coords[1] = y;
-	coords[2] = w;
-	coords[3] = h;
+	coords[0] = params[0];
+	coords[1] = params[1];
+	coords[2] = params[2];
+	coords[3] = params[3];
 	draw_rect_loop(app, coords, color);
 }
 
@@ -54,27 +66,22 @@ static void	draw_line_step(t_app *app, int *coords, int *deltas, int color)
 	}
 }
 
-static void	init_line_coords(int *coords, int x0, int y0, int x1, int y1)
-{
-	coords[0] = x0;
-	coords[1] = y0;
-	coords[2] = x1;
-	coords[3] = y1;
-}
-
-void	draw_line(t_app *app, int x0, int y0, int x1, int y1, int color)
+void	draw_line(t_app *app, int *params, int color)
 {
 	int	coords[4];
 	int	deltas[4];
 
-	init_line_coords(coords, x0, y0, x1, y1);
-	deltas[0] = abs(x1 - x0);
-	deltas[1] = abs(y1 - y0);
-	if (x0 < x1)
+	coords[0] = params[0];
+	coords[1] = params[1];
+	coords[2] = params[2];
+	coords[3] = params[3];
+	deltas[0] = abs(params[2] - params[0]);
+	deltas[1] = abs(params[3] - params[1]);
+	if (params[0] < params[2])
 		deltas[2] = 1;
 	else
 		deltas[2] = -1;
-	if (y0 < y1)
+	if (params[1] < params[3])
 		deltas[3] = 1;
 	else
 		deltas[3] = -1;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycasting.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 13:32:56 by hugoganet         #+#    #+#             */
+/*   Updated: 2025/09/29 13:32:57 by hugoganet        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include <math.h>
 
@@ -33,8 +45,7 @@ static void	render_solid_colors(t_app *app)
 	int			x;
 	t_vec2		ray_dir;
 	t_ray_hit	hit;
-	int			wall_height;
-	int			draw_coords[2];
+	int			params[3];
 
 	printf("⚠️ Textures not loaded, using solid colors\n");
 	x = 0;
@@ -43,11 +54,10 @@ static void	render_solid_colors(t_app *app)
 		calculate_ray_dir(app, x, &ray_dir);
 		if (cast_ray(app, ray_dir, &hit))
 		{
-			wall_height = (int)calculate_wall_height(hit.perp_dist, app->win_h);
-			calculate_wall_bounds(wall_height, app->win_h, &draw_coords[0],
-				&draw_coords[1]);
-			draw_wall_column(app, x, draw_coords[0], draw_coords[1],
-				get_wall_color(hit.wall_face));
+			calculate_wall_bounds((int)calculate_wall_height(hit.perp_dist,
+					app->win_h), app->win_h, &params[1], &params[2]);
+			params[0] = x;
+			draw_wall_column(app, params, get_wall_color(hit.wall_face));
 		}
 		x++;
 	}
@@ -58,8 +68,7 @@ static void	render_textured_walls(t_app *app)
 	int			x;
 	t_vec2		ray_dir;
 	t_ray_hit	hit;
-	int			wall_height;
-	int			draw_coords[2];
+	int			params[3];
 
 	x = 0;
 	while (x < app->win_w)
@@ -67,11 +76,10 @@ static void	render_textured_walls(t_app *app)
 		calculate_ray_dir(app, x, &ray_dir);
 		if (cast_ray(app, ray_dir, &hit))
 		{
-			wall_height = (int)calculate_wall_height(hit.perp_dist, app->win_h);
-			calculate_wall_bounds(wall_height, app->win_h, &draw_coords[0],
-				&draw_coords[1]);
-			draw_textured_wall_column(app, x, draw_coords[0], draw_coords[1],
-				&hit);
+			calculate_wall_bounds((int)calculate_wall_height(hit.perp_dist,
+					app->win_h), app->win_h, &params[1], &params[2]);
+			params[0] = x;
+			draw_textured_wall_column(app, params, &hit);
 		}
 		x++;
 	}

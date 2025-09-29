@@ -33,7 +33,10 @@ SRC	:= \
 	$(SRCDIR)/input/movement.c \
 	$(SRCDIR)/render/draw.c \
 	$(SRCDIR)/render/minimap.c \
+	$(SRCDIR)/render/minimap_utils.c \
 	$(SRCDIR)/render/textures.c \
+	$(SRCDIR)/render/texture_utils.c \
+	$(SRCDIR)/render/texture_cleanup.c \
 	$(SRCDIR)/render/background.c \
 	$(SRCDIR)/parser/parse_file.c \
 	$(SRCDIR)/parser/parse_input.c \
@@ -47,13 +50,18 @@ SRC	:= \
 
 # Placeholders for future implementation (compiled but may be unused for now)
 SRC += \
-	$(SRCDIR)/render/raycast.c \
 	$(SRCDIR)/render/raycasting.c \
 	$(SRCDIR)/render/projection.c \
+	$(SRCDIR)/render/projection_utils.c \
 	$(SRCDIR)/render/dda.c \
 	$(SRCDIR)/parser/parse_headers.c \
 	$(SRCDIR)/parser/colors.c \
 	$(SRCDIR)/utils/math.c
+
+# Include missing render utility sources
+SRC += \
+	$(SRCDIR)/render/draw_utils.c \
+	$(SRCDIR)/render/ray_utils.c
 
 OBJ	:= $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
 

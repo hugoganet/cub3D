@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minimap.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 13:32:37 by hugoganet         #+#    #+#             */
+/*   Updated: 2025/09/29 13:32:38 by hugoganet        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include "libft.h"
 #include <math.h>
@@ -6,29 +18,46 @@ void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
 {
 	int	screen_x;
 	int	screen_y;
+	int	params1[4];
+	int	params2[4];
+	int	params3[4];
 
 	screen_x = MINIMAP_OFFSET_X + map_x * MINIMAP_SCALE;
 	screen_y = MINIMAP_OFFSET_Y + map_y * MINIMAP_SCALE;
-	draw_rect(app, screen_x, screen_y, MINIMAP_SCALE, MINIMAP_SCALE, color);
-	draw_rect(app, screen_x, screen_y, MINIMAP_SCALE, 1, COLOR_BORDER);
-	draw_rect(app, screen_x, screen_y, 1, MINIMAP_SCALE, COLOR_BORDER);
+	params1[0] = screen_x;
+	params1[1] = screen_y;
+	params1[2] = MINIMAP_SCALE;
+	params1[3] = MINIMAP_SCALE;
+	params2[0] = screen_x;
+	params2[1] = screen_y;
+	params2[2] = MINIMAP_SCALE;
+	params2[3] = 1;
+	params3[0] = screen_x;
+	params3[1] = screen_y;
+	params3[2] = 1;
+	params3[3] = MINIMAP_SCALE;
+	draw_rect(app, params1, color);
+	draw_rect(app, params2, COLOR_BORDER);
+	draw_rect(app, params3, COLOR_BORDER);
 }
 
 void	draw_player_on_minimap(t_app *app)
 {
-	int	player_screen_x;
-	int	player_screen_y;
-	int	dir_end_x;
-	int	dir_end_y;
+	int	player_params[4];
+	int	dir_params[4];
 
-	player_screen_x = MINIMAP_OFFSET_X + (int)(app->player.pos.x
+	player_params[0] = MINIMAP_OFFSET_X + (int)(app->player.pos.x
 			* MINIMAP_SCALE) - 3;
-	player_screen_y = MINIMAP_OFFSET_Y + (int)(app->player.pos.y
+	player_params[1] = MINIMAP_OFFSET_Y + (int)(app->player.pos.y
 			* MINIMAP_SCALE) - 3;
-	draw_rect(app, player_screen_x, player_screen_y, 6, 6, COLOR_PLAYER);
-	dir_end_x = player_screen_x + 3 + (int)(app->player.dir.x * 10);
-	dir_end_y = player_screen_y + 3 + (int)(app->player.dir.y * 10);
-	draw_rect(app, dir_end_x, dir_end_y, 2, 2, 0x00FF00);
+	player_params[2] = 6;
+	player_params[3] = 6;
+	draw_rect(app, player_params, COLOR_PLAYER);
+	dir_params[0] = player_params[0] + 3 + (int)(app->player.dir.x * 10);
+	dir_params[1] = player_params[1] + 3 + (int)(app->player.dir.y * 10);
+	dir_params[2] = 2;
+	dir_params[3] = 2;
+	draw_rect(app, dir_params, 0x00FF00);
 }
 
 void	render_minimap(t_app *app)
@@ -36,12 +65,8 @@ void	render_minimap(t_app *app)
 	int		x;
 	int		y;
 	int		line_len;
-	char	tile;
-	int		color;
 
-	draw_rect(app, MINIMAP_OFFSET_X - 2, MINIMAP_OFFSET_Y - 2,
-		app->map.width * MINIMAP_SCALE + 4,
-		app->map.height * MINIMAP_SCALE + 4, 0xFFFFFF);
+	draw_minimap_border(app);
 	y = 0;
 	while (y < app->map.height)
 	{
@@ -51,18 +76,7 @@ void	render_minimap(t_app *app)
 			line_len = ft_strlen(app->map.grid[y]);
 		while (x < line_len)
 		{
-			tile = app->map.grid[y][x];
-			if (tile == '1')
-				color = 0xFFFFFF;
-			else if (tile == '0')
-				color = 0x404040;
-			else if (tile == 'N' || tile == 'S' || tile == 'E' || tile == 'W')
-				color = 0x0000FF;
-			else if (tile == ' ')
-				color = 0x000000;
-			else
-				color = 0xFF00FF;
-			draw_minimap_tile(app, x, y, color);
+			draw_minimap_tile(app, x, y, get_tile_color(app->map.grid[y][x]));
 			x++;
 		}
 		y++;
@@ -94,28 +108,13 @@ void	render_minimap_rays(t_app *app)
 	int		i;
 	t_vec2	ray_dir;
 	t_vec2	hit_point;
-	int		player_screen_x;
-	int		player_screen_y;
-	int		hit_screen_x;
-	int		hit_screen_y;
 
 	i = 0;
 	while (i < MINIMAP_RAY_COUNT)
 	{
 		get_ray_direction(app, i, MINIMAP_RAY_COUNT, &ray_dir);
 		if (cast_minimap_ray(app, ray_dir, &hit_point))
-		{
-			player_screen_x = MINIMAP_OFFSET_X + (int)(app->player.pos.x
-					* MINIMAP_SCALE);
-			player_screen_y = MINIMAP_OFFSET_Y + (int)(app->player.pos.y
-					* MINIMAP_SCALE);
-			hit_screen_x = MINIMAP_OFFSET_X + (int)(hit_point.x
-					* MINIMAP_SCALE);
-			hit_screen_y = MINIMAP_OFFSET_Y + (int)(hit_point.y
-					* MINIMAP_SCALE);
-			draw_line(app, player_screen_x, player_screen_y,
-				hit_screen_x, hit_screen_y, COLOR_RAY);
-		}
+			draw_minimap_ray(app, hit_point);
 		i++;
 	}
 }

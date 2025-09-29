@@ -1,12 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   projection.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/29 13:32:39 by hugoganet         #+#    #+#             */
+/*   Updated: 2025/09/29 13:32:40 by hugoganet        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include <math.h>
-
-double	calculate_wall_height(double perp_dist, int screen_h)
-{
-	if (perp_dist < 0.001)
-		perp_dist = 0.001;
-	return (screen_h / perp_dist);
-}
 
 void	calculate_wall_bounds(int height, int screen_h, int *draw_start,
 		int *draw_end)
@@ -19,29 +24,16 @@ void	calculate_wall_bounds(int height, int screen_h, int *draw_start,
 		*draw_end = screen_h - 1;
 }
 
-void	draw_wall_column(t_app *app, int x, int draw_start, int draw_end,
-		int color)
+void	draw_wall_column(t_app *app, int *params, int color)
 {
 	int	y;
 
-	y = draw_start;
-	while (y <= draw_end)
+	y = params[1];
+	while (y <= params[2])
 	{
-		img_put_pixel(&app->frame, x, y, color);
+		img_put_pixel(&app->frame, params[0], y, color);
 		y++;
 	}
-}
-
-int	get_texture_coord_x(double wall_x, t_img *texture)
-{
-	int	tex_x;
-
-	tex_x = (int)(wall_x * (double)texture->w);
-	if (tex_x < 0)
-		tex_x = 0;
-	if (tex_x >= texture->w)
-		tex_x = texture->w - 1;
-	return (tex_x);
 }
 
 static t_img	*get_texture_from_face(t_app *app, int wall_face)
@@ -56,8 +48,8 @@ static t_img	*get_texture_from_face(t_app *app, int wall_face)
 		return (&app->tex.west);
 }
 
-static void	init_texture_vars(t_app *app, t_ray_hit *hit, int draw_start,
-		int draw_end, int *vars)
+static void	init_texture_vars(t_app *app, t_ray_hit *hit, int *bounds,
+		int *vars)
 {
 	t_img	*texture;
 	int		wall_height;
@@ -66,47 +58,36 @@ static void	init_texture_vars(t_app *app, t_ray_hit *hit, int draw_start,
 
 	texture = get_texture_from_face(app, hit->wall_face);
 	vars[0] = get_texture_coord_x(hit->wall_x, texture);
-	wall_height = draw_end - draw_start;
+	wall_height = bounds[1] - bounds[0];
 	step = (double)texture->h / (double)wall_height;
-	tex_pos = (draw_start - app->win_h / 2 + wall_height / 2) * step;
+	tex_pos = (bounds[0] - app->win_h / 2 + wall_height / 2) * step;
 	vars[1] = (int)step;
 	vars[2] = (int)tex_pos;
 }
 
-void	draw_textured_wall_column(t_app *app, int x, int draw_start,
-		int draw_end, t_ray_hit *hit)
+void	draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit)
 {
 	t_img	*texture;
 	int		vars[3];
+	int		bounds[2];
 	int		y;
 	int		tex_y;
-	int		color;
 
 	texture = get_texture_from_face(app, hit->wall_face);
-	init_texture_vars(app, hit, draw_start, draw_end, vars);
-	y = draw_start;
-	while (y <= draw_end)
+	bounds[0] = params[1];
+	bounds[1] = params[2];
+	init_texture_vars(app, hit, bounds, vars);
+	y = params[1];
+	while (y <= params[2])
 	{
 		tex_y = vars[2];
 		if (tex_y >= texture->h)
 			tex_y = texture->h - 1;
 		if (tex_y < 0)
 			tex_y = 0;
-		color = get_texture_pixel(texture, vars[0], tex_y);
-		img_put_pixel(&app->frame, x, y, color);
+		img_put_pixel(&app->frame, params[0], y,
+			get_texture_pixel(texture, vars[0], tex_y));
 		vars[2] += vars[1];
 		y++;
 	}
-}
-
-int	get_wall_color(int wall_face)
-{
-	if (wall_face == FACE_NORTH)
-		return (0xFFFFFF);
-	else if (wall_face == FACE_SOUTH)
-		return (0xAAAAAA);
-	else if (wall_face == FACE_EAST)
-		return (0x888888);
-	else
-		return (0x555555);
 }
