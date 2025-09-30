@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:57:49 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 13:01:00 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:47:01 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ static int	process_line(t_app *app, char *line, t_parse_counters *counters,
 		return (1);
 	if (parse_single_line(app, line, counters) != 0)
 	{
+		free(line);
 		gnl_free(NULL);
 		close(fd);
 		error_exit(app, "Invalid RGB values (must be 0-255)");
