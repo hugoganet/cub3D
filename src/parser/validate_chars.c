@@ -13,6 +13,24 @@
 #include "cub3d.h"
 #include "libft.h"
 
+/**
+ * @brief Vérifie que tous les caractères de la map sont valides.
+ *
+ * Parcourt chaque cellule de la grille app->map.grid et valide que
+ * seuls les caractères autorisés sont présents :
+ * - '0' : espace vide (sol)
+ * - '1' : mur
+ * - ' ' : espace (vide non traversable)
+ * - 'N', 'S', 'E', 'W' : position et orientation du joueur
+ *
+ * Si un caractère invalide est détecté, appelle error_exit() avec
+ * un message explicite.
+ *
+ * @param app Pointeur vers la structure principale contenant la map.
+ * @return int Retourne 0 si tous les caractères sont valides.
+ *
+ * @see validate_map() pour la séquence complète de validation
+ */
 int	check_valid_chars(t_app *app)
 {
 	int		i;

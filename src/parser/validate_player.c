@@ -40,11 +40,37 @@ void	process_cell_for_player(t_app *app, int i, int j, int *player_count)
 	set_player_orientation(app, c);
 }
 
+/**
+ * @brief Détermine si un caractère représente un joueur.
+ *
+ * Vérifie si le caractère correspond à l'une des orientations de départ
+ * possibles du joueur : Nord (N), Sud (S), Est (E) ou Ouest (W).
+ *
+ * @param c Caractère à tester.
+ * @return int 1 si c est un caractère joueur, 0 sinon.
+ *
+ * @see find_player() pour la recherche du joueur dans la map
+ */
 int	is_player_char(char c)
 {
 	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
 }
 
+/**
+ * @brief Configure l'orientation du joueur pour Nord ou Sud.
+ *
+ * Définit les vecteurs de direction (dir) et de plan caméra (plane) pour
+ * une orientation Nord (N) ou Sud (S) :
+ * - Nord : dir=(0,-1), plane=(0.66,0) - regarde vers le haut
+ * - Sud : dir=(0,1), plane=(-0.66,0) - regarde vers le bas
+ *
+ * La magnitude du plane (0.66) détermine le FOV (~60°).
+ *
+ * @param app Pointeur vers la structure principale.
+ * @param c Caractère d'orientation ('N' ou 'S').
+ *
+ * @see set_player_orientation() pour la fonction appelante
+ */
 void	orientation_north_or_south(t_app *app, char c)
 {
 	if (c == 'N')
@@ -63,6 +89,21 @@ void	orientation_north_or_south(t_app *app, char c)
 	}
 }
 
+/**
+ * @brief Configure l'orientation du joueur pour Est ou Ouest.
+ *
+ * Définit les vecteurs de direction (dir) et de plan caméra (plane) pour
+ * une orientation Est (E) ou Ouest (W) :
+ * - Est : dir=(1,0), plane=(0,0.66) - regarde vers la droite
+ * - Ouest : dir=(-1,0), plane=(0,-0.66) - regarde vers la gauche
+ *
+ * Le plane est perpendiculaire à dir avec magnitude 0.66 pour FOV ~60°.
+ *
+ * @param app Pointeur vers la structure principale.
+ * @param c Caractère d'orientation ('E' ou 'W').
+ *
+ * @see set_player_orientation() pour la fonction appelante
+ */
 void	orientation_east_or_west(t_app *app, char c)
 {
 	if (c == 'E')
@@ -81,6 +122,20 @@ void	orientation_east_or_west(t_app *app, char c)
 	}
 }
 
+/**
+ * @brief Définit l'orientation initiale du joueur selon le caractère de spawn.
+ *
+ * Dispatche vers orientation_north_or_south() ou orientation_east_or_west()
+ * selon le caractère de départ (N/S/E/W) trouvé dans la map. Configure les
+ * vecteurs dir et plane pour le raycasting.
+ *
+ * @param app Pointeur vers la structure principale.
+ * @param c Caractère d'orientation du joueur ('N', 'S', 'E', 'W').
+ *
+ * @see process_cell_for_player() qui appelle cette fonction
+ * @see orientation_north_or_south() pour les orientations N/S
+ * @see orientation_east_or_west() pour les orientations E/W
+ */
 void	set_player_orientation(t_app *app, char c)
 {
 	if (c == 'N' || c == 'S')

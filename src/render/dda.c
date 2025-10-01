@@ -13,6 +13,23 @@
 #include "cub3d.h"
 #include <math.h>
 
+/**
+ * @brief Initialise les variables DDA pour l'axe X et calcule deltaDistX.
+ *
+ * Prépare les variables nécessaires à l'algorithme DDA (Digital Differential
+ * Analyzer) pour le raycasting :
+ * - map_x/map_y : position initiale dans la grille (cellule du joueur)
+ * - delta_dist : distance parcourue par le rayon pour traverser une cellule
+ * - step_x : direction du pas (-1 ou 1)
+ * - side_dist_x : distance initiale jusqu'au premier bord de cellule
+ *
+ * @param app Pointeur vers la structure principale (position joueur).
+ * @param ray_dir Vecteur direction du rayon.
+ * @param vars Pointeur vers la structure des variables DDA à initialiser.
+ *
+ * @see init_dda_vars_y() pour l'initialisation de l'axe Y
+ * @see cast_ray() qui utilise ces variables pour le DDA
+ */
 static void	init_dda_vars(t_app *app, t_vec2 ray_dir, t_ray_vars *vars)
 {
 	vars->map_x = (int)app->player.pos.x;
@@ -39,6 +56,20 @@ static void	init_dda_vars(t_app *app, t_vec2 ray_dir, t_ray_vars *vars)
 	}
 }
 
+/**
+ * @brief Initialise les variables DDA pour l'axe Y.
+ *
+ * Complète l'initialisation des variables DDA en calculant step_y et
+ * side_dist_y selon la direction du rayon sur l'axe Y. Travaille en
+ * tandem avec init_dda_vars() pour préparer l'algorithme DDA complet.
+ *
+ * @param app Pointeur vers la structure principale (position joueur).
+ * @param ray_dir Vecteur direction du rayon.
+ * @param vars Pointeur vers la structure des variables DDA à compléter.
+ *
+ * @see init_dda_vars() pour l'initialisation de l'axe X
+ * @see cast_ray() qui utilise ces variables
+ */
 static void	init_dda_vars_y(t_app *app, t_vec2 ray_dir, t_ray_vars *vars)
 {
 	if (ray_dir.y < 0)
@@ -55,6 +86,23 @@ static void	init_dda_vars_y(t_app *app, t_vec2 ray_dir, t_ray_vars *vars)
 	}
 }
 
+/**
+ * @brief Vérifie si le rayon a touché un mur à la position actuelle.
+ *
+ * Teste si la cellule de grille (map_x, map_y) contient un mur ('1') ou
+ * est hors limites. Utilisé dans la boucle DDA pour détecter la fin du
+ * raycasting.
+ *
+ * Conditions de collision :
+ * - Position hors des limites de la grille
+ * - Caractère '1' dans la grille (mur)
+ *
+ * @param app Pointeur vers la structure principale contenant la map.
+ * @param vars Pointeur vers les variables DDA avec position courante.
+ * @return int 1 si mur touché ou OOB, 0 sinon.
+ *
+ * @see cast_ray() qui utilise cette fonction dans la boucle DDA
+ */
 static int	check_wall_hit(t_app *app, t_ray_vars *vars)
 {
 	if (vars->map_x < 0 || vars->map_y < 0 || vars->map_x >= app->map.width
@@ -67,6 +115,26 @@ static int	check_wall_hit(t_app *app, t_ray_vars *vars)
 	return (0);
 }
 
+/**
+ * @brief Remplit la structure t_ray_hit avec les informations de collision.
+ *
+ * Calcule et stocke toutes les données de collision nécessaires au rendu :
+ * - perp_dist : distance perpendiculaire (corrige fish-eye)
+ * - wall_face : face de mur touchée (N/S/E/W)
+ * - wall_x : coordonnée d'impact sur le mur (pour texture mapping)
+ * - map_x/map_y : position de la cellule touchée
+ *
+ * La distance perpendiculaire est calculée selon le côté de collision
+ * (0=vertical, 1=horizontal) pour éviter l'effet fish-eye.
+ *
+ * @param app Pointeur vers la structure principale (position joueur).
+ * @param ray_dir Vecteur direction du rayon.
+ * @param vars Pointeur vers les variables DDA finales.
+ * @param hit Pointeur vers la structure t_ray_hit à remplir.
+ *
+ * @see cast_ray() qui appelle cette fonction après collision
+ * @see draw_textured_wall_column() qui utilise ces informations
+ */
 static void	fill_hit_info(t_app *app, t_vec2 ray_dir, t_ray_vars *vars,
 		t_ray_hit *hit)
 {
@@ -94,6 +162,29 @@ static void	fill_hit_info(t_app *app, t_vec2 ray_dir, t_ray_vars *vars,
 	hit->wall_x -= floor(hit->wall_x);
 }
 
+/**
+ * @brief Lance un rayon et détecte la collision avec un mur (algorithme DDA).
+ *
+ * Implémente l'algorithme Digital Differential Analyzer (DDA) pour tracer
+ * un rayon dans la grille 2D jusqu'à toucher un mur. Avance case par case
+ * en choisissant l'axe dont la distance au prochain bord est minimale.
+ *
+ * Algorithme :
+ * 1. Initialiser les variables DDA (delta_dist, step, side_dist)
+ * 2. Boucler jusqu'à collision :
+ *    - Avancer sur l'axe X ou Y selon side_dist minimal
+ *    - Vérifier si mur touché
+ * 3. Calculer les informations de collision (distance, face, coordonnées)
+ *
+ * @param app Pointeur vers la structure principale (joueur, map).
+ * @param ray_dir Vecteur direction du rayon normalisé.
+ * @param hit Pointeur vers la structure t_ray_hit à remplir.
+ * @return int Retourne toujours 1 (collision trouvée).
+ *
+ * @see init_dda_vars() pour l'initialisation
+ * @see fill_hit_info() pour les calculs de collision
+ * @see render_3d_view() qui appelle cette fonction pour chaque rayon
+ */
 int	cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit)
 {
 	t_ray_vars	vars;

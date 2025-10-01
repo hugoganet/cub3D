@@ -51,6 +51,24 @@ int	check_map_closed(t_app *app)
 	return (0);
 }
 
+/**
+ * @brief Valide la map complète : caractères, joueur et fermeture.
+ *
+ * Exécute la séquence complète de validation de la map en trois étapes :
+ * 1. Vérification des caractères valides (check_valid_chars)
+ * 2. Recherche et initialisation du joueur (find_player)
+ * 3. Vérification de fermeture par des murs (check_map_closed)
+ *
+ * Cette fonction est le point d'entrée de la validation après le parsing.
+ * Toute erreur provoque un error_exit() dans les sous-fonctions.
+ *
+ * @param app Pointeur vers la structure principale contenant la map.
+ * @return int Retourne 0 si toutes les validations passent.
+ *
+ * @see check_valid_chars() pour la validation des caractères
+ * @see find_player() pour la détection du joueur
+ * @see check_map_closed() pour la vérification de fermeture
+ */
 int	validate_map(t_app *app)
 {
 	check_valid_chars(app);

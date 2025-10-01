@@ -13,6 +13,24 @@
 #include "cub3d.h"
 #include "libft.h"
 
+/**
+ * @brief Recherche et initialise le joueur dans la map.
+ *
+ * Parcourt toute la grille app->map.grid pour trouver le caractère de
+ * joueur (N/S/E/W). Pour chaque cellule, appelle process_cell_for_player()
+ * qui incrémente un compteur et configure le joueur si trouvé.
+ *
+ * Valide qu'il y a exactement un joueur dans la map :
+ * - Si aucun joueur : error_exit("No player found")
+ * - Si plusieurs joueurs : error_exit("Multiple players found")
+ *
+ * @param app Pointeur vers la structure principale contenant la map.
+ * @return int Retourne 0 si exactement un joueur est trouvé.
+ *
+ * @see process_cell_for_player() pour le traitement de chaque cellule
+ * @see is_player_char() pour la détection des caractères joueur
+ * @see set_player_orientation() pour l'initialisation de l'orientation
+ */
 int	find_player(t_app *app)
 {
 	int	i;
