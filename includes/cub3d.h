@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/30 13:09:58 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/01 12:36:28 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 /*                             CONSTANTS                                     */
 /* ========================================================================== */
 
-//? can we actually use those constants (those are actually global variables aren't they) ? If yes, we need to move things around
 // Window settings
 # define DEFAULT_WIN_WIDTH 1024
 # define DEFAULT_WIN_HEIGHT 768
