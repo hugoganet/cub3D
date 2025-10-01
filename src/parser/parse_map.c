@@ -13,7 +13,18 @@
 #include "cub3d.h"
 #include "libft.h"
 
-// map.grid sera alloue dans add_map_line
+/**
+ * @brief Initialise la structure map à des valeurs par défaut.
+ *
+ * Prépare la structure app->map avant le parsing en définissant tous
+ * les champs à zéro ou NULL. La grille sera allouée dynamiquement
+ * lors de l'ajout des lignes via add_map_line().
+ *
+ * @param app Pointeur vers la structure principale de l'application.
+ * @return int Retourne toujours 0 (succès).
+ *
+ * @see add_map_line() pour l'allocation et le remplissage de la grille
+ */
 int	init_map(t_app *app)
 {
 	app->map.height = 0;
@@ -22,6 +33,15 @@ int	init_map(t_app *app)
 	return (0);
 }
 
+/**
+ * @brief Calcule la longueur effective d'une ligne sans le retour chariot.
+ *
+ * Détermine la longueur de la chaîne en excluant le caractère '\n' final
+ * s'il est présent. Utile pour normaliser les lignes de map avant copie.
+ *
+ * @param line Chaîne à mesurer (peut être NULL).
+ * @return int Longueur de la ligne sans '\n', ou 0 si line est NULL.
+ */
 int	get_trimmed_len(char *line)
 {
 	int	len;
@@ -34,6 +54,20 @@ int	get_trimmed_len(char *line)
 	return (len);
 }
 
+/**
+ * @brief Duplique une ligne de map dans une allocation propre.
+ *
+ * Alloue un buffer de taille len+1 et copie exactement len caractères
+ * depuis line. Termine la chaîne par '\0'. En cas d'échec d'allocation,
+ * appelle error_exit() pour arrêter le programme proprement.
+ *
+ * @param app Pointeur vers la structure principale (pour error_exit).
+ * @param line Chaîne source à dupliquer.
+ * @param len Nombre de caractères à copier (excluant '\0').
+ * @return char* Pointeur vers la nouvelle chaîne allouée.
+ *
+ * @see get_trimmed_len() pour calculer len sans '\n'
+ */
 char	*dup_map_line(t_app *app, char *line, int len)
 {
 	char	*map_line;
@@ -52,6 +86,20 @@ char	*dup_map_line(t_app *app, char *line, int len)
 	return (map_line);
 }
 
+/**
+ * @brief Réalloue la grille de map pour garantir la capacité nécessaire.
+ *
+ * Utilise realloc() pour agrandir le tableau de pointeurs app->map.grid
+ * afin qu'il puisse contenir au moins 'needed' entrées. En cas d'échec,
+ * appelle error_exit() pour terminer proprement.
+ *
+ * @param app Pointeur vers la structure principale (pour error_exit).
+ * @param old_grid Tableau actuel de pointeurs (peut être NULL au départ).
+ * @param needed Nombre d'entrées minimum requises dans le tableau.
+ * @return char** Pointeur vers le tableau réalloué.
+ *
+ * @see add_map_line() qui utilise cette fonction pour étendre la grille
+ */
 char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed)
 {
 	char	**new_grid;

@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:16 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/30 12:54:31 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/01 13:05:30 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,6 @@
  */
 int	main(int argc, char **argv)
 {
-	// Structure principale de l'application cub3D.
-	// Contient tous les éléments nécessaires au fonctionnement du moteur : 
-	// - données MLX, 
-	// - graphiques,
-	// -  monde de jeu, 
-	// - entrées utilisateur et paramètres de jeu.
 	t_app app;
 
 	if (parsing(&app, argc, argv) != 0)

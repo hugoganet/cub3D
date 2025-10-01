@@ -13,6 +13,18 @@
 #include "cub3d.h"
 #include "libft.h"
 
+/**
+ * @brief Réinitialise les champs de map après parsing des en-têtes.
+ *
+ * Prépare la structure app->map pour le parsing des lignes de carte
+ * en réinitialisant tous les champs à leurs valeurs par défaut.
+ * Appelé après avoir terminé le parsing des textures et couleurs.
+ *
+ * @param app Pointeur vers la structure principale de l'application.
+ * @return int Retourne toujours 0 (succès).
+ *
+ * @see parse_file() qui appelle cette fonction entre headers et map
+ */
 int	set_defaults_after_parse(t_app *app)
 {
 	app->map.grid = NULL;
@@ -21,6 +33,18 @@ int	set_defaults_after_parse(t_app *app)
 	return (0);
 }
 
+/**
+ * @brief Détecte si une ligne définit une texture.
+ *
+ * Vérifie si la ligne commence par un des préfixes de texture valides :
+ * "NO ", "SO ", "WE ", "EA " (suivis d'un espace). Utilisé pour
+ * identifier les lignes de configuration de textures murales.
+ *
+ * @param line Chaîne à analyser.
+ * @return int 1 si la ligne est une déclaration de texture, 0 sinon.
+ *
+ * @see process_line() qui utilise cette fonction pour router le parsing
+ */
 int	is_texture_line(char *line)
 {
 	if (!line || ft_strlen(line) < 3)
@@ -33,6 +57,18 @@ int	is_texture_line(char *line)
 	return (0);
 }
 
+/**
+ * @brief Détecte si une ligne définit une couleur.
+ *
+ * Vérifie si la ligne commence par "F " (floor/sol) ou "C " (ceiling/plafond).
+ * Utilisé pour identifier les lignes de configuration des couleurs de
+ * fond (sol et plafond).
+ *
+ * @param line Chaîne à analyser.
+ * @return int 1 si la ligne est une déclaration de couleur, 0 sinon.
+ *
+ * @see process_line() qui utilise cette fonction pour router le parsing
+ */
 int	is_color_line(char *line)
 {
 	if (!line || ft_strlen(line) < 2)
@@ -43,6 +79,20 @@ int	is_color_line(char *line)
 	return (0);
 }
 
+/**
+ * @brief Détecte si une ligne fait partie de la map.
+ *
+ * Vérifie que la ligne ne contient que des caractères valides pour une
+ * ligne de carte : '0', '1', ' ', 'N', 'S', 'E', 'W', '\n'. Tout autre
+ * caractère invalide la ligne comme ligne de map.
+ *
+ * Utilisé pour identifier le début de la section map après les en-têtes.
+ *
+ * @param line Chaîne à analyser.
+ * @return int 1 si la ligne contient uniquement des caractères de map, 0 sinon.
+ *
+ * @see process_line() qui utilise cette fonction pour détecter la map
+ */
 int	is_map_line(char *line)
 {
 	int	i;
@@ -61,6 +111,19 @@ int	is_map_line(char *line)
 	return (1);
 }
 
+/**
+ * @brief Compte le nombre de lignes dans un fichier.
+ *
+ * Ouvre le fichier spécifié et compte toutes ses lignes en utilisant
+ * get_next_line(). Libère proprement chaque ligne lue et ferme le
+ * descripteur de fichier. Appelle get_next_line(-1) pour nettoyer
+ * les buffers internes.
+ *
+ * @param filename Chemin vers le fichier à analyser.
+ * @return int Nombre de lignes dans le fichier, ou -1 si erreur d'ouverture.
+ *
+ * @see parse_file() qui peut utiliser cette fonction pour pré-allouer
+ */
 int	count_lines(const char *filename)
 {
 	int		fd;
