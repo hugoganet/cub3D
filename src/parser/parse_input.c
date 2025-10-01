@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:02:06 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 13:02:08 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/09/30 12:53:05 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@
  */
 int	parsing(t_app *app, int argc, char **argv)
 {
+	// On vérifie les arguments de la ligne de commande.
 	if (parse_input(argc, argv) == 1)
 		return (1);
+	// 
 	ft_memset(app, 0, sizeof(t_app));
 	init_defaults(app);
 	if (parse_cub_file(app, argv[1]) == 1)

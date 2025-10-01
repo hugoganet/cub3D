@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:09 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/29 13:32:10 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/09/30 13:00:07 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	app_init(t_app *app, int w, int h)
 		return (ft_putendl_fd("Error\nmlx_new_image failed", 2), -1);
 	return (0);
 }
-
+// ? why is it here ?
 void	free_map(t_app *app)
 {
 	int	i;
@@ -61,7 +61,7 @@ void	free_map(t_app *app)
 	app->map.height = 0;
 	app->map.width = 0;
 }
-
+// ? why is it here ?
 void	app_destroy(t_app *app, int code)
 {
 	free_textures(app);

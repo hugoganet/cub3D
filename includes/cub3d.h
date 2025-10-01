@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/01/01 12:00:00 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/09/30 13:09:58 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 /*                             CONSTANTS                                     */
 /* ========================================================================== */
 
+//? can we actually use those constants (those are actually global variables aren't they) ? If yes, we need to move things around
 // Window settings
 # define DEFAULT_WIN_WIDTH 1024
 # define DEFAULT_WIN_HEIGHT 768
@@ -69,7 +70,6 @@
  *
  * Structure représentant un point ou un vecteur dans l'espace 2D.
  * Utilisée pour les positions, directions et vitesses.
- *
  */
 typedef struct s_vec2
 {
@@ -382,6 +382,7 @@ int		key_press(int keycode, t_app *app);
 int		key_release(int keycode, t_app *app);
 int		close_window(t_app *app);
 bool	is_valid_position(t_app *app, double x, double y);
+// ? should we remove this ?
 void	move_player_forward_backward(t_app *app, int direction);
 void	move_player_strafe(t_app *app, int direction);
 void	update_player_movement(t_app *app);
@@ -424,6 +425,7 @@ void	*gnl_free(void *p);
 int		rgb_to_int(t_color c);
 
 // Get Next Line
+// ? we don't need that here, the function is in the libft
 char	*get_next_line(int fd);
 char	*freebuff(char **principal_buff);
 char	*ft_new_buff(char *principal_buff);
