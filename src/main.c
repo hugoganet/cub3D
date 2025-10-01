@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:16 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/01 13:05:30 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/01 15:36:20 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	mlx_loop_hook(app.mlx, (int (*)(void *))app_loop, &app);
+	// ? C'est quoi cette syntax `1L << 0` ?
 	mlx_hook(app.win, 2, 1L << 0, key_press, &app);
 	mlx_hook(app.win, 3, 1L << 1, key_release, &app);
 	mlx_hook(app.win, 17, 0, close_window, &app);
-	mlx_loop(app.mlx);
-	app_destroy(&app, 0);
+	// ? Code mort ⬇️
+	// mlx_loop(app.mlx);
+	// app_destroy(&app, 0);
 	return (0);
 }
