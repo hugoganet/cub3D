@@ -2,13 +2,44 @@
 
 ## 🎯 Focus Actuel
 
-Niveau 2 - Parsing & Validation (prochain)
+Niveau 2 - Parsing & Validation (50% complété - à reprendre : correction bug memory leak doublons)
 
 ## ✅ Concepts Maîtrisés
 
 ### 🏗️ Niveau 1 : Fondations - MAÎTRISÉ ✅
-
 **Date** : 2025-10-01
+
+### 📄 Niveau 2 : Parsing & Validation - EN COURS (50%) ⏳
+**Date** : 2025-10-01
+
+**Étapes parsing** :
+- ✅ Grandes phases : open() → get_next_line() loop → parser ligne → valider données → stocker dans t_app
+- ✅ 3 types de lignes : textures (NO/SO/WE/EA), couleurs (F/C), map (0/1/N/S/E/W/ )
+- ✅ Gestion lignes vides (ignorées avec `continue`)
+
+**Architecture modulaire (11 fichiers)** :
+- ✅ SOC appliqué : `parse_tex.c`, `parse_color.c`, `parse_map.c`, `validate_*.c`
+- ✅ Chef d'orchestre : `parse_input.c:parsing()` → `parse_cub_file()` → `validate_map()`
+- ✅ Avantages : responsabilités nettes, fonctions < 25 lignes (Norme), testable
+
+**Validation entrée** (`parse_input.c:88-109`) :
+- ✅ argc == 2, longueur >= 5 (min: `a.cub`), extension `.cub`
+- ✅ `ft_memset(app, 0)` avant init → sécurité (pointeurs NULL, pas de garbage)
+
+**Compteurs & ordre flexible** (`t_parse_counters`) :
+- ✅ `texture_count`, `color_count`, `map_started`, `map_line_index`
+- ✅ Ordre textures/couleurs libre (sujet ligne 124), mais map toujours en dernier
+- ✅ Check `!counters->map_started` → rejette texture/couleur après début map
+
+**Validation finale** (`validate_parsing_completion()`) :
+- ✅ Vérifie `texture_count == 4` (détecte doublons si count > 4)
+- ✅ Vérifie `color_count == 2`, `map_started == 1`
+
+**🐛 Bug détecté ensemble** :
+- ⚠️ Memory leak si doublon texture : `north_path` écrasé sans free du 1er malloc
+- 💡 Solution identifiée : vérifier `if (north_path != NULL)` avant assignation dans `parse_texture_line()`
+- 📍 Ligne 33 `parse_file.c` : check ajouté `if (texture_count == 4) → error` (détection précoce)
+- ⏸️ **À reprendre** : implémenter vérification dans `parse_tex.c` pour chaque texture
 
 **Architecture générale** :
 
@@ -47,16 +78,20 @@ Niveau 2 - Parsing & Validation (prochain)
 ## 🔄 Zones Nécessitant un Renforcement
 
 ### Session 1 - Niveau 1 (2025-10-01)
+- ⚠️ Confusion `mlx_loop_hook` appelée 1× vs ~60 FPS → résolu
+- ⚠️ Oubli map dans données `parsing()` → résolu (pointé vers `t_map`)
+- ✅ Bonne intuition : `app_init()` nécessite pointeur `mlx`
 
-- ⚠️ **Confusion initiale sur `mlx_loop_hook`** : Hugo pensait qu'elle était appelée une seule fois (boucle principale), alors qu'elle est appelée ~60 FPS en continu. **Résolu** après explication.
-- ⚠️ **Oubli de la map dans les données parsées** : Lors de la liste des éléments remplis par `parsing()`, Hugo a oublié la grille de map (a listé textures, couleurs, position/direction joueur). **Résolu** immédiatement quand pointé vers `t_map`.
-- ✅ **Bonne intuition** : A correctement identifié que `app_init()` nécessite le pointeur `mlx` pour charger les ressources.
+### Session 2 - Niveau 2 (2025-10-01)
+- ⚠️ Oubli initial get_next_line() pour lire `.cub` (pensait open() direct sur textures) → corrigé
+- ⚠️ Questionnement légitime sur vérif `strlen >= 5` (validé : `a.cub` = 5 chars min)
+- ✅ Excellente détection bug memory leak doublons textures
+- ✅ Compréhension SOC et responsabilités des 11 fichiers parser
 
 ## 💡 Métaphores & Analogies Personnalisées
 
-### Session 1 - Niveau 1 (2025-10-01)
-
-**Aucune métaphore explicite utilisée** - Apprentissage par questions/réponses directes sur le code.
+### Sessions 1-2 (2025-10-01)
+**Aucune métaphore explicite utilisée** - Apprentissage par Q&A directes sur code.
 
 ## 📊 Préparation à l'Évaluation
 
@@ -89,11 +124,11 @@ Niveau 2 - Parsing & Validation (prochain)
 - [ ] Peut expliquer la collision basée sur la grille
 - [ ] Peut décrire l'approche de validation
 
-### Parser (0/5) : Pas encore évalué
+### Parser (2/5) : En cours
 
-- [ ] Peut expliquer les étapes de validation
-- [ ] Peut décrire la gestion des erreurs
-- [ ] Peut expliquer la vérification de fermeture de map
+- [x] Peut expliquer les étapes de validation (open, GNL, parse ligne, validate)
+- [x] Peut décrire la gestion des erreurs (error_exit, cleanup, compteurs)
+- [ ] Peut expliquer la vérification de fermeture de map (pas encore vu)
 
 ## 📝 Notes de Session
 
@@ -137,7 +172,26 @@ Niveau 2 - Parsing & Validation (prochain)
    - Guidage: Lecture de close_window() → découverte de exit(0)
    - Compréhension: Code mort, jamais atteint en pratique ✅
 
-**Résultat** : Niveau 1 maîtrisé - Hugo peut expliquer le flow complet
+**Résultat** : Niveau 1 maîtrisé
+
+### Session 2 - Niveau 2 : Parsing (2025-10-01)
+
+**Parcours** (format Q&A condensé) :
+1. Grandes étapes parsing → R: open→GNL→parse→validate→store ✅ (oubli initial GNL, corrigé)
+2. Architecture 11 fichiers → R: SOC, responsabilités séparées ✅
+3. `parse_input()` 3 vérifs → R: argc==2, strlen>=5, extension `.cub` ✅
+4. Pourquoi `ft_memset(app,0)` → R: éviter garbage values, pointeurs NULL ✅
+5. Gestion lignes vides → R: `is_empty_line()` + `continue` ✅
+6. Ordre éléments flexible → R: compteurs permettent ordre libre (sauf map en dernier) ✅
+7. Détection doublons → R: `texture_count > 4` détecté, mais **memory leak identifié** ⚠️
+
+**Bug détecté ensemble** :
+- Doublon texture → 2× `malloc` pour `north_path`, 1er pointeur perdu → leak
+- Hugo a suggéré vérif avant parse (excellent réflexe SOC)
+- Solution : check `if (north_path != NULL)` dans `parse_texture_line()` avant assign
+- Fix partiel déjà ajouté ligne 33 `parse_file.c` (early detection)
+
+**À reprendre** : Implémenter fix complet dans `parse_tex.c`, continuer validation map
 
 ---
 
