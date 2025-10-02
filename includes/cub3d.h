@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/01 12:36:28 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 09:43:22 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "libft.h"
+# include "get_next_line.h"
 # include <math.h>
 
 /* ========================================================================== */
@@ -289,6 +290,9 @@ int		parsing(t_app *app, int argc, char **argv);
 int		parse_input(int argc, char **argv);
 int		parse_cub_file(t_app *app, const char *path);
 int		parse_single_line(t_app *app, char *line, t_parse_counters *counters);
+int		handle_texture_line(t_app *app, char *line,
+			t_parse_counters *counters);
+int		handle_map_line(t_app *app, char *line, t_parse_counters *counters);
 
 // Texture parsing
 int		parse_texture_line(t_app *app, char *line);
@@ -364,11 +368,6 @@ int		load_single_texture(t_app *app, char *path, t_img *texture);
 int		get_texture_pixel(t_img *texture, int x, int y);
 t_img	*get_wall_texture(t_app *app, int side, t_vec2 ray_dir);
 
-// Texture cleanup
-void	cleanup_north_texture(t_app *app);
-void	cleanup_north_south_textures(t_app *app);
-void	cleanup_north_south_west_textures(t_app *app);
-
 int		color_to_int(t_color color);
 void	draw_ceiling(t_app *app);
 void	draw_floor(t_app *app);
@@ -381,9 +380,6 @@ int		key_press(int keycode, t_app *app);
 int		key_release(int keycode, t_app *app);
 int		close_window(t_app *app);
 bool	is_valid_position(t_app *app, double x, double y);
-// ? should we remove this ?
-void	move_player_forward_backward(t_app *app, int direction);
-void	move_player_strafe(t_app *app, int direction);
 void	update_player_movement(t_app *app);
 void	rotate_player(t_app *app, int direction);
 void	move_player(t_app *app, double move_x, double move_y);
@@ -422,14 +418,6 @@ void	*gnl_free(void *p);
 
 // Color utilities
 int		rgb_to_int(t_color c);
-
-// Get Next Line
-// ? we don't need that here, the function is in the libft
-char	*get_next_line(int fd);
-char	*freebuff(char **principal_buff);
-char	*ft_new_buff(char *principal_buff);
-char	*ft_create_line(char *principal_buff);
-char	*ft_explore_text(char *principal_buff, int fd);
 
 void	free_map(t_app *app);
 #endif

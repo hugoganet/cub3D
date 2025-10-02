@@ -49,6 +49,7 @@ SRC	:= \
 	$(SRCDIR)/parser/parse_map.c \
 	$(SRCDIR)/parser/parse_color.c \
 	$(SRCDIR)/parser/parsing_utils.c \
+	$(SRCDIR)/parser/parse_line_handlers.c \
 	$(SRCDIR)/utils/errors.c \
 	$(SRCDIR)/utils/mem.c
 
@@ -58,7 +59,6 @@ SRC += \
 	$(SRCDIR)/render/projection.c \
 	$(SRCDIR)/render/projection_utils.c \
 	$(SRCDIR)/render/dda.c \
-	$(SRCDIR)/utils/math.c
 
 # Include missing render utility sources
 SRC += \

@@ -6,33 +6,17 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:57:49 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 19:47:01 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/01 17:51:52 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "libft.h"
 
-/**
- * @brief Analyse une ligne individuelle du fichier .cub.
- *
- * Détermine le type de ligne (texture, couleur, carte) et appelle la
- * fonction de parsing appropriée. Met à jour les compteurs pour suivre
- * la progression du parsing. Gère l'ordre strict : textures/couleurs
- * avant la carte.
- *
- * @param app Pointeur vers la structure de l'application.
- * @param line Ligne à analyser (sans retour à la ligne).
- * @param counters Pointeur vers les compteurs de parsing.
- * @return int Retourne 0 en cas de succès, -1 en cas d'erreur.
- */
 int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (is_texture_line(line) && !counters->map_started)
-	{
-		parse_texture_line(app, line);
-		counters->texture_count++;
-	}
+		return (handle_texture_line(app, line, counters));
 	else if (is_color_line(line) && !counters->map_started)
 	{
 		if (parse_color_line(app, line) != 0)
@@ -40,15 +24,7 @@ int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 		counters->color_count++;
 	}
 	else if (is_map_line(line))
-	{
-		if (!counters->map_started)
-		{
-			counters->map_started = 1;
-			init_map(app);
-		}
-		add_map_line(app, line, counters->map_line_index);
-		counters->map_line_index++;
-	}
+		return (handle_map_line(app, line, counters));
 	else
 		return (printf("Error:\nUnknown line format: %s", line), -1);
 	return (0);
@@ -89,7 +65,7 @@ static int	process_line(t_app *app, char *line, t_parse_counters *counters,
 		free(line);
 		gnl_free(NULL);
 		close(fd);
-		error_exit(app, "Invalid RGB values (must be 0-255)");
+		error_exit(app, NULL);
 	}
 	return (0);
 }

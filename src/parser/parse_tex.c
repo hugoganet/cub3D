@@ -49,40 +49,38 @@ char	*extract_path(char *line)
 	return (path);
 }
 
-/**
- * @brief Parse une ligne de texture et stocke le chemin dans app->tex.
- *
- * Utilise extract_path() pour récupérer le chemin, duplique la chaîne
- * avec ft_strdup() et la place dans le champ correspondant (north/south/…).
- * En cas d'échec d'allocation, appelle error_exit().
- *
- * @param app  Pointeur vers la structure principale où stocker le chemin.
- * @param line Ligne à parser (doit commencer par "NO ", "SO ", "WE " ou "EA ").
- * @return int 0 en cas de succès (le chemin est dupliqué et stocké).
- */
+static int	set_texture_path(char **dest, char *path)
+{
+	if (*dest)
+		return (-1);
+	*dest = ft_strdup(path);
+	return (0);
+}
+
+static int	assign_texture(t_app *app, char *line, char *path)
+{
+	if (ft_strncmp(line, "NO ", 3) == 0)
+		return (set_texture_path(&app->tex.north_path, path));
+	else if (ft_strncmp(line, "SO ", 3) == 0)
+		return (set_texture_path(&app->tex.south_path, path));
+	else if (ft_strncmp(line, "WE ", 3) == 0)
+		return (set_texture_path(&app->tex.west_path, path));
+	else if (ft_strncmp(line, "EA ", 3) == 0)
+		return (set_texture_path(&app->tex.east_path, path));
+	return (0);
+}
+
 int	parse_texture_line(t_app *app, char *line)
 {
 	char	*path;
+	int		result;
 
 	path = extract_path(line);
 	if (!path)
 		error_exit(app, "Memory allocation failed");
-	if (ft_strncmp(line, "NO ", 3) == 0)
-	{
-		app->tex.north_path = ft_strdup(path);
-	}
-	else if (ft_strncmp(line, "SO ", 3) == 0)
-	{
-		app->tex.south_path = ft_strdup(path);
-	}
-	else if (ft_strncmp(line, "WE ", 3) == 0)
-	{
-		app->tex.west_path = ft_strdup(path);
-	}
-	else if (ft_strncmp(line, "EA ", 3) == 0)
-	{
-		app->tex.east_path = ft_strdup(path);
-	}
+	result = assign_texture(app, line, path);
 	free(path);
+	if (result != 0)
+		return (-1);
 	return (0);
 }
