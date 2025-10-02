@@ -75,6 +75,16 @@ Niveau 2 - Parsing & Validation (50% complété - à reprendre : correction bug 
 - ✅ Séquence de destruction des ressources MLX
 - ✅ Code mort après `mlx_loop()` (jamais atteint)
 
+**MLX Loop vs Loop Hook** :
+
+- ✅ `mlx_loop_hook(mlx, func, param)` : **enregistre** une fonction à appeler en continu (comme donner une recette au chef)
+- ✅ `mlx_loop(mlx)` : **démarre** la boucle d'événements infinie (comme ouvrir le restaurant)
+- ✅ Différence clé : loop_hook = instructions, loop = exécution
+- ✅ Sans loop_hook : fenêtre s'ouvre mais reste noire (aucun rendu)
+- ✅ Sans loop : rien ne démarre (hooks jamais appelés)
+- ✅ `exit(0)` : fonction libc (stdlib.h) qui **tue le processus entier**, pas une fonction MLX
+- ✅ Pourquoi ligne 45 main.c jamais atteinte : `close_window()` appelle `exit(0)` → processus terminé avant retour de `mlx_loop()`
+
 ## 🔄 Zones Nécessitant un Renforcement
 
 ### Session 1 - Niveau 1 (2025-10-01)
@@ -83,15 +93,33 @@ Niveau 2 - Parsing & Validation (50% complété - à reprendre : correction bug 
 - ✅ Bonne intuition : `app_init()` nécessite pointeur `mlx`
 
 ### Session 2 - Niveau 2 (2025-10-01)
+
 - ⚠️ Oubli initial get_next_line() pour lire `.cub` (pensait open() direct sur textures) → corrigé
 - ⚠️ Questionnement légitime sur vérif `strlen >= 5` (validé : `a.cub` = 5 chars min)
 - ✅ Excellente détection bug memory leak doublons textures
 - ✅ Compréhension SOC et responsabilités des 11 fichiers parser
 
+### Session 3 - Niveau 1 : MLX Loop (2025-10-02)
+
+- ⚠️ Confusion initiale sur code mort ligne 45 main.c (erreur du tutor corrigée)
+- ✅ Compréhension finale : `exit(0)` tue le processus → `app_destroy()` ligne 45 jamais atteinte
+- ✅ Maîtrise différence `mlx_loop()` vs `mlx_loop_hook()` via métaphore restaurant
+- ✅ Compréhension que `exit()` est une fonction libc, pas MLX
+
 ## 💡 Métaphores & Analogies Personnalisées
 
 ### Sessions 1-2 (2025-10-01)
+
 **Aucune métaphore explicite utilisée** - Apprentissage par Q&A directes sur code.
+
+### Session 3 (2025-10-02)
+
+**Métaphore du Restaurant** :
+
+- `mlx_loop_hook()` = Donner une recette au chef (instructions)
+- `mlx_loop()` = Ouvrir le restaurant (exécution)
+- Sans loop_hook : restaurant ouvert mais aucun plat préparé (fenêtre noire)
+- `exit(0)` = Fermer brutalement le restaurant en éteignant les lumières
 
 ## 📊 Préparation à l'Évaluation
 
