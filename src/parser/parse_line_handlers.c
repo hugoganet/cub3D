@@ -13,6 +13,20 @@
 #include "cub3d.h"
 #include "libft.h"
 
+/**
+ * @brief Gère le parsing d'une ligne de définition de texture.
+ *
+ * Vérifie que le nombre maximum de textures (4) n'est pas dépassé, puis
+ * délègue le parsing à parse_texture_line(). Incrémente le compteur de
+ * textures en cas de succès. Détecte les duplications de définitions.
+ *
+ * @param app Pointeur vers la structure principale de l'application.
+ * @param line Ligne de texture à parser (format: "NO path/to/texture.xpm").
+ * @param counters Pointeur vers les compteurs de parsing.
+ * @return int 0 si succès, -1 si erreur (trop de textures ou duplication).
+ *
+ * @see parse_texture_line() pour l'extraction et l'assignation du chemin
+ */
 int	handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (counters->texture_count == 4)
@@ -29,6 +43,21 @@ int	handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
 	return (0);
 }
 
+/**
+ * @brief Gère le parsing d'une ligne de la map.
+ *
+ * Initialise la structure map lors de la première ligne de map rencontrée
+ * (map_started = 1), puis ajoute chaque ligne successive à la grille via
+ * add_map_line(). Incrémente le compteur de lignes de map.
+ *
+ * @param app Pointeur vers la structure principale de l'application.
+ * @param line Ligne de map à ajouter (contient '0', '1', ' ', N/S/E/W).
+ * @param counters Pointeur vers les compteurs de parsing.
+ * @return int Retourne toujours 0 (succès).
+ *
+ * @see init_map() pour l'initialisation de la structure map
+ * @see add_map_line() pour l'ajout de la ligne à la grille
+ */
 int	handle_map_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (!counters->map_started)

@@ -15,6 +15,21 @@
 #include <mlx.h>
 #include <stdlib.h>
 
+/**
+ * @brief Crée l'image offscreen pour le double buffering.
+ *
+ * Alloue une image MLX de dimensions w×h et récupère son pointeur de données
+ * pour permettre le dessin direct dans le buffer. Configure les métadonnées
+ * de l'image (bpp, line_len, endian) pour l'accès aux pixels.
+ *
+ * @param app Pointeur vers la structure principale.
+ * @param w Largeur de l'image en pixels.
+ * @param h Hauteur de l'image en pixels.
+ * @return int 0 si succès, -1 si erreur d'allocation MLX.
+ *
+ * @see app_init() qui appelle cette fonction
+ * @see img_put_pixel() qui utilise app->frame pour dessiner
+ */
 static int	create_frame(t_app *app, int w, int h)
 {
 	app->frame.ptr = mlx_new_image(app->mlx, w, h);
@@ -27,6 +42,26 @@ static int	create_frame(t_app *app, int w, int h)
 	return (0);
 }
 
+/**
+ * @brief Initialise l'application complète (MLX, fenêtre, textures, frame).
+ *
+ * Séquence d'initialisation complète :
+ * 1. Initialise MiniLibX
+ * 2. Charge les 4 textures murales (NO/SO/WE/EA)
+ * 3. Crée la fenêtre
+ * 4. Crée l'image offscreen pour le rendu
+ *
+ * En cas d'erreur à n'importe quelle étape, affiche un message et retourne -1.
+ *
+ * @param app Pointeur vers la structure principale (doit être déjà parsée).
+ * @param w Largeur de la fenêtre en pixels.
+ * @param h Hauteur de la fenêtre en pixels.
+ * @return int 0 si succès, -1 ou 1 en cas d'erreur.
+ *
+ * @see load_textures() pour le chargement des textures
+ * @see create_frame() pour l'image offscreen
+ * @see app_destroy() pour le nettoyage
+ */
 int	app_init(t_app *app, int w, int h)
 {
 	app->win_w = w;
@@ -44,6 +79,18 @@ int	app_init(t_app *app, int w, int h)
 	return (0);
 }
 
+/**
+ * @brief Libère la grille de la map 2D.
+ *
+ * Parcourt et libère chaque ligne de la grille app->map.grid, puis libère
+ * le tableau de pointeurs lui-même. Réinitialise les dimensions et le
+ * pointeur à NULL/0 pour éviter les double-free.
+ *
+ * @param app Pointeur vers la structure principale contenant la map.
+ *
+ * @see app_destroy() qui appelle cette fonction
+ * @see add_map_line() qui alloue la grille
+ */
 void	free_map(t_app *app)
 {
 	int	i;
@@ -62,6 +109,25 @@ void	free_map(t_app *app)
 	app->map.width = 0;
 }
 
+/**
+ * @brief Nettoie et libère toutes les ressources de l'application.
+ *
+ * Séquence de nettoyage complète dans l'ordre inverse de l'initialisation :
+ * 1. Libère les textures (images MLX + chemins)
+ * 2. Nettoie les buffers get_next_line
+ * 3. Détruit l'image offscreen
+ * 4. Détruit la fenêtre MLX
+ * 5. Détruit le display MLX et libère le pointeur
+ * 6. Libère la grille de map
+ *
+ * Peut être appelée à n'importe quel stade (gère les pointeurs NULL).
+ *
+ * @param app Pointeur vers la structure principale à nettoyer.
+ * @param code Code de sortie (actuellement non utilisé).
+ *
+ * @see error_exit() qui appelle cette fonction avant exit(1)
+ * @see close_window() qui appelle cette fonction à la fermeture
+ */
 void	app_destroy(t_app *app, int code)
 {
 	free_textures(app);

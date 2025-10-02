@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:16 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 09:37:51 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 10:35:17 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,22 @@
 #include <mlx.h>
 
 /**
- * @brief Application entry point.
+ * @brief Point d'entrée de l'application cub3D.
  *
- * Parses command-line arguments and map file, initializes the application and
- * MiniLibX, registers input and loop hooks, starts the MLX event loop, and
- * cleans up resources on exit.
+ * Orchestre le démarrage complet du programme :
+ * 1. Parse les arguments et le fichier .cub
+ * 2. Initialise MiniLibX, la fenêtre et les textures
+ * 3. Enregistre les hooks d'événements (clavier, boucle, fermeture)
+ * 4. Lance la boucle d'événements MLX (bloquante)
+ * 5. Nettoie les ressources à la sortie
  *
- * @param argc Number of command-line arguments.
- * @param argv Array of command-line argument strings.
- * @return int Returns 0 on success, non-zero on failure.
+ * @param argc Nombre d'arguments de ligne de commande.
+ * @param argv Tableau des arguments de ligne de commande.
+ * @return int Retourne 0 en cas de succès, 1 en cas d'erreur.
+ *
+ * @see parsing() pour l'analyse du fichier .cub
+ * @see app_init() pour l'initialisation MLX et textures
+ * @see app_loop() pour la boucle de rendu
  */
 int	main(int argc, char **argv)
 {
@@ -42,6 +49,7 @@ int	main(int argc, char **argv)
 	mlx_hook(app.win, 3, 1L << 1, key_release, &app);
 	mlx_hook(app.win, 17, 0, close_window, &app);
 	mlx_loop(app.mlx);
+	// ? dead code ⬇️
 	app_destroy(&app, 0);
 	return (0);
 }

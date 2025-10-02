@@ -12,6 +12,18 @@
 
 #include "cub3d.h"
 
+/**
+ * @brief Boucle interne pour dessiner un rectangle pixel par pixel
+ *
+ * Parcourt tous les pixels du rectangle défini par coords et applique
+ * la couleur spécifiée. Utilisée en interne par draw_rect.
+ *
+ * @param app Structure principale de l'application
+ * @param coords Tableau [x, y, largeur, hauteur] définissant le rectangle
+ * @param color Couleur de remplissage du rectangle
+ * @see draw_rect
+ * @see img_put_pixel
+ */
 static void	draw_rect_loop(t_app *app, int *coords, int color)
 {
 	int	i;
@@ -30,6 +42,17 @@ static void	draw_rect_loop(t_app *app, int *coords, int color)
 	}
 }
 
+/**
+ * @brief Dessine un rectangle rempli à l'écran
+ *
+ * Fonction publique pour dessiner un rectangle avec une couleur unie.
+ * Prépare les coordonnées et délègue le dessin à draw_rect_loop.
+ *
+ * @param app Structure principale de l'application
+ * @param params Tableau [x, y, largeur, hauteur] du rectangle
+ * @param color Couleur de remplissage (format hexadécimal)
+ * @see draw_rect_loop
+ */
 void	draw_rect(t_app *app, int *params, int color)
 {
 	int	coords[4];
@@ -41,6 +64,20 @@ void	draw_rect(t_app *app, int *params, int color)
 	draw_rect_loop(app, coords, color);
 }
 
+/**
+ * @brief Implémentation de l'algorithme de Bresenham pour tracer une ligne
+ *
+ * Parcourt les pixels entre le point de départ et d'arrivée en utilisant
+ * l'algorithme de Bresenham (ligne sans anti-aliasing). Gère les erreurs
+ * d'accumulation pour un tracé optimal.
+ *
+ * @param app Structure principale de l'application
+ * @param coords Tableau [x1, y1, x2, y2] définissant la ligne
+ * @param deltas Tableau [dx, dy, sx, sy] pour l'algorithme de Bresenham
+ * @param color Couleur de la ligne
+ * @see draw_line
+ * @see img_put_pixel
+ */
 static void	draw_line_step(t_app *app, int *coords, int *deltas, int color)
 {
 	int	err;
@@ -66,6 +103,18 @@ static void	draw_line_step(t_app *app, int *coords, int *deltas, int color)
 	}
 }
 
+/**
+ * @brief Dessine une ligne entre deux points
+ *
+ * Fonction publique pour tracer une ligne droite. Calcule les deltas
+ * et les directions nécessaires à l'algorithme de Bresenham puis
+ * délègue le tracé à draw_line_step.
+ *
+ * @param app Structure principale de l'application
+ * @param params Tableau [x1, y1, x2, y2] des coordonnées de départ et arrivée
+ * @param color Couleur de la ligne (format hexadécimal)
+ * @see draw_line_step
+ */
 void	draw_line(t_app *app, int *params, int color)
 {
 	int	coords[4];

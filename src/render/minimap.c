@@ -14,6 +14,19 @@
 #include "libft.h"
 #include <math.h>
 
+/**
+ * @brief Dessine une tuile de la minimap avec bordures
+ *
+ * Convertit les coordonnées de map en coordonnées écran (avec mise à
+ * l'échelle MINIMAP_SCALE) et dessine un carré coloré avec bordures.
+ * Chaque tuile représente une case de la map.
+ *
+ * @param app Structure principale de l'application
+ * @param map_x Coordonnée X dans la grille de map
+ * @param map_y Coordonnée Y dans la grille de map
+ * @param color Couleur de remplissage de la tuile
+ * @see draw_rect
+ */
 void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
 {
 	int	screen_x;
@@ -41,6 +54,16 @@ void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
 	draw_rect(app, params3, COLOR_BORDER);
 }
 
+/**
+ * @brief Dessine le joueur et sa direction sur la minimap
+ *
+ * Affiche un petit carré représentant la position du joueur et un
+ * point vert indiquant sa direction de vue. La position est convertie
+ * des coordonnées monde vers les coordonnées minimap.
+ *
+ * @param app Structure principale de l'application
+ * @see draw_rect
+ */
 void	draw_player_on_minimap(t_app *app)
 {
 	int	player_params[4];
@@ -60,6 +83,21 @@ void	draw_player_on_minimap(t_app *app)
 	draw_rect(app, dir_params, 0x00FF00);
 }
 
+/**
+ * @brief Rendu complet de la minimap overlay
+ *
+ * Dessine tous les éléments de la minimap :
+ * - Bordure blanche
+ * - Grille de tuiles colorées (murs, sol, spawn)
+ * - Rayons du champ de vision (vert)
+ * - Indicateur du joueur et direction
+ *
+ * @param app Structure principale de l'application
+ * @see draw_minimap_border
+ * @see draw_minimap_tile
+ * @see render_minimap_rays
+ * @see draw_player_on_minimap
+ */
 void	render_minimap(t_app *app)
 {
 	int		x;
@@ -85,6 +123,19 @@ void	render_minimap(t_app *app)
 	draw_player_on_minimap(app);
 }
 
+/**
+ * @brief Calcule la direction d'un rayon pour la minimap
+ *
+ * Détermine la direction d'un rayon en fonction de son index dans le FOV.
+ * Utilise un FOV de 60° (π/3) et interpole l'angle par rapport à la
+ * direction du joueur.
+ *
+ * @param app Structure principale de l'application
+ * @param ray_index Index du rayon courant (0 à total_rays-1)
+ * @param total_rays Nombre total de rayons à tracer
+ * @param ray_dir Pointeur vers le vecteur de direction résultant
+ * @see render_minimap_rays
+ */
 void	get_ray_direction(t_app *app, int ray_index, int total_rays,
 		t_vec2 *ray_dir)
 {
@@ -103,6 +154,18 @@ void	get_ray_direction(t_app *app, int ray_index, int total_rays,
 	ray_dir->y = sin(final_angle);
 }
 
+/**
+ * @brief Dessine les rayons du champ de vision sur la minimap
+ *
+ * Trace MINIMAP_RAY_COUNT rayons (20 par défaut) du joueur vers les
+ * murs visibles. Chaque rayon est calculé via DDA et affiché en vert
+ * pour visualiser le FOV.
+ *
+ * @param app Structure principale de l'application
+ * @see get_ray_direction
+ * @see cast_minimap_ray
+ * @see draw_minimap_ray
+ */
 void	render_minimap_rays(t_app *app)
 {
 	int		i;

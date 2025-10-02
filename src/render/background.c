@@ -12,11 +12,29 @@
 
 #include "cub3d.h"
 
+/**
+ * @brief Convertit une structure de couleur RGB en entier hexadécimal
+ *
+ * @param color Structure contenant les composantes RGB de la couleur
+ * @return int Valeur hexadécimale de la couleur (format 0xRRGGBB)
+ * @see t_color
+ */
 int	color_to_int(t_color color)
 {
 	return ((color.r << 16) | (color.g << 8) | color.b);
 }
 
+/**
+ * @brief Dessine le plafond avec une couleur unie
+ *
+ * Remplit la moitié supérieure de l'écran avec la couleur du plafond
+ * définie dans le fichier .cub. Utilise draw_rect pour dessiner des
+ * bandes horizontales ligne par ligne.
+ *
+ * @param app Structure principale de l'application contenant les couleurs
+ * @see draw_rect
+ * @see color_to_int
+ */
 void	draw_ceiling(t_app *app)
 {
 	int	ceiling_color;
@@ -38,6 +56,17 @@ void	draw_ceiling(t_app *app)
 	}
 }
 
+/**
+ * @brief Dessine le sol avec une couleur unie
+ *
+ * Remplit la moitié inférieure de l'écran avec la couleur du sol
+ * définie dans le fichier .cub. Utilise draw_rect pour dessiner des
+ * bandes horizontales ligne par ligne.
+ *
+ * @param app Structure principale de l'application contenant les couleurs
+ * @see draw_rect
+ * @see color_to_int
+ */
 void	draw_floor(t_app *app)
 {
 	int	floor_color;
@@ -57,6 +86,17 @@ void	draw_floor(t_app *app)
 	}
 }
 
+/**
+ * @brief Rendu complet de l'arrière-plan (plafond et sol)
+ *
+ * Fonction principale pour dessiner l'arrière-plan de la scène 3D.
+ * Appelle successivement draw_ceiling et draw_floor pour créer
+ * le fond avant le rendu des murs.
+ *
+ * @param app Structure principale de l'application
+ * @see draw_ceiling
+ * @see draw_floor
+ */
 void	render_background(t_app *app)
 {
 	draw_ceiling(app);

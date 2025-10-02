@@ -13,6 +13,16 @@
 #include "cub3d.h"
 #include <mlx.h>
 
+/**
+ * @brief Libère la mémoire des chemins de textures
+ *
+ * Libère les 4 chaînes de caractères contenant les chemins vers les
+ * fichiers XPM des textures (NO/SO/EA/WE). Remet les pointeurs à NULL
+ * après libération pour éviter les double-free.
+ *
+ * @param app Structure principale de l'application
+ * @see free_textures
+ */
 static void	free_texture_paths(t_app *app)
 {
 	if (app->tex.north_path)
@@ -37,6 +47,18 @@ static void	free_texture_paths(t_app *app)
 	}
 }
 
+/**
+ * @brief Libère toutes les ressources liées aux textures
+ *
+ * Détruit les 4 images MLX des textures de murs, libère les chemins
+ * de fichiers et remet le flag loaded à false. Fonction appelée lors
+ * du cleanup général ou en cas d'erreur de chargement.
+ *
+ * @param app Structure principale de l'application
+ * @see free_texture_paths
+ * @see app_destroy
+ * @see load_textures
+ */
 void	free_textures(t_app *app)
 {
 	if (app->tex.north.ptr)

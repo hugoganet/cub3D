@@ -12,6 +12,25 @@
 
 #include "cub3d.h"
 
+/**
+ * @brief Vérifie si une position est traversable (collision detection).
+ *
+ * Teste si les coordonnées (x, y) correspondent à une cellule valide et
+ * non-mur dans la grille de map. Utilisé pour empêcher le joueur de
+ * traverser les murs ou de sortir de la map.
+ *
+ * Conditions pour position valide :
+ * - Coordonnées dans les limites de la grille
+ * - Cellule existe (ligne non-NULL)
+ * - Caractère différent de '1' (mur)
+ *
+ * @param app Pointeur vers la structure principale contenant la map.
+ * @param x Coordonnée X à tester (en unités de grille, pas pixels).
+ * @param y Coordonnée Y à tester (en unités de grille, pas pixels).
+ * @return bool true si position traversable, false sinon.
+ *
+ * @see move_player() qui utilise cette fonction pour collision
+ */
 bool	is_valid_position(t_app *app, double x, double y)
 {
 	int		map_x;
@@ -32,6 +51,22 @@ bool	is_valid_position(t_app *app, double x, double y)
 	return (true);
 }
 
+/**
+ * @brief Applique une rotation au joueur (direction + plan caméra).
+ *
+ * Effectue une rotation 2D des vecteurs dir et plane du joueur via une
+ * matrice de rotation. L'angle de rotation est : rot_speed × direction.
+ *
+ * Formule de rotation 2D :
+ * - new_x = x × cos(θ) - y × sin(θ)
+ * - new_y = x × sin(θ) + y × cos(θ)
+ *
+ * @param app Pointeur vers la structure principale.
+ * @param direction Sens de rotation (-1 = gauche, 1 = droite).
+ *
+ * @see update_player_movement() qui appelle cette fonction
+ * @see app->rot_speed pour la vitesse angulaire
+ */
 void	rotate_player(t_app *app, int direction)
 {
 	double	angle;
@@ -51,6 +86,26 @@ void	rotate_player(t_app *app, int direction)
 		+ app->player.plane.y * cos(angle);
 }
 
+/**
+ * @brief Déplace le joueur avec détection de collision.
+ *
+ * Calcule la nouvelle position du joueur en ajoutant le vecteur de déplacement
+ * (move_x, move_y) multiplié par move_speed. Teste la collision sur chaque axe
+ * indépendamment pour permettre le "sliding" le long des murs.
+ *
+ * Algorithme :
+ * 1. Calculer new_x = pos.x + move_x × speed
+ * 2. Si (new_x, pos.y) valide → appliquer déplacement X
+ * 3. Calculer new_y = pos.y + move_y × speed
+ * 4. Si (pos.x, new_y) valide → appliquer déplacement Y
+ *
+ * @param app Pointeur vers la structure principale.
+ * @param move_x Composante X du vecteur de déplacement (normalisée).
+ * @param move_y Composante Y du vecteur de déplacement (normalisée).
+ *
+ * @see is_valid_position() pour la détection de collision
+ * @see update_player_movement() qui appelle cette fonction
+ */
 void	move_player(t_app *app, double move_x, double move_y)
 {
 	double	new_x;
@@ -64,6 +119,25 @@ void	move_player(t_app *app, double move_x, double move_y)
 		app->player.pos.y = new_y;
 }
 
+/**
+ * @brief Calcule le vecteur de déplacement selon les touches pressées.
+ *
+ * Accumule les composantes X et Y du mouvement souhaité en fonction
+ * des touches actives (WASD) :
+ * - W : avance (dir)
+ * - S : recule (-dir)
+ * - A : strafe gauche (perpendiculaire à dir, rotation -90°)
+ * - D : strafe droite (perpendiculaire à dir, rotation +90°)
+ *
+ * Le vecteur résultant peut être diagonal si plusieurs touches sont pressées.
+ *
+ * @param app Pointeur vers la structure principale (keys, player.dir).
+ * @param move_x Pointeur vers la composante X accumulée (sortie).
+ * @param move_y Pointeur vers la composante Y accumulée (sortie).
+ *
+ * @see update_player_movement() qui appelle cette fonction
+ * @see move_player() qui applique le déplacement
+ */
 static void	apply_movement(t_app *app, double *move_x, double *move_y)
 {
 	if (app->keys.w)
@@ -88,6 +162,24 @@ static void	apply_movement(t_app *app, double *move_x, double *move_y)
 	}
 }
 
+/**
+ * @brief Point d'entrée de mise à jour du joueur (appelé chaque frame).
+ *
+ * Orchestre la mise à jour complète du joueur selon les touches actives :
+ * 1. Calcule le vecteur de déplacement via apply_movement()
+ * 2. Applique le déplacement si non-nul (avec collision)
+ * 3. Applique la rotation gauche si LEFT pressée
+ * 4. Applique la rotation droite si RIGHT pressée
+ *
+ * Cette fonction est appelée dans app_loop() avant le rendu.
+ *
+ * @param app Pointeur vers la structure principale (keys, player).
+ *
+ * @see app_loop() qui appelle cette fonction chaque frame
+ * @see apply_movement() pour calcul du vecteur de déplacement
+ * @see move_player() pour application du mouvement
+ * @see rotate_player() pour les rotations
+ */
 void	update_player_movement(t_app *app)
 {
 	double	move_x;

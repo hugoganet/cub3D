@@ -13,6 +13,22 @@
 #include "cub3d.h"
 #include "libft.h"
 
+/**
+ * @brief Parse une seule ligne du fichier .cub et route vers le handler approprié.
+ *
+ * Analyse le type de ligne (texture, couleur, ou map) et délègue le traitement
+ * au handler spécialisé. Maintient l'ordre strict du format .cub :
+ * textures/couleurs d'abord, puis map. Toute ligne non reconnue génère une erreur.
+ *
+ * @param app Pointeur vers la structure principale de l'application.
+ * @param line Ligne à parser (peut contenir '\n' final).
+ * @param counters Pointeur vers les compteurs de parsing (texture/color/map).
+ * @return int 0 si succès, -1 si erreur de parsing ou format invalide.
+ *
+ * @see handle_texture_line() pour le traitement des textures
+ * @see parse_color_line() pour le traitement des couleurs
+ * @see handle_map_line() pour le traitement des lignes de map
+ */
 int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (is_texture_line(line) && !counters->map_started)

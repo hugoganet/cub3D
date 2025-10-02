@@ -13,6 +13,18 @@
 #include "cub3d.h"
 #include <mlx.h>
 
+/**
+ * @brief Charge les 4 textures de murs (NO/SO/WE/EA)
+ *
+ * Charge séquentiellement les textures des 4 directions en utilisant
+ * les chemins définis dans le fichier .cub. En cas d'erreur sur une
+ * texture, libère celles déjà chargées avant de retourner une erreur.
+ *
+ * @param app Structure principale de l'application
+ * @return int 0 si succès, 1 si échec
+ * @see load_single_texture
+ * @see free_textures
+ */
 int	load_textures(t_app *app)
 {
 	if (load_single_texture(app, app->tex.north_path, &app->tex.north))
@@ -36,6 +48,21 @@ int	load_textures(t_app *app)
 	return (0);
 }
 
+/**
+ * @brief Sélectionne la texture appropriée selon la face du mur touchée
+ *
+ * Détermine quelle texture de mur utiliser en fonction du côté de
+ * collision (vertical/horizontal) et de la direction du rayon :
+ * - Side 0 (vertical) : WE si ray.x > 0, sinon EA
+ * - Side 1 (horizontal) : SO si ray.y > 0, sinon NO
+ *
+ * @param app Structure principale de l'application
+ * @param side Côté de collision (0 = vertical, 1 = horizontal)
+ * @param ray_dir Direction du rayon
+ * @return t_img* Pointeur vers la texture appropriée
+ * @see draw_textured_column
+ * @see perform_dda
+ */
 t_img	*get_wall_texture(t_app *app, int side, t_vec2 ray_dir)
 {
 	if (side == 0)

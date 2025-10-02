@@ -14,6 +14,20 @@
 #include "libft.h"
 #include <math.h>
 
+/**
+ * @brief Détermine la couleur d'une tuile selon son type
+ *
+ * Associe chaque caractère de la map à une couleur pour la minimap :
+ * - '1' : blanc (mur)
+ * - '0' : gris foncé (sol)
+ * - 'N/S/E/W' : bleu (spawn joueur)
+ * - ' ' : noir (vide)
+ * - autre : magenta (erreur)
+ *
+ * @param tile Caractère de la map
+ * @return int Couleur hexadécimale correspondante
+ * @see render_minimap
+ */
 int	get_tile_color(char tile)
 {
 	if (tile == '1')
@@ -28,6 +42,17 @@ int	get_tile_color(char tile)
 		return (0xFF00FF);
 }
 
+/**
+ * @brief Dessine la bordure blanche autour de la minimap
+ *
+ * Trace un rectangle blanc englobant toute la minimap avec une marge
+ * de 2 pixels. La taille est calculée en fonction des dimensions de
+ * la map et de l'échelle de la minimap.
+ *
+ * @param app Structure principale de l'application
+ * @see draw_rect
+ * @see render_minimap
+ */
 void	draw_minimap_border(t_app *app)
 {
 	int	border_params[4];
@@ -39,6 +64,17 @@ void	draw_minimap_border(t_app *app)
 	draw_rect(app, border_params, 0xFFFFFF);
 }
 
+/**
+ * @brief Dessine un rayon du joueur vers un point de collision
+ *
+ * Trace une ligne verte du joueur vers le point où le rayon a touché
+ * un mur. Les coordonnées sont converties en coordonnées minimap.
+ *
+ * @param app Structure principale de l'application
+ * @param hit_point Point de collision du rayon dans les coordonnées monde
+ * @see draw_line
+ * @see render_minimap_rays
+ */
 void	draw_minimap_ray(t_app *app, t_vec2 hit_point)
 {
 	int	line_params[4];
