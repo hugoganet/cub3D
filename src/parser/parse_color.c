@@ -13,22 +13,63 @@
 #include "cub3d.h"
 
 /**
+ * @brief Vérifie qu'une chaîne contient uniquement des chiffres
+ * @param str Chaîne à vérifier
+ * @return 1 si valide (que des chiffres), 0 sinon
+ */
+static int	is_valid_number(const char *str)
+{
+	int	i;
+
+	if (!str || !str[0])
+		return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+/**
+ * @brief Valide et convertit les 3 parties RGB en entiers
+ * @param rgb_parts Tableau de 3 strings ["R", "G", "B"]
+ * @param color Structure t_color à remplir
+ * @return 0 si succès, 1 si erreur
+ */
+static int	validate_and_convert_rgb(char **rgb_parts, t_color *color)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	if (!is_valid_number(rgb_parts[0]) || !is_valid_number(rgb_parts[1])
+		|| !is_valid_number(rgb_parts[2]))
+		return (1);
+	r = ft_atoi(rgb_parts[0]);
+	g = ft_atoi(rgb_parts[1]);
+	b = ft_atoi(rgb_parts[2]);
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+		return (1);
+	color->r = r;
+	color->g = g;
+	color->b = b;
+	return (0);
+}
+
+/**
  * @brief Parse les valeurs RGB depuis une chaîne "R,G,B"
  * @param rgb_str Chaîne contenant "R,G,B"
  * @param color Structure t_color à remplir
- * @note On divise la chaîne par les virgules
- * @note On verifie qu'on a exactement 3 valeurs
- * @note On converti en entiers et valider (0-255)
- * @note On stocke les valeurs
  * @return 0 si succès, 1 si erreur
  */
-int parse_rgb_values(const char *rgb_str, t_color *color)
+int	parse_rgb_values(const char *rgb_str, t_color *color)
 {
-	char **rgb_parts;
-	int r;
-	int g;
-	int b;
-	int count;
+	char	**rgb_parts;
+	int		count;
+	int		result;
 
 	rgb_parts = ft_split(rgb_str, ',');
 	if (!rgb_parts)
@@ -38,16 +79,9 @@ int parse_rgb_values(const char *rgb_str, t_color *color)
 		count++;
 	if (count != 3)
 		return (free_split(rgb_parts), 1);
-	r = ft_atoi(rgb_parts[0]);
-	g = ft_atoi(rgb_parts[1]);
-	b = ft_atoi(rgb_parts[2]);
+	result = validate_and_convert_rgb(rgb_parts, color);
 	free_split(rgb_parts);
-	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		return (1);
-	color->r = r;
-	color->g = g;
-	color->b = b;
-	return (0);
+	return (result);
 }
 
 /**
@@ -58,12 +92,12 @@ int parse_rgb_values(const char *rgb_str, t_color *color)
  * @note Allouer et copier
  * @return Chaîne "R,G,B" ou NULL si erreur
  */
-char *extract_rgb_string(char *line)
+char	*extract_rgb_string(char *line)
 {
-	char *rgb_str;
-	int i;
-	int j;
-	int start;
+	char	*rgb_str;
+	int		i;
+	int		j;
+	int		start;
 
 	i = 0;
 	while (line[i] && line[i] != ' ')
@@ -92,10 +126,10 @@ char *extract_rgb_string(char *line)
  * @note Déterminer si c'est Floor ou Ceiling
  * @return 0 si succès, 1 si erreur
  */
-int parse_color_line(t_app *app, char *line)
+int	parse_color_line(t_app *app, char *line)
 {
-	char *rgb_str;
-	t_color color;
+	char	*rgb_str;
+	t_color	color;
 
 	rgb_str = extract_rgb_string(line);
 	if (!rgb_str)

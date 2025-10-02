@@ -2,7 +2,7 @@
 
 ## 🎯 Focus Actuel
 
-Niveau 2 - Parsing & Validation (50% complété - à reprendre : correction bug memory leak doublons)
+Niveau 2 - Parsing & Validation (70% complété - prochaine étape : refactoriser gestion d'erreurs avec `error_msg()`)
 
 ## ✅ Concepts Maîtrisés
 
@@ -35,11 +35,52 @@ Niveau 2 - Parsing & Validation (50% complété - à reprendre : correction bug 
 - ✅ Vérifie `texture_count == 4` (détecte doublons si count > 4)
 - ✅ Vérifie `color_count == 2`, `map_started == 1`
 
-**🐛 Bug détecté ensemble** :
-- ⚠️ Memory leak si doublon texture : `north_path` écrasé sans free du 1er malloc
-- 💡 Solution identifiée : vérifier `if (north_path != NULL)` avant assignation dans `parse_texture_line()`
-- 📍 Ligne 33 `parse_file.c` : check ajouté `if (texture_count == 4) → error` (détection précoce)
-- ⏸️ **À reprendre** : implémenter vérification dans `parse_tex.c` pour chaque texture
+**🐛 Bugs détectés et corrigés** :
+- ✅ Memory leak doublons textures : ajout vérif `if (path != NULL)` dans `parse_tex.c` avant assignation
+- ✅ RGB invalides acceptés : `ft_atoi("abc")` retournait 0 au lieu d'erreur
+  - Ajout `is_valid_number()` pour valider strings avant conversion
+  - Refactorisation `parse_rgb_values()` (18 lignes, < 25) avec `validate_and_convert_rgb()`
+  - Maintenant rejette `F abc,100,0` ou `F -50,100,0` correctement
+
+**Parse de couleurs** (`parse_color.c`) :
+- ✅ Flow : `parse_color_line()` → `extract_rgb_string()` → `parse_rgb_values()` → `validate_and_convert_rgb()`
+- ✅ `extract_rgb_string()` : skip "F"/"C" + espaces, extrait "R,G,B"
+- ✅ `ft_split(rgb_str, ',')` → tableau ["R", "G", "B"]
+- ✅ Validation : exactement 3 valeurs, que des chiffres, range 0-255
+- ✅ Stockage dans `t_color` (r, g, b) puis assignation `app->floor` ou `app->ceil`
+
+**⚠️ Problème identifié - Gestion d'erreurs incohérente** :
+
+- 3 patterns différents dans le parser :
+  - `return -1` (parse_tex.c, parse_line_handlers.c)
+  - `return 1` (parse_color.c, map_neighbors.c)
+  - `error_exit(app, msg)` direct (validate_chars.c, find_player.c)
+- Messages d'erreur parfois absents, parfois avec `printf`, parfois avec `error_exit`
+
+**Solution décidée - Fonction `error_msg()` helper** :
+
+- Créer dans `errors.c` une fonction simple :
+
+  ```c
+  int error_msg(const char *msg)
+  {
+      ft_putendl_fd("Error", 2);
+      if (msg)
+          ft_putendl_fd((char *)msg, 2);
+      return (-1);
+  }
+  ```
+
+- **Avantages** :
+  - Pas besoin de passer `app` partout (contrairement à `error_exit`)
+  - Pattern uniforme : toutes les fonctions retournent `-1` en cas d'erreur
+  - Message spécifique affiché au point d'erreur : `return (error_msg("RGB values must be numeric"));`
+  - Programme remonte les erreurs au lieu de quitter brutalement (meilleur contrôle)
+
+- ⏸️ **Prochaine étape** :
+  1. Implémenter `error_msg()` dans `errors.c`
+  2. Refactoriser tous les fichiers parser pour l'utiliser
+  3. Uniformiser codes retour (`-1` partout, éliminer `return 1`)
 
 **Architecture générale** :
 
@@ -105,6 +146,15 @@ Niveau 2 - Parsing & Validation (50% complété - à reprendre : correction bug 
 - ✅ Compréhension finale : `exit(0)` tue le processus → `app_destroy()` ligne 45 jamais atteinte
 - ✅ Maîtrise différence `mlx_loop()` vs `mlx_loop_hook()` via métaphore restaurant
 - ✅ Compréhension que `exit()` est une fonction libc, pas MLX
+
+### Session 4 - Niveau 2 : Parse Couleurs + Gestion Erreurs (2025-10-02)
+
+- ✅ Correction bug RGB invalides : ajout validation `is_valid_number()` avant `ft_atoi()`
+- ✅ Refactorisation `parse_color.c` : extraction `validate_and_convert_rgb()` (respect Norme < 25 lignes)
+- ✅ Compréhension flow parsing couleurs : extract → split → validate → convert → store
+- ⚠️ Identification problème : gestion d'erreurs incohérente (3 patterns différents)
+- 💡 Décision : créer `error_msg()` helper pour uniformiser (Solution 2)
+- ⏸️ À faire : implémenter `error_msg()` et refactoriser tout le parser
 
 ## 💡 Métaphores & Analogies Personnalisées
 
