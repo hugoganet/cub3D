@@ -6,12 +6,11 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:22:58 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/01 17:07:08 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 
 /**
  * @brief Réinitialise les champs de map après parsing des en-têtes.
@@ -24,7 +23,7 @@
  * @return int Retourne toujours 0 (succès).
  *
  */
-int	set_defaults_after_parse(t_app *app)
+int set_defaults_after_parse(t_app *app)
 {
 	app->map.grid = NULL;
 	app->map.width = 0;
@@ -43,14 +42,11 @@ int	set_defaults_after_parse(t_app *app)
  * @return int 1 si la ligne est une déclaration de texture, 0 sinon.
  *
  */
-int	is_texture_line(char *line)
+int is_texture_line(char *line)
 {
 	if (!line || ft_strlen(line) < 3)
 		return (0);
-	if (ft_strncmp(line, "NO ", 3) == 0
-		|| ft_strncmp(line, "SO ", 3) == 0
-		|| ft_strncmp(line, "WE ", 3) == 0
-		|| ft_strncmp(line, "EA ", 3) == 0)
+	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0 || ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
 		return (1);
 	return (0);
 }
@@ -66,12 +62,11 @@ int	is_texture_line(char *line)
  * @return int 1 si la ligne est une déclaration de couleur, 0 sinon.
  *
  */
-int	is_color_line(char *line)
+int is_color_line(char *line)
 {
 	if (!line || ft_strlen(line) < 2)
 		return (0);
-	if (ft_strncmp(line, "F ", 2) == 0
-		|| ft_strncmp(line, "C ", 2) == 0)
+	if (ft_strncmp(line, "F ", 2) == 0 || ft_strncmp(line, "C ", 2) == 0)
 		return (1);
 	return (0);
 }
@@ -89,18 +84,16 @@ int	is_color_line(char *line)
  * @return int 1 si la ligne contient uniquement des caractères de map, 0 sinon.
  *
  */
-int	is_map_line(char *line)
+int is_map_line(char *line)
 {
-	int	i;
+	int i;
 
 	if (!line)
 		return (0);
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != '0' && line[i] != '1' && line[i] != ' '
-			&& line[i] != 'N' && line[i] != 'S' && line[i] != 'E'
-			&& line[i] != 'W' && line[i] != '\n')
+		if (line[i] != '0' && line[i] != '1' && line[i] != ' ' && line[i] != 'N' && line[i] != 'S' && line[i] != 'E' && line[i] != 'W' && line[i] != '\n')
 			return (0);
 		i++;
 	}
@@ -119,11 +112,11 @@ int	is_map_line(char *line)
  * @return int Nombre de lignes dans le fichier, ou -1 si erreur d'ouverture.
  *
  */
-int	count_lines(const char *filename)
+int count_lines(const char *filename)
 {
-	int		fd;
-	char	*line;
-	int		count;
+	int fd;
+	char *line;
+	int count;
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)

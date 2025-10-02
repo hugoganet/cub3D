@@ -6,14 +6,12 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:09 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/01 12:35:42 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:08:10 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 #include <mlx.h>
-#include <stdlib.h>
 
 /**
  * @brief Crée l'image offscreen pour le double buffering.
@@ -28,13 +26,13 @@
  * @return int 0 si succès, -1 si erreur d'allocation MLX.
  *
  */
-static int	create_frame(t_app *app, int w, int h)
+static int create_frame(t_app *app, int w, int h)
 {
 	app->frame.ptr = mlx_new_image(app->mlx, w, h);
 	if (!app->frame.ptr)
 		return (-1);
 	app->frame.addr = mlx_get_data_addr(app->frame.ptr, &app->frame.bpp,
-			&app->frame.line_len, &app->frame.endian);
+										&app->frame.line_len, &app->frame.endian);
 	app->frame.w = w;
 	app->frame.h = h;
 	return (0);
@@ -57,7 +55,7 @@ static int	create_frame(t_app *app, int w, int h)
  * @return int 0 si succès, -1 ou 1 en cas d'erreur.
  *
  */
-int	app_init(t_app *app, int w, int h)
+int app_init(t_app *app, int w, int h)
 {
 	app->win_w = w;
 	app->win_h = h;
@@ -84,12 +82,12 @@ int	app_init(t_app *app, int w, int h)
  * @param app Pointeur vers la structure principale contenant la map.
  *
  */
-void	free_map(t_app *app)
+void free_map(t_app *app)
 {
-	int	i;
+	int i;
 
 	if (!app->map.grid)
-		return ;
+		return;
 	i = 0;
 	while (i < app->map.height)
 	{
@@ -119,7 +117,7 @@ void	free_map(t_app *app)
  * @param code Code de sortie (actuellement non utilisé).
  *
  */
-void	app_destroy(t_app *app, int code)
+void app_destroy(t_app *app, int code)
 {
 	free_textures(app);
 	gnl_free(NULL);

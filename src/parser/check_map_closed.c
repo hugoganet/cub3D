@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_closed.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:48:23 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 15:51:53 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 
 /**
  * @brief Vérifie que la carte est correctement fermée par des murs.
@@ -26,11 +25,11 @@
  * @return int Toujours 0 si la vérification complète (error_exit termine
  *             le programme en cas d'erreur).
  */
-int	check_map_closed(t_app *app)
+int check_map_closed(t_app *app)
 {
-	int		i;
-	int		j;
-	char	c;
+	int i;
+	int j;
+	char c;
 
 	i = 0;
 	while (i < app->map.height)
@@ -66,7 +65,7 @@ int	check_map_closed(t_app *app)
  * @return int Retourne 0 si toutes les validations passent.
  *
  */
-int	validate_map(t_app *app)
+int validate_map(t_app *app)
 {
 	check_valid_chars(app);
 	find_player(app);

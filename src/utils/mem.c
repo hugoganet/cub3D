@@ -6,12 +6,11 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:19 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/29 13:32:20 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:08:10 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <stdlib.h>
 
 /**
  * @brief Libère un tableau de chaînes alloué dynamiquement.
@@ -23,13 +22,13 @@
  * @param arr Tableau de chaînes terminé par NULL à libérer.
  *
  */
-void	free_split(char **arr)
+void free_split(char **arr)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (!arr)
-		return ;
+		return;
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);
@@ -46,7 +45,7 @@ void	free_split(char **arr)
  * @return void* Retourne toujours NULL (commodité pour assignation).
  *
  */
-void	*gnl_free(void *p)
+void *gnl_free(void *p)
 {
 	if (!p)
 		get_next_line(-1);

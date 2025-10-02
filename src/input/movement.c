@@ -6,11 +6,12 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:20:04 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/29 15:20:05 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:12:45 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <math.h>
 
 /**
  * @brief Vérifie si une position est traversable (collision detection).

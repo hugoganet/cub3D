@@ -6,12 +6,11 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 00:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/01 00:00:01 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 
 /**
  * @brief Gère le parsing d'une ligne de définition de texture.
@@ -26,7 +25,7 @@
  * @return int 0 si succès, -1 si erreur (trop de textures ou duplication).
  *
  */
-int	handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
+int handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (counters->texture_count == 4)
 	{
@@ -55,7 +54,7 @@ int	handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
  * @return int Retourne toujours 0 (succès).
  *
  */
-int	handle_map_line(t_app *app, char *line, t_parse_counters *counters)
+int handle_map_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (!counters->map_started)
 	{

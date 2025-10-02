@@ -6,12 +6,11 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:37 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/29 13:32:38 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 #include <math.h>
 
 /**
@@ -26,13 +25,13 @@
  * @param map_y Coordonnée Y dans la grille de map
  * @param color Couleur de remplissage de la tuile
  */
-void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
+void draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
 {
-	int	screen_x;
-	int	screen_y;
-	int	params1[4];
-	int	params2[4];
-	int	params3[4];
+	int screen_x;
+	int screen_y;
+	int params1[4];
+	int params2[4];
+	int params3[4];
 
 	screen_x = MINIMAP_OFFSET_X + map_x * MINIMAP_SCALE;
 	screen_y = MINIMAP_OFFSET_Y + map_y * MINIMAP_SCALE;
@@ -62,15 +61,13 @@ void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
  *
  * @param app Structure principale de l'application
  */
-void	draw_player_on_minimap(t_app *app)
+void draw_player_on_minimap(t_app *app)
 {
-	int	player_params[4];
-	int	dir_params[4];
+	int player_params[4];
+	int dir_params[4];
 
-	player_params[0] = MINIMAP_OFFSET_X + (int)(app->player.pos.x
-			* MINIMAP_SCALE) - 3;
-	player_params[1] = MINIMAP_OFFSET_Y + (int)(app->player.pos.y
-			* MINIMAP_SCALE) - 3;
+	player_params[0] = MINIMAP_OFFSET_X + (int)(app->player.pos.x * MINIMAP_SCALE) - 3;
+	player_params[1] = MINIMAP_OFFSET_Y + (int)(app->player.pos.y * MINIMAP_SCALE) - 3;
 	player_params[2] = 6;
 	player_params[3] = 6;
 	draw_rect(app, player_params, COLOR_PLAYER);
@@ -92,11 +89,11 @@ void	draw_player_on_minimap(t_app *app)
  *
  * @param app Structure principale de l'application
  */
-void	render_minimap(t_app *app)
+void render_minimap(t_app *app)
 {
-	int		x;
-	int		y;
-	int		line_len;
+	int x;
+	int y;
+	int line_len;
 
 	draw_minimap_border(app);
 	y = 0;
@@ -129,14 +126,14 @@ void	render_minimap(t_app *app)
  * @param total_rays Nombre total de rayons à tracer
  * @param ray_dir Pointeur vers le vecteur de direction résultant
  */
-void	get_ray_direction(t_app *app, int ray_index, int total_rays,
-		t_vec2 *ray_dir)
+void get_ray_direction(t_app *app, int ray_index, int total_rays,
+					   t_vec2 *ray_dir)
 {
-	double	fov_radians;
-	double	angle_step;
-	double	ray_angle;
-	double	player_angle;
-	double	final_angle;
+	double fov_radians;
+	double angle_step;
+	double ray_angle;
+	double player_angle;
+	double final_angle;
 
 	fov_radians = M_PI / 3.0;
 	angle_step = fov_radians / (total_rays - 1);
@@ -156,11 +153,11 @@ void	get_ray_direction(t_app *app, int ray_index, int total_rays,
  *
  * @param app Structure principale de l'application
  */
-void	render_minimap_rays(t_app *app)
+void render_minimap_rays(t_app *app)
 {
-	int		i;
-	t_vec2	ray_dir;
-	t_vec2	hit_point;
+	int i;
+	t_vec2 ray_dir;
+	t_vec2 hit_point;
 
 	i = 0;
 	while (i < MINIMAP_RAY_COUNT)

@@ -6,13 +6,11 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:24 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 11:09:11 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:08:10 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
-#include <stdlib.h>
 
 /**
  * @brief Affiche un msg d'erreur, clean les ressources et termine le programme.
@@ -29,7 +27,7 @@
  * @param msg Message d'erreur descriptif à afficher (peut être NULL).
  *
  */
-void	error_exit(t_app *app, const char *msg)
+void error_exit(t_app *app, const char *msg)
 {
 	ft_putendl_fd("Error", 2);
 	if (msg)
@@ -51,7 +49,7 @@ void	error_exit(t_app *app, const char *msg)
  * @return int Couleur encodée en 0xAARRGGBB pour MLX.
  *
  */
-int	rgb_to_int(t_color c)
+int rgb_to_int(t_color c)
 {
 	if (c.r < 0)
 		c.r = 0;

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_color.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:35:37 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 12:56:24 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:49 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 
 /**
  * @brief Parse les valeurs RGB depuis une chaîne "R,G,B"
@@ -23,13 +22,13 @@
  * @note On stocke les valeurs
  * @return 0 si succès, 1 si erreur
  */
-int	parse_rgb_values(const char *rgb_str, t_color *color)
+int parse_rgb_values(const char *rgb_str, t_color *color)
 {
-	char	**rgb_parts;
-	int		r;
-	int		g;
-	int		b;
-	int		count;
+	char **rgb_parts;
+	int r;
+	int g;
+	int b;
+	int count;
 
 	rgb_parts = ft_split(rgb_str, ',');
 	if (!rgb_parts)
@@ -59,12 +58,12 @@ int	parse_rgb_values(const char *rgb_str, t_color *color)
  * @note Allouer et copier
  * @return Chaîne "R,G,B" ou NULL si erreur
  */
-char	*extract_rgb_string(char *line)
+char *extract_rgb_string(char *line)
 {
-	char	*rgb_str;
-	int		i;
-	int		j;
-	int		start;
+	char *rgb_str;
+	int i;
+	int j;
+	int start;
 
 	i = 0;
 	while (line[i] && line[i] != ' ')
@@ -93,10 +92,10 @@ char	*extract_rgb_string(char *line)
  * @note Déterminer si c'est Floor ou Ceiling
  * @return 0 si succès, 1 si erreur
  */
-int	parse_color_line(t_app *app, char *line)
+int parse_color_line(t_app *app, char *line)
 {
-	char	*rgb_str;
-	t_color	color;
+	char *rgb_str;
+	t_color color;
 
 	rgb_str = extract_rgb_string(line);
 	if (!rgb_str)

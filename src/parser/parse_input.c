@@ -6,12 +6,11 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:02:06 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/01 12:36:15 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 
 /**
  * @brief Fonction principale de parsing qui orchestre la validation et
@@ -26,7 +25,7 @@
  * @param argv Tableau des chaînes d'arguments de ligne de commande.
  * @return int Retourne 0 en cas de succès, 1 en cas d'échec.
  */
-int	parsing(t_app *app, int argc, char **argv)
+int parsing(t_app *app, int argc, char **argv)
 {
 	if (parse_input(argc, argv) == 1)
 		return (1);
@@ -52,7 +51,7 @@ int	parsing(t_app *app, int argc, char **argv)
  *
  * @param app Pointeur vers la structure de l'application à initialiser.
  */
-void	init_defaults(t_app *app)
+void init_defaults(t_app *app)
 {
 	app->win_w = 1024;
 	app->win_h = 768;
@@ -85,7 +84,7 @@ void	init_defaults(t_app *app)
  * @param argv Tableau des chaînes d'arguments de ligne de commande.
  * @return int Retourne 0 en cas de succès, 1 en cas d'échec de validation.
  */
-int	parse_input(int argc, char **argv)
+int parse_input(int argc, char **argv)
 {
 	if (argc != 2)
 	{

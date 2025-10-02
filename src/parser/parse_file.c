@@ -6,19 +6,18 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:57:49 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 11:11:02 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:49 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 
 /**
  * @brief Parse une ligne du fichier .cub et route vers le handler approprié.
  *
  * Analyse le type de ligne (texture, couleur, ou map) et délègue le traitement
  * au handler spécialisé. Maintient l'ordre strict du format .cub :
- * textures/couleurs d'abord, puis map. 
+ * textures/couleurs d'abord, puis map.
  * Toute ligne non reconnue génère une erreur.
  *
  * @param app Pointeur vers la structure principale de l'application.
@@ -27,7 +26,7 @@
  * @return int 0 si succès, -1 si erreur de parsing ou format invalide.
  *
  */
-int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
+int parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (is_texture_line(line) && !counters->map_started)
 		return (handle_texture_line(app, line, counters));
@@ -51,7 +50,7 @@ int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
  * @param line Ligne à vérifier.
  * @return int Retourne 1 si la ligne est vide, 0 sinon.
  */
-int	is_empty_line(char *line)
+int is_empty_line(char *line)
 {
 	return (ft_strlen(line) == 0 || line[0] == '\n');
 }
@@ -69,7 +68,7 @@ int	is_empty_line(char *line)
  * @param fd Descripteur de fichier pour fermeture en cas d'erreur.
  * @return int Retourne 0 pour continuer, 1 pour ligne vide, -1 erreur.
  */
-static int	process_line(t_app *app, char *line, t_parse_counters *counters,
+static int process_line(t_app *app, char *line, t_parse_counters *counters,
 						int fd)
 {
 	if (is_empty_line(line))
@@ -94,7 +93,7 @@ static int	process_line(t_app *app, char *line, t_parse_counters *counters,
  * @param app Pointeur vers la structure de l'application.
  * @param counters Structure contenant les compteurs de parsing.
  */
-static void	validate_parsing_completion(t_app *app,
+static void validate_parsing_completion(t_app *app,
 										t_parse_counters *counters)
 {
 	if (counters->texture_count != 4)
@@ -118,12 +117,12 @@ static void	validate_parsing_completion(t_app *app,
  * @return int Retourne 0 en cas de succès.
  *
  */
-int	parse_cub_file(t_app *app, const char *path)
+int parse_cub_file(t_app *app, const char *path)
 {
-	t_parse_counters	counters;
-	int					fd;
-	char				*line;
-	int					result;
+	t_parse_counters counters;
+	int fd;
+	char *line;
+	int result;
 
 	counters = (t_parse_counters){0};
 	fd = open(path, O_RDONLY);
@@ -137,7 +136,7 @@ int	parse_cub_file(t_app *app, const char *path)
 		if (result == 1)
 		{
 			line = get_next_line(fd);
-			continue ;
+			continue;
 		}
 		line = get_next_line(fd);
 	}

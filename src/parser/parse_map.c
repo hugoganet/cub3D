@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:02:24 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 13:18:07 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 
 /**
  * @brief Initialise la structure map à des valeurs par défaut.
@@ -24,7 +23,7 @@
  * @return int Retourne toujours 0 (succès).
  *
  */
-int	init_map(t_app *app)
+int init_map(t_app *app)
 {
 	app->map.height = 0;
 	app->map.width = 0;
@@ -41,9 +40,9 @@ int	init_map(t_app *app)
  * @param line Chaîne à mesurer (peut être NULL).
  * @return int Longueur de la ligne sans '\n', ou 0 si line est NULL.
  */
-int	get_trimmed_len(char *line)
+int get_trimmed_len(char *line)
 {
-	int	len;
+	int len;
 
 	if (!line)
 		return (0);
@@ -66,10 +65,10 @@ int	get_trimmed_len(char *line)
  * @return char* Pointeur vers la nouvelle chaîne allouée.
  *
  */
-char	*dup_map_line(t_app *app, char *line, int len)
+char *dup_map_line(t_app *app, char *line, int len)
 {
-	char	*map_line;
-	int		i;
+	char *map_line;
+	int i;
 
 	map_line = malloc(len + 1);
 	if (!map_line)
@@ -97,9 +96,9 @@ char	*dup_map_line(t_app *app, char *line, int len)
  * @return char** Pointeur vers le tableau réalloué.
  *
  */
-char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed)
+char **ensure_grid_capacity(t_app *app, char **old_grid, int needed)
 {
-	char	**new_grid;
+	char **new_grid;
 
 	new_grid = realloc(old_grid, sizeof(char *) * needed);
 	if (!new_grid)
@@ -126,11 +125,11 @@ char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed)
  * @param line_index Index 0-based où insérer la ligne dans la grille.
  * @return int 0 si succès, 1 si line == NULL (erreur non-fatale).
  */
-int	add_map_line(t_app *app, char *line, int line_index)
+int add_map_line(t_app *app, char *line, int line_index)
 {
-	int		len;
-	char	*map_line;
-	char	**new_grid;
+	int len;
+	char *map_line;
+	char **new_grid;
 
 	if (!line)
 		return (1);

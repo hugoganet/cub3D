@@ -6,12 +6,11 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:16 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 10:35:17 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:49 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 #include <mlx.h>
 
 /**
@@ -29,9 +28,9 @@
  * @return int Retourne 0 en cas de succès, 1 en cas d'erreur.
  *
  */
-int	main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	t_app	app;
+	t_app app;
 
 	if (parsing(&app, argc, argv) != 0)
 		return (1);

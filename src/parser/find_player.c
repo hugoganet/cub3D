@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   find_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:47:30 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 15:50:20 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:06:49 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "libft.h"
 
 /**
  * @brief Recherche et initialise le joueur dans la map.
@@ -28,11 +27,11 @@
  * @return int Retourne 0 si exactement un joueur est trouvé.
  *
  */
-int	find_player(t_app *app)
+int find_player(t_app *app)
 {
-	int	i;
-	int	j;
-	int	player_count;
+	int i;
+	int j;
+	int player_count;
 
 	player_count = 0;
 	i = 0;
