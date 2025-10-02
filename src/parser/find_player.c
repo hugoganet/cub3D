@@ -27,9 +27,6 @@
  * @param app Pointeur vers la structure principale contenant la map.
  * @return int Retourne 0 si exactement un joueur est trouvé.
  *
- * @see process_cell_for_player() pour le traitement de chaque cellule
- * @see is_player_char() pour la détection des caractères joueur
- * @see set_player_orientation() pour l'initialisation de l'orientation
  */
 int	find_player(t_app *app)
 {

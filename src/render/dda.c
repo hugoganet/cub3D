@@ -27,8 +27,6 @@
  * @param ray_dir Vecteur direction du rayon.
  * @param vars Pointeur vers la structure des variables DDA à initialiser.
  *
- * @see init_dda_vars_y() pour l'initialisation de l'axe Y
- * @see cast_ray() qui utilise ces variables pour le DDA
  */
 static void	init_dda_vars(t_app *app, t_vec2 ray_dir, t_ray_vars *vars)
 {
@@ -67,8 +65,6 @@ static void	init_dda_vars(t_app *app, t_vec2 ray_dir, t_ray_vars *vars)
  * @param ray_dir Vecteur direction du rayon.
  * @param vars Pointeur vers la structure des variables DDA à compléter.
  *
- * @see init_dda_vars() pour l'initialisation de l'axe X
- * @see cast_ray() qui utilise ces variables
  */
 static void	init_dda_vars_y(t_app *app, t_vec2 ray_dir, t_ray_vars *vars)
 {
@@ -101,7 +97,6 @@ static void	init_dda_vars_y(t_app *app, t_vec2 ray_dir, t_ray_vars *vars)
  * @param vars Pointeur vers les variables DDA avec position courante.
  * @return int 1 si mur touché ou OOB, 0 sinon.
  *
- * @see cast_ray() qui utilise cette fonction dans la boucle DDA
  */
 static int	check_wall_hit(t_app *app, t_ray_vars *vars)
 {
@@ -132,8 +127,6 @@ static int	check_wall_hit(t_app *app, t_ray_vars *vars)
  * @param vars Pointeur vers les variables DDA finales.
  * @param hit Pointeur vers la structure t_ray_hit à remplir.
  *
- * @see cast_ray() qui appelle cette fonction après collision
- * @see draw_textured_wall_column() qui utilise ces informations
  */
 static void	fill_hit_info(t_app *app, t_vec2 ray_dir, t_ray_vars *vars,
 		t_ray_hit *hit)
@@ -181,9 +174,6 @@ static void	fill_hit_info(t_app *app, t_vec2 ray_dir, t_ray_vars *vars,
  * @param hit Pointeur vers la structure t_ray_hit à remplir.
  * @return int Retourne toujours 1 (collision trouvée).
  *
- * @see init_dda_vars() pour l'initialisation
- * @see fill_hit_info() pour les calculs de collision
- * @see render_3d_view() qui appelle cette fonction pour chaque rayon
  */
 int	cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit)
 {

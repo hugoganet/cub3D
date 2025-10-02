@@ -29,9 +29,6 @@
  * @param app Pointeur vers la structure principale de l'application.
  * @return int Retourne toujours 0 (requis par MLX).
  *
- * @see update_player_movement() pour les déplacements
- * @see render_3d_view() pour le raycasting
- * @see render_minimap() pour la minimap
  */
 int	app_loop(t_app *app)
 {
@@ -56,8 +53,6 @@ int	app_loop(t_app *app)
  * @param app Pointeur vers la structure principale à nettoyer.
  * @return int Jamais atteint (exit avant), mais retournerait 0.
  *
- * @see app_destroy() pour le nettoyage complet
- * @see key_press() qui appelle cette fonction sur KEY_ESC
  */
 int	close_window(t_app *app)
 {

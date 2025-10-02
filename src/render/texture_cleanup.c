@@ -21,7 +21,6 @@
  * après libération pour éviter les double-free.
  *
  * @param app Structure principale de l'application
- * @see free_textures
  */
 static void	free_texture_paths(t_app *app)
 {
@@ -55,9 +54,6 @@ static void	free_texture_paths(t_app *app)
  * du cleanup général ou en cas d'erreur de chargement.
  *
  * @param app Structure principale de l'application
- * @see free_texture_paths
- * @see app_destroy
- * @see load_textures
  */
 void	free_textures(t_app *app)
 {

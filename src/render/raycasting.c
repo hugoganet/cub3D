@@ -27,7 +27,6 @@
  * @param x Coordonnée x de la colonne d'écran (0 à win_w-1).
  * @param ray_dir Pointeur vers le vecteur résultat (direction du rayon).
  *
- * @see cast_ray() qui utilise cette direction pour le DDA
  */
 void	calculate_ray_dir(t_app *app, int x, t_vec2 *ray_dir)
 {
@@ -51,7 +50,6 @@ void	calculate_ray_dir(t_app *app, int x, t_vec2 *ray_dir)
  * @param side Côté de collision (0 = vertical, 1 = horizontal).
  * @return int Identifiant de la face de mur (FACE_NORTH/SOUTH/EAST/WEST).
  *
- * @see fill_hit_info() dans dda.c qui calcule wall_face directement
  */
 int	get_wall_side(int step_x, int step_y, int side)
 {
@@ -86,8 +84,6 @@ int	get_wall_side(int step_x, int step_y, int side)
  *
  * @param app Pointeur vers la structure principale.
  *
- * @see render_textured_walls() pour le rendu avec textures
- * @see get_wall_color() pour les couleurs par face
  */
 static void	render_solid_colors(t_app *app)
 {
@@ -127,8 +123,6 @@ static void	render_solid_colors(t_app *app)
  *
  * @param app Pointeur vers la structure principale avec textures chargées.
  *
- * @see render_solid_colors() pour le mode fallback
- * @see draw_textured_wall_column() pour le dessin avec textures
  */
 static void	render_textured_walls(t_app *app)
 {
@@ -163,9 +157,6 @@ static void	render_textured_walls(t_app *app)
  *
  * @param app Pointeur vers la structure principale.
  *
- * @see render_solid_colors() pour le mode sans textures
- * @see render_textured_walls() pour le mode avec textures
- * @see app_loop() dans loop.c qui appelle cette fonction
  */
 void	render_3d_view(t_app *app)
 {

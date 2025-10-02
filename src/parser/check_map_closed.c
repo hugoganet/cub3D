@@ -65,9 +65,6 @@ int	check_map_closed(t_app *app)
  * @param app Pointeur vers la structure principale contenant la map.
  * @return int Retourne 0 si toutes les validations passent.
  *
- * @see check_valid_chars() pour la validation des caractères
- * @see find_player() pour la détection du joueur
- * @see check_map_closed() pour la vérification de fermeture
  */
 int	validate_map(t_app *app)
 {

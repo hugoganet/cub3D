@@ -28,9 +28,6 @@
  * @param argv Tableau des arguments de ligne de commande.
  * @return int Retourne 0 en cas de succès, 1 en cas d'erreur.
  *
- * @see parsing() pour l'analyse du fichier .cub
- * @see app_init() pour l'initialisation MLX et textures
- * @see app_loop() pour la boucle de rendu
  */
 int	main(int argc, char **argv)
 {

@@ -29,7 +29,6 @@
  * @param app Pointeur vers la structure principale contenant la map.
  * @return int Retourne 0 si tous les caractères sont valides.
  *
- * @see validate_map() pour la séquence complète de validation
  */
 int	check_valid_chars(t_app *app)
 {

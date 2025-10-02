@@ -25,7 +25,6 @@
  * @param counters Pointeur vers les compteurs de parsing.
  * @return int 0 si succès, -1 si erreur (trop de textures ou duplication).
  *
- * @see parse_texture_line() pour l'extraction et l'assignation du chemin
  */
 int	handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
 {
@@ -55,8 +54,6 @@ int	handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
  * @param counters Pointeur vers les compteurs de parsing.
  * @return int Retourne toujours 0 (succès).
  *
- * @see init_map() pour l'initialisation de la structure map
- * @see add_map_line() pour l'ajout de la ligne à la grille
  */
 int	handle_map_line(t_app *app, char *line, t_parse_counters *counters)
 {

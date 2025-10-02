@@ -31,8 +31,6 @@
  * @param draw_start Pointeur vers la coordonnée Y de début (résultat).
  * @param draw_end Pointeur vers la coordonnée Y de fin (résultat).
  *
- * @see calculate_wall_height() pour le calcul de height
- * @see draw_wall_column() qui utilise ces bornes
  */
 void	calculate_wall_bounds(int height, int screen_h, int *draw_start,
 		int *draw_end)
@@ -55,8 +53,6 @@ void	calculate_wall_bounds(int height, int screen_h, int *draw_start,
  * @param params Tableau [x, draw_start, draw_end] définissant la colonne.
  * @param color Couleur RGB à appliquer (format 0xRRGGBB).
  *
- * @see render_solid_colors() qui appelle cette fonction
- * @see draw_textured_wall_column() pour la version avec textures
  */
 void	draw_wall_column(t_app *app, int *params, int color)
 {
@@ -83,7 +79,6 @@ void	draw_wall_column(t_app *app, int *params, int color)
  * @param wall_face Identifiant de la face de mur (FACE_NORTH/SOUTH/EAST/WEST).
  * @return t_img* Pointeur vers la structure d'image texture.
  *
- * @see draw_textured_wall_column() qui utilise cette texture
  */
 static t_img	*get_texture_from_face(t_app *app, int wall_face)
 {
@@ -113,8 +108,6 @@ static t_img	*get_texture_from_face(t_app *app, int wall_face)
  * @param bounds Tableau [draw_start, draw_end] définissant la hauteur.
  * @param vars Tableau résultat [tex_x, step, tex_pos] (sortie).
  *
- * @see draw_textured_wall_column() qui utilise ces variables
- * @see get_texture_coord_x() pour le calcul de tex_x
  */
 static void	init_texture_vars(t_app *app, t_ray_hit *hit, int *bounds,
 		int *vars)
@@ -148,9 +141,6 @@ static void	init_texture_vars(t_app *app, t_ray_hit *hit, int *bounds,
  * @param params Tableau [x, draw_start, draw_end] définissant la colonne.
  * @param hit Pointeur vers les données de collision (wall_face, wall_x).
  *
- * @see init_texture_vars() pour l'initialisation des paramètres texture
- * @see get_texture_pixel() pour l'échantillonnage de la texture
- * @see render_textured_walls() qui appelle cette fonction
  */
 void	draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit)
 {

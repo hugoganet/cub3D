@@ -23,7 +23,6 @@
  * @param app Pointeur vers la structure principale de l'application.
  * @return int Retourne toujours 0 (succès).
  *
- * @see parse_file() qui appelle cette fonction entre headers et map
  */
 int	set_defaults_after_parse(t_app *app)
 {
@@ -43,7 +42,6 @@ int	set_defaults_after_parse(t_app *app)
  * @param line Chaîne à analyser.
  * @return int 1 si la ligne est une déclaration de texture, 0 sinon.
  *
- * @see process_line() qui utilise cette fonction pour router le parsing
  */
 int	is_texture_line(char *line)
 {
@@ -67,7 +65,6 @@ int	is_texture_line(char *line)
  * @param line Chaîne à analyser.
  * @return int 1 si la ligne est une déclaration de couleur, 0 sinon.
  *
- * @see process_line() qui utilise cette fonction pour router le parsing
  */
 int	is_color_line(char *line)
 {
@@ -91,7 +88,6 @@ int	is_color_line(char *line)
  * @param line Chaîne à analyser.
  * @return int 1 si la ligne contient uniquement des caractères de map, 0 sinon.
  *
- * @see process_line() qui utilise cette fonction pour détecter la map
  */
 int	is_map_line(char *line)
 {
@@ -122,7 +118,6 @@ int	is_map_line(char *line)
  * @param filename Chemin vers le fichier à analyser.
  * @return int Nombre de lignes dans le fichier, ou -1 si erreur d'ouverture.
  *
- * @see parse_file() qui peut utiliser cette fonction pour pré-allouer
  */
 int	count_lines(const char *filename)
 {

@@ -23,7 +23,6 @@
  * @param app Pointeur vers la structure principale de l'application.
  * @return int Retourne toujours 0 (succès).
  *
- * @see add_map_line() pour l'allocation et le remplissage de la grille
  */
 int	init_map(t_app *app)
 {
@@ -66,7 +65,6 @@ int	get_trimmed_len(char *line)
  * @param len Nombre de caractères à copier (excluant '\0').
  * @return char* Pointeur vers la nouvelle chaîne allouée.
  *
- * @see get_trimmed_len() pour calculer len sans '\n'
  */
 char	*dup_map_line(t_app *app, char *line, int len)
 {
@@ -98,7 +96,6 @@ char	*dup_map_line(t_app *app, char *line, int len)
  * @param needed Nombre d'entrées minimum requises dans le tableau.
  * @return char** Pointeur vers le tableau réalloué.
  *
- * @see add_map_line() qui utilise cette fonction pour étendre la grille
  */
 char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed)
 {

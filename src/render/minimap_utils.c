@@ -26,7 +26,6 @@
  *
  * @param tile Caractère de la map
  * @return int Couleur hexadécimale correspondante
- * @see render_minimap
  */
 int	get_tile_color(char tile)
 {
@@ -50,8 +49,6 @@ int	get_tile_color(char tile)
  * la map et de l'échelle de la minimap.
  *
  * @param app Structure principale de l'application
- * @see draw_rect
- * @see render_minimap
  */
 void	draw_minimap_border(t_app *app)
 {
@@ -72,8 +69,6 @@ void	draw_minimap_border(t_app *app)
  *
  * @param app Structure principale de l'application
  * @param hit_point Point de collision du rayon dans les coordonnées monde
- * @see draw_line
- * @see render_minimap_rays
  */
 void	draw_minimap_ray(t_app *app, t_vec2 hit_point)
 {

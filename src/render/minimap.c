@@ -25,7 +25,6 @@
  * @param map_x Coordonnée X dans la grille de map
  * @param map_y Coordonnée Y dans la grille de map
  * @param color Couleur de remplissage de la tuile
- * @see draw_rect
  */
 void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
 {
@@ -62,7 +61,6 @@ void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
  * des coordonnées monde vers les coordonnées minimap.
  *
  * @param app Structure principale de l'application
- * @see draw_rect
  */
 void	draw_player_on_minimap(t_app *app)
 {
@@ -93,10 +91,6 @@ void	draw_player_on_minimap(t_app *app)
  * - Indicateur du joueur et direction
  *
  * @param app Structure principale de l'application
- * @see draw_minimap_border
- * @see draw_minimap_tile
- * @see render_minimap_rays
- * @see draw_player_on_minimap
  */
 void	render_minimap(t_app *app)
 {
@@ -134,7 +128,6 @@ void	render_minimap(t_app *app)
  * @param ray_index Index du rayon courant (0 à total_rays-1)
  * @param total_rays Nombre total de rayons à tracer
  * @param ray_dir Pointeur vers le vecteur de direction résultant
- * @see render_minimap_rays
  */
 void	get_ray_direction(t_app *app, int ray_index, int total_rays,
 		t_vec2 *ray_dir)
@@ -162,9 +155,6 @@ void	get_ray_direction(t_app *app, int ray_index, int total_rays,
  * pour visualiser le FOV.
  *
  * @param app Structure principale de l'application
- * @see get_ray_direction
- * @see cast_minimap_ray
- * @see draw_minimap_ray
  */
 void	render_minimap_rays(t_app *app)
 {

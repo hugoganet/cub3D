@@ -17,7 +17,6 @@
  *
  * @param color Structure contenant les composantes RGB de la couleur
  * @return int Valeur hexadécimale de la couleur (format 0xRRGGBB)
- * @see t_color
  */
 int	color_to_int(t_color color)
 {
@@ -32,8 +31,6 @@ int	color_to_int(t_color color)
  * bandes horizontales ligne par ligne.
  *
  * @param app Structure principale de l'application contenant les couleurs
- * @see draw_rect
- * @see color_to_int
  */
 void	draw_ceiling(t_app *app)
 {
@@ -64,8 +61,6 @@ void	draw_ceiling(t_app *app)
  * bandes horizontales ligne par ligne.
  *
  * @param app Structure principale de l'application contenant les couleurs
- * @see draw_rect
- * @see color_to_int
  */
 void	draw_floor(t_app *app)
 {
@@ -94,8 +89,6 @@ void	draw_floor(t_app *app)
  * le fond avant le rendu des murs.
  *
  * @param app Structure principale de l'application
- * @see draw_ceiling
- * @see draw_floor
  */
 void	render_background(t_app *app)
 {

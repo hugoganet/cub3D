@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tex.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:18:41 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/09/29 13:22:29 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/02 11:10:26 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,10 @@ char	*extract_path(char *line)
  * retourne -1 (erreur de duplication). Sinon, duplique le chemin via
  * ft_strdup() et l'assigne à *dest.
  *
- * @param dest Pointeur vers la variable de destination (ex: &app->tex.north_path).
+ * @param dest Pointeur vers la var de destination (ex: &app->tex.north_path).
  * @param path Chemin à assigner.
  * @return int 0 si succès, -1 si *dest était déjà défini (duplication).
  *
- * @see assign_texture() qui utilise cette fonction pour chaque direction
  */
 static int	set_texture_path(char **dest, char *path)
 {
@@ -82,8 +81,6 @@ static int	set_texture_path(char **dest, char *path)
  * @param path Chemin extrait de la ligne.
  * @return int 0 si succès, -1 si duplication détectée.
  *
- * @see set_texture_path() pour l'assignation avec vérification de duplication
- * @see parse_texture_line() qui appelle cette fonction
  */
 static int	assign_texture(t_app *app, char *line, char *path)
 {
@@ -112,8 +109,6 @@ static int	assign_texture(t_app *app, char *line, char *path)
  * @param line Ligne complète à parser (ex: "NO ./textures/north_wall.xpm").
  * @return int 0 si succès, -1 si erreur (duplication de texture).
  *
- * @see extract_path() pour l'extraction du chemin depuis la ligne
- * @see assign_texture() pour l'assignation à la bonne variable
  */
 int	parse_texture_line(t_app *app, char *line)
 {

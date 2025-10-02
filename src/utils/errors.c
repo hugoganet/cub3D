@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:24 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/01 17:52:11 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/02 11:09:11 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 /**
- * @brief Affiche un message d'erreur, nettoie les ressources et termine le programme.
+ * @brief Affiche un msg d'erreur, clean les ressources et termine le programme.
  *
  * Fonction centrale de gestion d'erreurs qui :
  * 1. Affiche "Error" sur stderr
@@ -28,7 +28,6 @@
  * @param app Pointeur vers la structure principale à nettoyer.
  * @param msg Message d'erreur descriptif à afficher (peut être NULL).
  *
- * @see app_destroy() pour le nettoyage complet des ressources
  */
 void	error_exit(t_app *app, const char *msg)
 {
@@ -51,8 +50,6 @@ void	error_exit(t_app *app, const char *msg)
  * @param c Structure t_color contenant les composantes r, g, b.
  * @return int Couleur encodée en 0xAARRGGBB pour MLX.
  *
- * @see render_frame() qui utilise cette fonction pour sol/plafond
- * @see color_to_int() dans background.c (version simplifiée)
  */
 int	rgb_to_int(t_color c)
 {

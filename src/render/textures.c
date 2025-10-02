@@ -22,8 +22,6 @@
  *
  * @param app Structure principale de l'application
  * @return int 0 si succès, 1 si échec
- * @see load_single_texture
- * @see free_textures
  */
 int	load_textures(t_app *app)
 {
@@ -60,8 +58,6 @@ int	load_textures(t_app *app)
  * @param side Côté de collision (0 = vertical, 1 = horizontal)
  * @param ray_dir Direction du rayon
  * @return t_img* Pointeur vers la texture appropriée
- * @see draw_textured_column
- * @see perform_dda
  */
 t_img	*get_wall_texture(t_app *app, int side, t_vec2 ray_dir)
 {

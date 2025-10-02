@@ -22,7 +22,6 @@
  *
  * @param arr Tableau de chaînes terminé par NULL à libérer.
  *
- * @see parse_rgb_values() qui utilise cette fonction pour ft_split()
  */
 void	free_split(char **arr)
 {
@@ -46,7 +45,6 @@ void	free_split(char **arr)
  * @param p Pointeur à libérer, ou NULL pour forcer le nettoyage GNL.
  * @return void* Retourne toujours NULL (commodité pour assignation).
  *
- * @see parse_cub_file() qui utilise gnl_free(NULL) pour cleanup
  */
 void	*gnl_free(void *p)
 {

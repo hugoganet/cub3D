@@ -21,7 +21,6 @@
  *
  * @param path Chemin du fichier XPM défaillant
  * @param message Message d'erreur descriptif
- * @see load_single_texture
  */
 static void	print_texture_error(char *path, char *message)
 {
@@ -41,7 +40,6 @@ static void	print_texture_error(char *path, char *message)
  * @param path Chemin du fichier XPM
  * @param texture Structure d'image à remplir
  * @return int 0 si succès, 1 si échec
- * @see load_single_texture
  */
 static int	load_texture_image(t_app *app, char *path, t_img *texture)
 {
@@ -69,7 +67,6 @@ static int	load_texture_image(t_app *app, char *path, t_img *texture)
  * @param path Chemin de la texture (pour les messages d'erreur)
  * @param texture Structure d'image contenant le pointeur MLX
  * @return int 0 si succès, 1 si échec
- * @see load_single_texture
  */
 static int	get_texture_data(t_app *app, char *path, t_img *texture)
 {
@@ -96,9 +93,6 @@ static int	get_texture_data(t_app *app, char *path, t_img *texture)
  * @param path Chemin du fichier XPM à charger
  * @param texture Pointeur vers la structure d'image à initialiser
  * @return int 0 si succès, 1 si échec
- * @see load_textures
- * @see load_texture_image
- * @see get_texture_data
  */
 int	load_single_texture(t_app *app, char *path, t_img *texture)
 {
@@ -124,7 +118,6 @@ int	load_single_texture(t_app *app, char *path, t_img *texture)
  * @param x Coordonnée X du pixel (0 à texture->w-1)
  * @param y Coordonnée Y du pixel (0 à texture->h-1)
  * @return int Couleur du pixel en format hexadécimal (masque 0xFFFFFF)
- * @see draw_textured_column
  */
 int	get_texture_pixel(t_img *texture, int x, int y)
 {

@@ -25,7 +25,6 @@
  * @param screen_h Hauteur de l'écran en pixels.
  * @return double Hauteur du mur en pixels (peut dépasser screen_h).
  *
- * @see calculate_wall_bounds() qui utilise cette hauteur pour le dessin
  */
 double	calculate_wall_height(double perp_dist, int screen_h)
 {
@@ -45,8 +44,6 @@ double	calculate_wall_height(double perp_dist, int screen_h)
  * @param texture Pointeur vers la structure d'image texture.
  * @return int Coordonnée X dans la texture (0 à texture->w-1).
  *
- * @see fill_hit_info() dans dda.c qui calcule wall_x
- * @see init_texture_vars() qui utilise cette fonction
  */
 int	get_texture_coord_x(double wall_x, t_img *texture)
 {
@@ -73,8 +70,6 @@ int	get_texture_coord_x(double wall_x, t_img *texture)
  * @param wall_face Identifiant de la face de mur (FACE_NORTH/SOUTH/EAST/WEST).
  * @return int Couleur RGB au format 0xRRGGBB.
  *
- * @see render_solid_colors() qui utilise ces couleurs
- * @see draw_wall_column() pour l'application de la couleur
  */
 int	get_wall_color(int wall_face)
 {

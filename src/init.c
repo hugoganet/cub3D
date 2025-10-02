@@ -27,8 +27,6 @@
  * @param h Hauteur de l'image en pixels.
  * @return int 0 si succès, -1 si erreur d'allocation MLX.
  *
- * @see app_init() qui appelle cette fonction
- * @see img_put_pixel() qui utilise app->frame pour dessiner
  */
 static int	create_frame(t_app *app, int w, int h)
 {
@@ -58,9 +56,6 @@ static int	create_frame(t_app *app, int w, int h)
  * @param h Hauteur de la fenêtre en pixels.
  * @return int 0 si succès, -1 ou 1 en cas d'erreur.
  *
- * @see load_textures() pour le chargement des textures
- * @see create_frame() pour l'image offscreen
- * @see app_destroy() pour le nettoyage
  */
 int	app_init(t_app *app, int w, int h)
 {
@@ -88,8 +83,6 @@ int	app_init(t_app *app, int w, int h)
  *
  * @param app Pointeur vers la structure principale contenant la map.
  *
- * @see app_destroy() qui appelle cette fonction
- * @see add_map_line() qui alloue la grille
  */
 void	free_map(t_app *app)
 {
@@ -125,8 +118,6 @@ void	free_map(t_app *app)
  * @param app Pointeur vers la structure principale à nettoyer.
  * @param code Code de sortie (actuellement non utilisé).
  *
- * @see error_exit() qui appelle cette fonction avant exit(1)
- * @see close_window() qui appelle cette fonction à la fermeture
  */
 void	app_destroy(t_app *app, int code)
 {

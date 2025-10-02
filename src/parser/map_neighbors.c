@@ -28,7 +28,6 @@
  * @param y Coordonnée verticale (ligne).
  * @return int 1 si position est mur/vide/OOB, 0 si traversable.
  *
- * @see has_open_neighbor() qui utilise cette fonction
  */
 int	is_wall_or_void(t_app *app, int x, int y)
 {
@@ -56,8 +55,6 @@ int	is_wall_or_void(t_app *app, int x, int y)
  * @param y Coordonnée verticale de la cellule à tester.
  * @return int 1 si au moins un voisin est ouvert, 0 sinon.
  *
- * @see is_wall_or_void() pour la vérification de chaque voisin
- * @see check_map_closed() qui utilise cette fonction
  */
 int	has_open_neighbor(t_app *app, int x, int y)
 {
@@ -84,7 +81,6 @@ int	has_open_neighbor(t_app *app, int x, int y)
  * @param y Coordonnée verticale.
  * @return int 1 si la position est sur un bord, 0 sinon.
  *
- * @see check_map_closed() qui utilise cette fonction
  */
 int	is_at_map_edge(t_app *app, int x, int y)
 {

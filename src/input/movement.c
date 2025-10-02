@@ -29,7 +29,6 @@
  * @param y Coordonnée Y à tester (en unités de grille, pas pixels).
  * @return bool true si position traversable, false sinon.
  *
- * @see move_player() qui utilise cette fonction pour collision
  */
 bool	is_valid_position(t_app *app, double x, double y)
 {
@@ -64,8 +63,6 @@ bool	is_valid_position(t_app *app, double x, double y)
  * @param app Pointeur vers la structure principale.
  * @param direction Sens de rotation (-1 = gauche, 1 = droite).
  *
- * @see update_player_movement() qui appelle cette fonction
- * @see app->rot_speed pour la vitesse angulaire
  */
 void	rotate_player(t_app *app, int direction)
 {
@@ -103,8 +100,6 @@ void	rotate_player(t_app *app, int direction)
  * @param move_x Composante X du vecteur de déplacement (normalisée).
  * @param move_y Composante Y du vecteur de déplacement (normalisée).
  *
- * @see is_valid_position() pour la détection de collision
- * @see update_player_movement() qui appelle cette fonction
  */
 void	move_player(t_app *app, double move_x, double move_y)
 {
@@ -135,8 +130,6 @@ void	move_player(t_app *app, double move_x, double move_y)
  * @param move_x Pointeur vers la composante X accumulée (sortie).
  * @param move_y Pointeur vers la composante Y accumulée (sortie).
  *
- * @see update_player_movement() qui appelle cette fonction
- * @see move_player() qui applique le déplacement
  */
 static void	apply_movement(t_app *app, double *move_x, double *move_y)
 {
@@ -175,10 +168,6 @@ static void	apply_movement(t_app *app, double *move_x, double *move_y)
  *
  * @param app Pointeur vers la structure principale (keys, player).
  *
- * @see app_loop() qui appelle cette fonction chaque frame
- * @see apply_movement() pour calcul du vecteur de déplacement
- * @see move_player() pour application du mouvement
- * @see rotate_player() pour les rotations
  */
 void	update_player_movement(t_app *app)
 {

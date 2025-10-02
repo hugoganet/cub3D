@@ -25,9 +25,6 @@
  * @param hit_point Pointeur vers le vecteur résultat (coordonnées d'impact).
  * @return int 1 si collision trouvée (toujours vrai avec cast_ray actuel).
  *
- * @see cast_ray() pour l'algorithme DDA complet
- * @see render_minimap_rays() qui appelle cette fonction
- * @see draw_minimap_ray() qui dessine la ligne résultante
  */
 int	cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point)
 {

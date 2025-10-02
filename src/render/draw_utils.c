@@ -21,8 +21,6 @@
  * @param app Structure principale de l'application
  * @param coords Tableau [x, y, largeur, hauteur] définissant le rectangle
  * @param color Couleur de remplissage du rectangle
- * @see draw_rect
- * @see img_put_pixel
  */
 static void	draw_rect_loop(t_app *app, int *coords, int color)
 {
@@ -51,7 +49,6 @@ static void	draw_rect_loop(t_app *app, int *coords, int color)
  * @param app Structure principale de l'application
  * @param params Tableau [x, y, largeur, hauteur] du rectangle
  * @param color Couleur de remplissage (format hexadécimal)
- * @see draw_rect_loop
  */
 void	draw_rect(t_app *app, int *params, int color)
 {
@@ -75,8 +72,6 @@ void	draw_rect(t_app *app, int *params, int color)
  * @param coords Tableau [x1, y1, x2, y2] définissant la ligne
  * @param deltas Tableau [dx, dy, sx, sy] pour l'algorithme de Bresenham
  * @param color Couleur de la ligne
- * @see draw_line
- * @see img_put_pixel
  */
 static void	draw_line_step(t_app *app, int *coords, int *deltas, int color)
 {
@@ -113,7 +108,6 @@ static void	draw_line_step(t_app *app, int *coords, int *deltas, int color)
  * @param app Structure principale de l'application
  * @param params Tableau [x1, y1, x2, y2] des coordonnées de départ et arrivée
  * @param color Couleur de la ligne (format hexadécimal)
- * @see draw_line_step
  */
 void	draw_line(t_app *app, int *params, int color)
 {

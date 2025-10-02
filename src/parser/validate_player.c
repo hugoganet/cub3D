@@ -49,7 +49,6 @@ void	process_cell_for_player(t_app *app, int i, int j, int *player_count)
  * @param c Caractère à tester.
  * @return int 1 si c est un caractère joueur, 0 sinon.
  *
- * @see find_player() pour la recherche du joueur dans la map
  */
 int	is_player_char(char c)
 {
@@ -69,7 +68,6 @@ int	is_player_char(char c)
  * @param app Pointeur vers la structure principale.
  * @param c Caractère d'orientation ('N' ou 'S').
  *
- * @see set_player_orientation() pour la fonction appelante
  */
 void	orientation_north_or_south(t_app *app, char c)
 {
@@ -102,7 +100,6 @@ void	orientation_north_or_south(t_app *app, char c)
  * @param app Pointeur vers la structure principale.
  * @param c Caractère d'orientation ('E' ou 'W').
  *
- * @see set_player_orientation() pour la fonction appelante
  */
 void	orientation_east_or_west(t_app *app, char c)
 {
@@ -132,9 +129,6 @@ void	orientation_east_or_west(t_app *app, char c)
  * @param app Pointeur vers la structure principale.
  * @param c Caractère d'orientation du joueur ('N', 'S', 'E', 'W').
  *
- * @see process_cell_for_player() qui appelle cette fonction
- * @see orientation_north_or_south() pour les orientations N/S
- * @see orientation_east_or_west() pour les orientations E/W
  */
 void	set_player_orientation(t_app *app, char c)
 {

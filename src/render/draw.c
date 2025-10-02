@@ -22,7 +22,6 @@
  *
  * @param img Pointeur vers la structure d'image à remplir
  * @param color Couleur à appliquer (format hexadécimal)
- * @see img_put_pixel
  */
 static void	clear_frame(t_img *img, int color)
 {
@@ -51,9 +50,6 @@ static void	clear_frame(t_img *img, int color)
  * Cette fonction est une alternative simplifiée à render_background.
  *
  * @param app Structure principale de l'application
- * @see clear_frame
- * @see rgb_to_int
- * @see img_put_pixel
  */
 void	render_frame(t_app *app)
 {
@@ -106,7 +102,6 @@ void	img_put_pixel(t_img *img, int x, int y, int color)
  *
  * @param app Structure principale de l'application
  * @param color Couleur de remplissage (format hexadécimal)
- * @see img_put_pixel
  */
 void	fill_background(t_app *app, int color)
 {
