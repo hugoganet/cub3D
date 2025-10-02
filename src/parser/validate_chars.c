@@ -43,7 +43,7 @@ int check_valid_chars(t_app *app)
 		{
 			c = app->map.grid[i][j];
 			if (c != '0' && c != '1' && c != ' ' && c != 'N' && c != 'S' && c != 'E' && c != 'W')
-				error_exit(app, "Invalid character in map");
+				return (error_msg("Invalid character in map"));
 			j++;
 		}
 		i++;

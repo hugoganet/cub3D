@@ -280,6 +280,7 @@ void	init_defaults(t_app *app);
 
 // Error handling
 void	error_exit(t_app *app, const char *msg);
+int		error_msg(const char *msg);
 
 // ============================================================================
 //                              PARSING

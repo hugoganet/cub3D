@@ -28,15 +28,9 @@
 int handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (counters->texture_count == 4)
-	{
-		printf("Error\nOnly 4 texture path are allowed\n");
-		return (-1);
-	}
+		return (error_msg("Only 4 texture paths are allowed"));
 	if (parse_texture_line(app, line) != 0)
-	{
-		printf("Error\nDuplicate texture definition\n");
 		return (-1);
-	}
 	counters->texture_count++;
 	return (0);
 }

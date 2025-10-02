@@ -39,7 +39,12 @@ int parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 	else if (is_map_line(line))
 		return (handle_map_line(app, line, counters));
 	else
-		return (printf("Error:\nUnknown line format: %s", line), -1);
+	{
+		ft_putendl_fd("Error", 2);
+		ft_putstr_fd("Unknown line format: ", 2);
+		ft_putstr_fd(line, 2);
+		return (-1);
+	}
 	return (0);
 }
 
@@ -78,7 +83,8 @@ static int process_line(t_app *app, char *line, t_parse_counters *counters,
 		free(line);
 		gnl_free(NULL);
 		close(fd);
-		error_exit(app, NULL);
+		app_destroy(app, 1);
+		exit(1);
 	}
 	return (0);
 }
@@ -93,15 +99,17 @@ static int process_line(t_app *app, char *line, t_parse_counters *counters,
  * @param app Pointeur vers la structure de l'application.
  * @param counters Structure contenant les compteurs de parsing.
  */
-static void validate_parsing_completion(t_app *app,
+static int validate_parsing_completion(t_app *app,
 										t_parse_counters *counters)
 {
+	(void)app;
 	if (counters->texture_count != 4)
-		error_exit(app, "Missing texture definitions (need NO, SO, WE, EA)");
+		return (error_msg("Missing texture definitions (need NO, SO, WE, EA)"));
 	if (counters->color_count != 2)
-		error_exit(app, "Missing color definitions (need F and C)");
+		return (error_msg("Missing color definitions (need F and C)"));
 	if (!counters->map_started)
-		error_exit(app, "No map found in file");
+		return (error_msg("No map found in file"));
+	return (0);
 }
 
 /**
@@ -127,7 +135,7 @@ int parse_cub_file(t_app *app, const char *path)
 	counters = (t_parse_counters){0};
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		error_exit(app, "Cannot open file");
+		return (error_msg("Cannot open file"));
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
@@ -142,6 +150,7 @@ int parse_cub_file(t_app *app, const char *path)
 	}
 	gnl_free(NULL);
 	close(fd);
-	validate_parsing_completion(app, &counters);
+	if (validate_parsing_completion(app, &counters) != 0)
+		return (-1);
 	return (0);
 }

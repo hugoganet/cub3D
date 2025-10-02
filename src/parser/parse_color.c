@@ -47,12 +47,12 @@ static int	validate_and_convert_rgb(char **rgb_parts, t_color *color)
 
 	if (!is_valid_number(rgb_parts[0]) || !is_valid_number(rgb_parts[1])
 		|| !is_valid_number(rgb_parts[2]))
-		return (1);
+		return (error_msg("RGB values must be numeric (0-255)"));
 	r = ft_atoi(rgb_parts[0]);
 	g = ft_atoi(rgb_parts[1]);
 	b = ft_atoi(rgb_parts[2]);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		return (1);
+		return (error_msg("RGB values must be in range 0-255"));
 	color->r = r;
 	color->g = g;
 	color->b = b;
@@ -73,12 +73,15 @@ int	parse_rgb_values(const char *rgb_str, t_color *color)
 
 	rgb_parts = ft_split(rgb_str, ',');
 	if (!rgb_parts)
-		return (1);
+		return (error_msg("Memory allocation failed for RGB parsing"));
 	count = 0;
 	while (rgb_parts[count])
 		count++;
 	if (count != 3)
-		return (free_split(rgb_parts), 1);
+	{
+		free_split(rgb_parts);
+		return (error_msg("RGB format must be R,G,B (3 values)"));
+	}
 	result = validate_and_convert_rgb(rgb_parts, color);
 	free_split(rgb_parts);
 	return (result);
@@ -133,24 +136,21 @@ int	parse_color_line(t_app *app, char *line)
 
 	rgb_str = extract_rgb_string(line);
 	if (!rgb_str)
-		return (1);
+		return (error_msg("Memory allocation failed for color parsing"));
 	if (parse_rgb_values(rgb_str, &color) != 0)
 	{
 		free(rgb_str);
-		return (1);
+		return (-1);
 	}
 	if (ft_strncmp(line, "F ", 2) == 0)
-	{
 		app->floor = color;
-	}
 	else if (ft_strncmp(line, "C ", 2) == 0)
-	{
 		app->ceil = color;
-	}
 	else
 	{
 		free(rgb_str);
-		return (1);
+		return (error_msg("Color line must start with F or C"));
 	}
-	return (free(rgb_str), 0);
+	free(rgb_str);
+	return (0);
 }

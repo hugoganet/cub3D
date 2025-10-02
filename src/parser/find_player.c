@@ -46,8 +46,8 @@ int find_player(t_app *app)
 		i++;
 	}
 	if (player_count == 0)
-		error_exit(app, "No player found in map (need N, S, E, or W)");
+		return (error_msg("No player found in map (need N, S, E, or W)"));
 	if (player_count > 1)
-		error_exit(app, "Multiple players found in map (only one allowed)");
+		return (error_msg("Multiple players found in map (only one allowed)"));
 	return (0);
 }

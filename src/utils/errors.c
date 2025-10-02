@@ -37,6 +37,24 @@ void error_exit(t_app *app, const char *msg)
 }
 
 /**
+ * @brief Affiche un message d'erreur sur stderr et retourne -1.
+ *
+ * Fonction helper pour gérer les erreurs sans terminer le programme.
+ * Affiche "Error" suivi du message spécifique sur stderr, puis retourne -1
+ * pour permettre la propagation de l'erreur vers les couches supérieures.
+ *
+ * @param msg Message d'erreur descriptif (peut être NULL).
+ * @return int Retourne toujours -1.
+ */
+int	error_msg(const char *msg)
+{
+	ft_putendl_fd("Error", 2);
+	if (msg)
+		ft_putendl_fd((char *)msg, 2);
+	return (-1);
+}
+
+/**
  * @brief Convertit une structure t_color en entier RGB au format MLX.
  *
  * Transforme les composantes RGB (0-255) en un entier 32 bits au format :

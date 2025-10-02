@@ -27,16 +27,20 @@
  */
 int parsing(t_app *app, int argc, char **argv)
 {
-	if (parse_input(argc, argv) == 1)
-		return (1);
+	if (parse_input(argc, argv) != 0)
+		return (-1);
 	ft_memset(app, 0, sizeof(t_app));
 	init_defaults(app);
-	if (parse_cub_file(app, argv[1]) == 1)
+	if (parse_cub_file(app, argv[1]) != 0)
 	{
 		app_destroy(app, 1);
-		return (1);
+		return (-1);
 	}
-	validate_map(app);
+	if (validate_map(app) != 0)
+	{
+		app_destroy(app, 1);
+		return (-1);
+	}
 	return (0);
 }
 
@@ -90,19 +94,19 @@ int parse_input(int argc, char **argv)
 	{
 		ft_putendl_fd("Error", 2);
 		ft_putendl_fd("Usage: ./cub3D <map.cub>", 2);
-		return (1);
+		return (-1);
 	}
 	if (!argv[1] || ft_strlen(argv[1]) < 5)
 	{
 		ft_putendl_fd("Error", 2);
 		ft_putendl_fd("Invalid file path", 2);
-		return (1);
+		return (-1);
 	}
 	if (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 4) != 0)
 	{
 		ft_putendl_fd("Error", 2);
 		ft_putendl_fd("File must have .cub extension", 2);
-		return (1);
+		return (-1);
 	}
 	return (0);
 }

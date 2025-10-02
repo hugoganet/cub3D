@@ -116,10 +116,10 @@ int parse_texture_line(t_app *app, char *line)
 
 	path = extract_path(line);
 	if (!path)
-		error_exit(app, "Memory allocation failed");
+		return (error_msg("Memory allocation failed for texture path"));
 	result = assign_texture(app, line, path);
 	free(path);
 	if (result != 0)
-		return (-1);
+		return (error_msg("Duplicate texture definition"));
 	return (0);
 }

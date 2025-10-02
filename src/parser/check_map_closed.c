@@ -41,7 +41,7 @@ int check_map_closed(t_app *app)
 			if (is_player_char(c))
 			{
 				if (has_open_neighbor(app, j, i) && is_at_map_edge(app, j, i))
-					error_exit(app, "Map is not properly closed by walls");
+					return (error_msg("Map is not properly closed by walls"));
 			}
 			j++;
 		}
@@ -67,8 +67,11 @@ int check_map_closed(t_app *app)
  */
 int validate_map(t_app *app)
 {
-	check_valid_chars(app);
-	find_player(app);
-	check_map_closed(app);
+	if (check_valid_chars(app) != 0)
+		return (-1);
+	if (find_player(app) != 0)
+		return (-1);
+	if (check_map_closed(app) != 0)
+		return (-1);
 	return (0);
 }

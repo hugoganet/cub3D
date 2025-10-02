@@ -70,9 +70,13 @@ char *dup_map_line(t_app *app, char *line, int len)
 	char *map_line;
 	int i;
 
+	(void)app;
 	map_line = malloc(len + 1);
 	if (!map_line)
-		error_exit(app, "Memory allocation failed for map line");
+	{
+		error_msg("Memory allocation failed for map line");
+		return (NULL);
+	}
 	i = 0;
 	while (i < len)
 	{
@@ -100,9 +104,13 @@ char **ensure_grid_capacity(t_app *app, char **old_grid, int needed)
 {
 	char **new_grid;
 
+	(void)app;
 	new_grid = realloc(old_grid, sizeof(char *) * needed);
 	if (!new_grid)
-		error_exit(app, "Memory reallocation failed for map");
+	{
+		error_msg("Memory reallocation failed for map");
+		return (NULL);
+	}
 	return (new_grid);
 }
 
@@ -132,10 +140,17 @@ int add_map_line(t_app *app, char *line, int line_index)
 	char **new_grid;
 
 	if (!line)
-		return (1);
+		return (error_msg("Null line passed to add_map_line"));
 	len = get_trimmed_len(line);
 	map_line = dup_map_line(app, line, len);
+	if (!map_line)
+		return (-1);
 	new_grid = ensure_grid_capacity(app, app->map.grid, line_index + 2);
+	if (!new_grid)
+	{
+		free(map_line);
+		return (-1);
+	}
 	app->map.grid = new_grid;
 	app->map.grid[line_index] = map_line;
 	app->map.grid[line_index + 1] = NULL;
