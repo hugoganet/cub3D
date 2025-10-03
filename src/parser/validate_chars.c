@@ -29,11 +29,11 @@
  * @return int Retourne 0 si tous les caractères sont valides.
  *
  */
-int check_valid_chars(t_app *app)
+int	check_valid_chars(t_app *app)
 {
-	int i;
-	int j;
-	char c;
+	int		i;
+	int		j;
+	char	c;
 
 	i = 0;
 	while (i < app->map.height)
@@ -42,7 +42,8 @@ int check_valid_chars(t_app *app)
 		while (app->map.grid[i] && app->map.grid[i][j])
 		{
 			c = app->map.grid[i][j];
-			if (c != '0' && c != '1' && c != ' ' && c != 'N' && c != 'S' && c != 'E' && c != 'W')
+			if (c != '0' && c != '1' && c != ' ' && c != 'N'
+				&& c != 'S' && c != 'E' && c != 'W')
 				return (error_msg("Invalid character in map"));
 			j++;
 		}

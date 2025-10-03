@@ -6,46 +6,72 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:48:23 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/03 05:10:00 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 14:54:39 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 /**
- * @brief Vérifie que la carte est correctement fermée par des murs.
+ * @brief Vérifie que les 4 voisins d'une cellule ne sont pas du vide.
  *
- * Parcourt chaque cellule de la grille app->map.grid. Pour chaque cellule
- * contenant un caractère de joueur (N/S/E/W), vérifie que la cellule
- * n'a pas de voisin "ouvert" (i.e. non mur/non espace) et qu'elle n'est
- * pas située sur le bord de la carte. Si une cellule de joueur enfreint
- * ces règles, appelle error_msg() avec un message explicite.
+ * Pour une position donnée (x,y), examine les quatre cellules adjacentes
+ * (gauche, droite, haut, bas) et s'assure qu'aucune n'est un espace ' '.
+ * Un espace représente le vide/l'extérieur et invalide la fermeture.
  *
  * @param app Pointeur vers la structure principale contenant la map.
- * @return int Toujours 0 si la vérification complète (error_msg termine
- *             le programme en cas d'erreur).
+ * @param x Coordonnée horizontale de la cellule à vérifier.
+ * @param y Coordonnée verticale de la cellule à vérifier.
+ * @return int 0 si tous les voisins sont valides, -1 si un voisin est vide.
+ *
  */
-int check_map_closed(t_app *app)
+static int	check_neighbors_of(t_app *app, int x, int y)
 {
-	int i;
-	int j;
-	char c;
+	char	n;
 
-	i = 0;
-	while (i < app->map.height)
+	n = get_map_char_or_space(app, x - 1, y);
+	if (n == ' ')
+		return (error_msg("Map not closed: walkable tile adjacent to void"));
+	n = get_map_char_or_space(app, x + 1, y);
+	if (n == ' ')
+		return (error_msg("Map not closed: walkable tile adjacent to void"));
+	n = get_map_char_or_space(app, x, y - 1);
+	if (n == ' ')
+		return (error_msg("Map not closed: walkable tile adjacent to void"));
+	n = get_map_char_or_space(app, x, y + 1);
+	if (n == ' ')
+		return (error_msg("Map not closed: walkable tile adjacent to void"));
+	return (0);
+}
+
+/**
+ * @brief Vérifie que la carte est correctement fermée (aucune ouverture).
+ *
+ * Pour chaque cellule walkable ('0' ou joueur), ses 4 voisins doivent
+ * exister et ne pas être un espace ' '. Toute OOB ou espace est considérée
+ * comme du vide (void) et invalide la carte.
+ */
+int	check_map_closed(t_app *app)
+{
+	int		y;
+	int		x;
+	char	c;
+
+	y = 0;
+	while (y < app->map.height)
 	{
-		j = 0;
-		while (app->map.grid[i] && app->map.grid[i][j])
+		x = 0;
+		while (app->map.grid[y] && app->map.grid[y][x])
 		{
-			c = app->map.grid[i][j];
-			if (is_player_char(c))
+			c = app->map.grid[y][x];
+			if (is_walkable_char(c))
 			{
-				if (has_open_neighbor(app, j, i) && is_at_map_edge(app, j, i))
-					return (error_msg("Map is not properly closed by walls"));
+				if (check_neighbors_of(app, x, y) != 0)
+					return (-1);
 			}
-			j++;
+			x++;
 		}
-		i++;
+		y++;
 	}
 	return (0);
 }
@@ -65,7 +91,7 @@ int check_map_closed(t_app *app)
  * @return int Retourne 0 si toutes les validations passent.
  *
  */
-int validate_map(t_app *app)
+int	validate_map(t_app *app)
 {
 	if (check_valid_chars(app) != 0)
 		return (-1);

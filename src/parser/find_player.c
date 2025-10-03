@@ -27,11 +27,11 @@
  * @return int Retourne 0 si exactement un joueur est trouvé.
  *
  */
-int find_player(t_app *app)
+int	find_player(t_app *app)
 {
-	int i;
-	int j;
-	int player_count;
+	int	i;
+	int	j;
+	int	player_count;
 
 	player_count = 0;
 	i = 0;

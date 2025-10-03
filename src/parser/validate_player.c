@@ -26,13 +26,13 @@
  * @param j   Indice de colonne (x) dans la grille.
  * @param player_count Pointeur vers le compteur de joueurs trouvé jusqu'ici.
  */
-void process_cell_for_player(t_app *app, int i, int j, int *player_count)
+void	process_cell_for_player(t_app *app, int i, int j, int *player_count)
 {
-	char c;
+	char	c;
 
 	c = app->map.grid[i][j];
 	if (!is_player_char(c))
-		return;
+		return ;
 	(*player_count)++;
 	app->player.pos.x = (double)j + 0.5;
 	app->player.pos.y = (double)i + 0.5;
@@ -49,7 +49,7 @@ void process_cell_for_player(t_app *app, int i, int j, int *player_count)
  * @return int 1 si c est un caractère joueur, 0 sinon.
  *
  */
-int is_player_char(char c)
+int	is_player_char(char c)
 {
 	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
 }
@@ -68,7 +68,7 @@ int is_player_char(char c)
  * @param c Caractère d'orientation ('N' ou 'S').
  *
  */
-void orientation_north_or_south(t_app *app, char c)
+void	orientation_north_or_south(t_app *app, char c)
 {
 	if (c == 'N')
 	{
@@ -100,7 +100,7 @@ void orientation_north_or_south(t_app *app, char c)
  * @param c Caractère d'orientation ('E' ou 'W').
  *
  */
-void orientation_east_or_west(t_app *app, char c)
+void	orientation_east_or_west(t_app *app, char c)
 {
 	if (c == 'E')
 	{
@@ -129,7 +129,7 @@ void orientation_east_or_west(t_app *app, char c)
  * @param c Caractère d'orientation du joueur ('N', 'S', 'E', 'W').
  *
  */
-void set_player_orientation(t_app *app, char c)
+void	set_player_orientation(t_app *app, char c)
 {
 	if (c == 'N' || c == 'S')
 		orientation_north_or_south(app, c);

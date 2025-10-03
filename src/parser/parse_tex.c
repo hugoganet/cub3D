@@ -23,12 +23,12 @@
  * @return char* Chaîne allouée contenant le chemin (NULL si allocation échoue).
  *               L'appelant est responsable de free().
  */
-char *extract_path(char *line)
+char	*extract_path(char *line)
 {
-	char *path;
-	int i;
-	int j;
-	int start;
+	char	*path;
+	int		i;
+	int		j;
+	int		start;
 
 	i = 0;
 	while (line[i] && line[i] != ' ')
@@ -60,7 +60,7 @@ char *extract_path(char *line)
  * @return int 0 si succès, -1 si *dest était déjà défini (duplication).
  *
  */
-static int set_texture_path(char **dest, char *path)
+static int	set_texture_path(char **dest, char *path)
 {
 	if (*dest)
 		return (-1);
@@ -81,7 +81,7 @@ static int set_texture_path(char **dest, char *path)
  * @return int 0 si succès, -1 si duplication détectée.
  *
  */
-static int assign_texture(t_app *app, char *line, char *path)
+static int	assign_texture(t_app *app, char *line, char *path)
 {
 	if (ft_strncmp(line, "NO ", 3) == 0)
 		return (set_texture_path(&app->tex.north_path, path));
@@ -109,10 +109,10 @@ static int assign_texture(t_app *app, char *line, char *path)
  * @return int 0 si succès, -1 si erreur (duplication de texture).
  *
  */
-int parse_texture_line(t_app *app, char *line)
+int	parse_texture_line(t_app *app, char *line)
 {
-	char *path;
-	int result;
+	char	*path;
+	int		result;
 
 	path = extract_path(line);
 	if (!path)

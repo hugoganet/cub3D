@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:12 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 13:08:10 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 14:34:04 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
  * @return int Retourne toujours 0 (requis par MLX).
  *
  */
-int app_loop(t_app *app)
+int	app_loop(t_app *app)
 {
 	update_player_movement(app);
 	fill_background(app, 0x000000);
@@ -53,7 +53,7 @@ int app_loop(t_app *app)
  * @return int Jamais atteint (exit avant), mais retournerait 0.
  *
  */
-int close_window(t_app *app)
+int	close_window(t_app *app)
 {
 	app_destroy(app, 0);
 	exit(0);

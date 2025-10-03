@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:57:49 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:49 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 14:56:30 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
  * @return int 0 si succès, -1 si erreur de parsing ou format invalide.
  *
  */
-int parse_single_line(t_app *app, char *line, t_parse_counters *counters)
+int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (is_texture_line(line) && !counters->map_started)
 		return (handle_texture_line(app, line, counters));
@@ -49,18 +49,6 @@ int parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 }
 
 /**
- * @brief Vérifie si une ligne est vide ou ne contient qu'un retour
- *        à la ligne.
- *
- * @param line Ligne à vérifier.
- * @return int Retourne 1 si la ligne est vide, 0 sinon.
- */
-int is_empty_line(char *line)
-{
-	return (ft_strlen(line) == 0 || line[0] == '\n');
-}
-
-/**
  * @brief Traite une ligne du fichier .cub avec gestion d'erreurs.
  *
  * Fonction helper qui encapsule la logique de traitement d'une ligne :
@@ -73,11 +61,18 @@ int is_empty_line(char *line)
  * @param fd Descripteur de fichier pour fermeture en cas d'erreur.
  * @return int Retourne 0 pour continuer, 1 pour ligne vide, -1 erreur.
  */
-static int process_line(t_app *app, char *line, t_parse_counters *counters,
+static int	process_line(t_app *app, char *line, t_parse_counters *counters,
 						int fd)
 {
 	if (is_empty_line(line))
+	{
+		if (counters->map_started)
+		{
+			(void)fd;
+			return (error_msg("Empty line inside map section"));
+		}
 		return (1);
+	}
 	if (parse_single_line(app, line, counters) != 0)
 	{
 		free(line);
@@ -90,25 +85,42 @@ static int process_line(t_app *app, char *line, t_parse_counters *counters,
 }
 
 /**
- * @brief Valide que tous les éléments requis ont été parsés.
+ * @brief Lit et traite toutes les lignes d'un fichier ouvert.
  *
- * Vérifie que le fichier .cub contient bien toutes les textures,
- * couleurs et une carte. Affiche des messages d'erreur spécifiques
- * selon l'élément manquant.
+ * Boucle de lecture principale qui lit chaque ligne avec get_next_line,
+ * la traite via process_line, et gère la continuation ou l'arrêt selon
+ * le résultat. Libère la mémoire et ferme le descripteur en cas d'erreur.
  *
- * @param app Pointeur vers la structure de l'application.
- * @param counters Structure contenant les compteurs de parsing.
+ * @param app Pointeur vers la structure principale de l'application.
+ * @param fd Descripteur du fichier ouvert.
+ * @param counters Pointeur vers les compteurs de parsing.
+ * @return int 0 si succès, -1 si erreur de traitement.
+ *
  */
-static int validate_parsing_completion(t_app *app,
-										t_parse_counters *counters)
+static int	read_and_process_lines(t_app *app, int fd,
+								t_parse_counters *counters)
 {
-	(void)app;
-	if (counters->texture_count != 4)
-		return (error_msg("Missing texture definitions (need NO, SO, WE, EA)"));
-	if (counters->color_count != 2)
-		return (error_msg("Missing color definitions (need F and C)"));
-	if (!counters->map_started)
-		return (error_msg("No map found in file"));
+	char	*line;
+	int		result;
+
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		result = process_line(app, line, counters, fd);
+		free(line);
+		if (result == 1)
+		{
+			line = get_next_line(fd);
+			continue ;
+		}
+		if (result == -1)
+		{
+			gnl_free(NULL);
+			close(fd);
+			return (-1);
+		}
+		line = get_next_line(fd);
+	}
 	return (0);
 }
 
@@ -125,29 +137,17 @@ static int validate_parsing_completion(t_app *app,
  * @return int Retourne 0 en cas de succès.
  *
  */
-int parse_cub_file(t_app *app, const char *path)
+int	parse_cub_file(t_app *app, const char *path)
 {
-	t_parse_counters counters;
-	int fd;
-	char *line;
-	int result;
+	t_parse_counters	counters;
+	int					fd;
 
 	counters = (t_parse_counters){0};
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (error_msg("Cannot open file"));
-	line = get_next_line(fd);
-	while (line != NULL)
-	{
-		result = process_line(app, line, &counters, fd);
-		free(line);
-		if (result == 1)
-		{
-			line = get_next_line(fd);
-			continue;
-		}
-		line = get_next_line(fd);
-	}
+	if (read_and_process_lines(app, fd, &counters) != 0)
+		return (-1);
 	gnl_free(NULL);
 	close(fd);
 	if (validate_parsing_completion(app, &counters) != 0)

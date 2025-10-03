@@ -22,13 +22,13 @@
  * @param arr Tableau de chaînes terminé par NULL à libérer.
  *
  */
-void free_split(char **arr)
+void	free_split(char **arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!arr)
-		return;
+		return ;
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);
@@ -45,7 +45,7 @@ void free_split(char **arr)
  * @return void* Retourne toujours NULL (commodité pour assignation).
  *
  */
-void *gnl_free(void *p)
+void	*gnl_free(void *p)
 {
 	if (!p)
 		get_next_line(-1);

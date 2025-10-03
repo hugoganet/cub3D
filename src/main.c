@@ -29,9 +29,9 @@
  * @return int Retourne 0 en cas de succès, 1 en cas d'erreur.
  *
  */
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_app app;
+	t_app	app;
 
 	// Mode "parse-only": parse, valide, cleanup, et quitte sans lancer MLX
 	if (argc == 3 && strcmp(argv[1], "--parse-only") == 0)
@@ -51,8 +51,6 @@ int main(int argc, char **argv)
 		app_destroy(&app, 0);
 		return (0);
 	}
-
-	// Mode normal: parsing complet + initialisation MLX + boucle évènements
 	if (parsing(&app, argc, argv) != 0)
 		return (1);
 	if (app_init(&app, app.win_w, app.win_h) != 0)

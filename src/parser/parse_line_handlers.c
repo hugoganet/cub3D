@@ -25,7 +25,7 @@
  * @return int 0 si succès, -1 si erreur (trop de textures ou duplication).
  *
  */
-int handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
+int	handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (counters->texture_count == 4)
 		return (error_msg("Only 4 texture paths are allowed"));
@@ -48,7 +48,7 @@ int handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
  * @return int Retourne toujours 0 (succès).
  *
  */
-int handle_map_line(t_app *app, char *line, t_parse_counters *counters)
+int	handle_map_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (!counters->map_started)
 	{

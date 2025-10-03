@@ -22,10 +22,10 @@
  * @param img Pointeur vers la structure d'image à remplir
  * @param color Couleur à appliquer (format hexadécimal)
  */
-static void clear_frame(t_img *img, int color)
+static void	clear_frame(t_img *img, int color)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (y < img->h)
@@ -50,11 +50,11 @@ static void clear_frame(t_img *img, int color)
  *
  * @param app Structure principale de l'application
  */
-void render_frame(t_app *app)
+void	render_frame(t_app *app)
 {
-	int floor_color;
-	int y;
-	int x;
+	int	floor_color;
+	int	y;
+	int	x;
 
 	clear_frame(&app->frame, rgb_to_int(app->ceil));
 	floor_color = rgb_to_int(app->floor);
@@ -82,12 +82,12 @@ void render_frame(t_app *app)
  * @param y Coordonnée Y du pixel
  * @param color Couleur du pixel (format hexadécimal)
  */
-void img_put_pixel(t_img *img, int x, int y, int color)
+void	img_put_pixel(t_img *img, int x, int y, int color)
 {
-	char *dst;
+	char	*dst;
 
 	if (x < 0 || y < 0 || x >= 1024 || y >= 768)
-		return;
+		return ;
 	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
 	*(unsigned int *)dst = color;
 }
@@ -102,10 +102,10 @@ void img_put_pixel(t_img *img, int x, int y, int color)
  * @param app Structure principale de l'application
  * @param color Couleur de remplissage (format hexadécimal)
  */
-void fill_background(t_app *app, int color)
+void	fill_background(t_app *app, int color)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (y < app->win_h)

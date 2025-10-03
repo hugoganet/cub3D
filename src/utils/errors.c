@@ -43,7 +43,7 @@ int	error_msg(const char *msg)
  * @return int Couleur encodée en 0xAARRGGBB pour MLX.
  *
  */
-int rgb_to_int(t_color c)
+int	rgb_to_int(t_color c)
 {
 	if (c.r < 0)
 		c.r = 0;

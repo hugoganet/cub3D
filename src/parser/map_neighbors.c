@@ -28,7 +28,7 @@
  * @return int 1 si position est mur/vide/OOB, 0 si traversable.
  *
  */
-int is_wall_or_void(t_app *app, int x, int y)
+int	is_wall_or_void(t_app *app, int x, int y)
 {
 	if (y < 0 || y >= app->map.height)
 		return (1);
@@ -55,9 +55,11 @@ int is_wall_or_void(t_app *app, int x, int y)
  * @return int 1 si au moins un voisin est ouvert, 0 sinon.
  *
  */
-int has_open_neighbor(t_app *app, int x, int y)
+int	has_open_neighbor(t_app *app, int x, int y)
 {
-	if (!is_wall_or_void(app, x - 1, y) || !is_wall_or_void(app, x + 1, y) || !is_wall_or_void(app, x, y - 1) || !is_wall_or_void(app, x, y + 1))
+	if (!is_wall_or_void(app, x - 1, y) || !is_wall_or_void(app, x + 1, y)
+		|| !is_wall_or_void(app, x, y - 1)
+		|| !is_wall_or_void(app, x, y + 1))
 		return (1);
 	return (0);
 }
@@ -78,7 +80,7 @@ int has_open_neighbor(t_app *app, int x, int y)
  * @return int 1 si la position est sur un bord, 0 sinon.
  *
  */
-int is_at_map_edge(t_app *app, int x, int y)
+int	is_at_map_edge(t_app *app, int x, int y)
 {
 	if (y == 0 || y == app->map.height - 1)
 		return (1);

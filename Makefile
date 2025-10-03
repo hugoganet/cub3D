@@ -41,9 +41,11 @@ SRC	:= \
 	$(SRCDIR)/parser/check_map_closed.c \
 	$(SRCDIR)/parser/find_player.c \
 	$(SRCDIR)/parser/map_neighbors.c \
+	$(SRCDIR)/parser/map_utils.c \
 	$(SRCDIR)/parser/validate_chars.c \
 	$(SRCDIR)/parser/validate_player.c \
 	$(SRCDIR)/parser/parse_file.c \
+	$(SRCDIR)/parser/parse_file_utils.c \
 	$(SRCDIR)/parser/parse_input.c \
 	$(SRCDIR)/parser/parse_tex.c \
 	$(SRCDIR)/parser/parse_map.c \

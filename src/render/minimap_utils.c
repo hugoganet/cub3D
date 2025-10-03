@@ -26,7 +26,7 @@
  * @param tile Caractère de la map
  * @return int Couleur hexadécimale correspondante
  */
-int get_tile_color(char tile)
+int	get_tile_color(char tile)
 {
 	if (tile == '1')
 		return (0xFFFFFF);
@@ -49,9 +49,9 @@ int get_tile_color(char tile)
  *
  * @param app Structure principale de l'application
  */
-void draw_minimap_border(t_app *app)
+void	draw_minimap_border(t_app *app)
 {
-	int border_params[4];
+	int	border_params[4];
 
 	border_params[0] = MINIMAP_OFFSET_X - 2;
 	border_params[1] = MINIMAP_OFFSET_Y - 2;
@@ -69,12 +69,14 @@ void draw_minimap_border(t_app *app)
  * @param app Structure principale de l'application
  * @param hit_point Point de collision du rayon dans les coordonnées monde
  */
-void draw_minimap_ray(t_app *app, t_vec2 hit_point)
+void	draw_minimap_ray(t_app *app, t_vec2 hit_point)
 {
-	int line_params[4];
+	int	line_params[4];
 
-	line_params[0] = MINIMAP_OFFSET_X + (int)(app->player.pos.x * MINIMAP_SCALE);
-	line_params[1] = MINIMAP_OFFSET_Y + (int)(app->player.pos.y * MINIMAP_SCALE);
+	line_params[0] = MINIMAP_OFFSET_X
+		+ (int)(app->player.pos.x * MINIMAP_SCALE);
+	line_params[1] = MINIMAP_OFFSET_Y
+		+ (int)(app->player.pos.y * MINIMAP_SCALE);
 	line_params[2] = MINIMAP_OFFSET_X + (int)(hit_point.x * MINIMAP_SCALE);
 	line_params[3] = MINIMAP_OFFSET_Y + (int)(hit_point.y * MINIMAP_SCALE);
 	draw_line(app, line_params, COLOR_RAY);
