@@ -175,49 +175,39 @@ Avantages:
 
 ### ✅ Tests Valgrind - Validation Mémoire Complète
 
-**Tous les tests Valgrind passent sans fuites mémoire!**
+**Suite de tests complète** : 59 maps (19 valides + 38 invalides + 2 root)
 
-#### Tests effectués:
-1. **Cas d'erreur (100% clean)**:
-   - RGB invalide (`maps/error.cub`): ✅ 0 bytes leaked
-   - Fichier inexistant: ✅ 0 bytes leaked
-   - Permissions refusées: ✅ 0 bytes leaked
-   - Extension invalide: ✅ 0 bytes leaked
-   - Aucun argument: ✅ 0 bytes leaked
-
-2. **Cas nominaux** (avec timeout SIGTERM):
-   - Map simple (`maps/sample.cub`): ⚠️ "still reachable" (expliqué ci-dessous)
-   - Map complexe (`maps/complex.cub`): ⚠️ "still reachable" (expliqué ci-dessous)
-
-#### Explication "still reachable"
-Les cas nominaux montrent du "still reachable" (61KB) car:
-- Le programme est interrompu par `timeout` (SIGTERM) pendant l'exécution
-- `app_destroy()` n'est jamais atteint (ligne 50 de `main.c`)
-- En usage réel, l'utilisateur ferme proprement (ESC/croix) et tout est libéré
-
-**Confirmation**: Le code de cleanup existe et fonctionne:
-- `free_texture_paths()` libère les 4 chemins de textures
-- `free_textures()` détruit les images MLX
-- `free_map()` libère la grille 2D
-- `app_destroy()` nettoie MLX et toutes les ressources
-
-#### Commandes de test:
-```bash
-# Cas nominal
-timeout 3 env DISPLAY=:0 valgrind --leak-check=full --show-leak-kinds=all \
-  --track-origins=yes --suppressions=mlx.supp \
-  --log-file=/tmp/valgrind_sample.log ./cub3D maps/sample.cub
-
-# Map complexe
-timeout 3 env DISPLAY=:0 valgrind --leak-check=full --show-leak-kinds=all \
-  --track-origins=yes --suppressions=mlx.supp \
-  --log-file=/tmp/valgrind_complex.log ./cub3D maps/complex.cub
-
-# Voir résultats
-grep -E "(LEAK SUMMARY|definitely lost|ERROR SUMMARY)" /tmp/valgrind_*.log
+#### Structure des tests
+```
+maps/
+├── sample.cub, complex.cub        # Maps originales
+├── valid/                         # 19 maps valides
+│   ├── simple_square.cub, minimal_3x3.cub
+│   ├── player_north/south/east/west.cub
+│   ├── irregular_shape.cub, spaces_outside_walls.cub
+│   └── rgb_min/max_values.cub, elements_unordered.cub
+└── invalid/                       # 38 maps invalides
+    ├── missing_*_texture.cub, missing_*_color.cub
+    ├── rgb_negative/over_255/non_numeric.cub
+    ├── no_player.cub, multiple_players.cub
+    ├── map_not_closed_*.cub, player_on_edge_*.cub
+    └── space_in_playable_area.cub, hole_in_wall.cub
 ```
 
-**Conclusion**: Projet exempt de fuites mémoire véritables. Prêt pour soumission.
+#### Script de test automatisé
+```bash
+./test_maps.sh  # Valgrind complet sur toutes les maps
+```
+
+**Flags Valgrind** : `--leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=mlx.supp`
+**Validation stricte** : Détecte definitely lost, indirectly lost, **et still reachable**
+**Zéro tolérance** : Aucune fuite acceptée (exit si total_leaks > 0)
+
+#### Validation map closure
+**Fix récent** : Correction logique `check_map_closed()` (ligne 43)
+- Avant : `has_open_neighbor(app, j, i) && is_at_map_edge(app, j, i)` ❌
+- Après : `has_open_neighbor(app, j, i) || is_at_map_edge(app, j, i)` ✅
+- Détecte maintenant : joueur sur bord **OU** espace adjacent à zone jouable
 
 ### ❌ Non implémenté (Bonus)
 1. **Texturage sol/plafond** (floor/ceiling casting)
