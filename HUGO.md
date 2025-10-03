@@ -2,15 +2,16 @@
 
 ## 🎯 Focus Actuel
 
-Niveau 2 - Parsing & Validation (75% complété - prochaine étape : validation map closure)
+Niveau 2 - Parsing & Validation - COMPLÉTÉ ✅ (100%)
+Date : 2025-10-03
 
 ## ✅ Concepts Maîtrisés
 
 ### 🏗️ Niveau 1 : Fondations - MAÎTRISÉ ✅
 **Date** : 2025-10-01
 
-### 📄 Niveau 2 : Parsing & Validation - EN COURS (50%) ⏳
-**Date** : 2025-10-01
+### 📄 Niveau 2 : Parsing & Validation - MAÎTRISÉ ✅
+**Date** : 2025-10-03 (complété)
 
 **Étapes parsing** :
 - ✅ Grandes phases : open() → get_next_line() loop → parser ligne → valider données → stocker dans t_app
@@ -98,9 +99,45 @@ Niveau 2 - Parsing & Validation (75% complété - prochaine étape : validation 
 - ✅ `mlx_loop(mlx)` : **démarre** la boucle d'événements infinie (comme ouvrir le restaurant)
 - ✅ Différence clé : loop_hook = instructions, loop = exécution
 - ✅ Sans loop_hook : fenêtre s'ouvre mais reste noire (aucun rendu)
-- ✅ Sans loop : rien ne démarre (hooks jamais appelés)
 - ✅ `exit(0)` : fonction libc (stdlib.h) qui **tue le processus entier**, pas une fonction MLX
 - ✅ Pourquoi ligne 45 main.c jamais atteinte : `close_window()` appelle `exit(0)` → processus terminé avant retour de `mlx_loop()`
+
+**Parsing de la map** (`parse_map.c`) :
+
+- ✅ Allocation dynamique ligne par ligne (pas de taille fixe)
+- ✅ `ensure_grid_capacity()` : alloue nouveau tableau, copie anciennes lignes, libère ancien (remplace realloc)
+- ✅ `add_map_line()` : trim \n, duplique ligne, réalloue grid, ajoute ligne + NULL terminator
+- ✅ `grid[line_index + 2]` : +1 pour nouvelle ligne, +1 pour NULL terminator
+- ✅ Détection début map : `is_map_line()` vérifie que tous les caractères sont valides (0/1/ /N/S/E/W/\n)
+- ✅ Flag `map_started` comme verrou unidirectionnel : une fois la map commencée, plus de textures/couleurs acceptées
+- ✅ Lignes vides rejetées si `map_started == 1` (évite trous dans la map)
+
+**Validation des caractères** (`validate_chars.c`) :
+
+- ✅ Double vérification `app->map.grid[i] && app->map.grid[i][j]` pour éviter segfault (NULL check)
+- ✅ Parcours complet de la grille avec boucles imbriquées
+- ✅ Rejet de tout caractère non autorisé (uniquement 0/1/ /N/S/E/W acceptés)
+
+**Validation du joueur** (`validate_player.c` & `find_player.c`) :
+
+- ✅ `find_player()` : parcourt map, compte les joueurs avec `player_count`
+- ✅ Erreur si `player_count == 0` (pas de joueur) ou `player_count > 1` (plusieurs joueurs)
+- ✅ `process_cell_for_player()` : si caractère joueur trouvé → incrémente compteur + initialise position
+- ✅ Position centrée : `pos.x = (double)j + 0.5` et `pos.y = (double)i + 0.5` (centre de la cellule, pas le coin)
+- ✅ Vecteurs dir et plane perpendiculaires :
+  - `dir` : direction du regard (centre de l'écran)
+  - `plane` : largeur du champ de vision (écran plat devant le joueur)
+  - Magnitude `plane = 0.66` → FOV ~66°
+  - Exemple Nord : `dir=(0,-1)`, `plane=(0.66,0)` (plane perpendiculaire à dir)
+
+**Validation map fermée** (`check_map_closed.c`) :
+
+- ✅ `check_map_closed()` : parcourt toutes les cellules marchables (0 ou joueur)
+- ✅ `check_neighbors_of()` : pour chaque cellule marchable, vérifie les 4 voisins (haut/bas/gauche/droite)
+- ✅ `get_map_char_or_space()` : retourne caractère à position (x,y), ou `' '` si hors limites
+- ✅ Logique : hors map = vide, espace dans map = vide → traités pareil
+- ✅ Rejet si case marchable adjacente à espace `' '` (empêche joueur de "sortir")
+- ✅ Exemple invalide : `10 1` → le 0 est adjacent à un espace (trou vers l'extérieur)
 
 ## 🔄 Zones Nécessitant un Renforcement
 
@@ -130,7 +167,18 @@ Niveau 2 - Parsing & Validation (75% complété - prochaine étape : validation 
 - ✅ Compréhension flow parsing couleurs : extract → split → validate → convert → store
 - ✅ Identification problème : gestion d'erreurs incohérente (3 patterns différents)
 - ✅ Implémentation `error_msg()` helper + uniformisation complète du parser
-- ⏳ Prochaine étape : validation map closure (check_map_closed.c)
+
+### Session 5 - Niveau 2 : Parsing Map + Validation Complète (2025-10-03)
+
+- ✅ Remplacement `realloc()` par allocation manuelle (malloc + copie + free) dans `ensure_grid_capacity()`
+- ✅ Compréhension allocation dynamique : ligne par ligne, `grid[line_index + 2]` pour ligne + NULL terminator
+- ✅ Compréhension flag `map_started` comme verrou unidirectionnel (textures/couleurs bloquées après début map)
+- ✅ Compréhension position joueur centrée : `+0.5` pour centre de cellule vs coin
+- ✅ Compréhension vecteurs dir/plane perpendiculaires pour FOV
+- ⚠️ Confusion initiale coordonnées (x,y) : haut = y-1 (pas x-1) → résolu
+- ✅ Compréhension `get_map_char_or_space()` : hors map = vide = espace
+- ✅ Compréhension validation fermeture : case marchable adjacente à espace = erreur
+- ✅ **Résultat** : Niveau 2 (Parsing & Validation) complété à 100%
 
 ## 💡 Métaphores & Analogies Personnalisées
 
@@ -146,6 +194,15 @@ Niveau 2 - Parsing & Validation (75% complété - prochaine étape : validation 
 - `mlx_loop()` = Ouvrir le restaurant (exécution)
 - Sans loop_hook : restaurant ouvert mais aucun plat préparé (fenêtre noire)
 - `exit(0)` = Fermer brutalement le restaurant en éteignant les lumières
+
+### Session 5 (2025-10-03)
+
+**Métaphore de la Caméra (vecteurs dir/plane)** :
+
+- `dir` = Direction du regard (centre de l'écran, où tu pointes)
+- `plane` = Largeur de l'écran (écran plat perpendiculaire à dir)
+- Perpendiculaires car ton écran est plat devant toi
+- Magnitude `0.66` du plane = FOV ~66°
 
 ## 📊 Préparation à l'Évaluation
 
@@ -178,11 +235,13 @@ Niveau 2 - Parsing & Validation (75% complété - prochaine étape : validation 
 - [ ] Peut expliquer la collision basée sur la grille
 - [ ] Peut décrire l'approche de validation
 
-### Parser (2/5) : En cours
+### Parser (5/5) : Maîtrisé ✅
 
 - [x] Peut expliquer les étapes de validation (open, GNL, parse ligne, validate)
-- [x] Peut décrire la gestion des erreurs (error_exit, cleanup, compteurs)
-- [ ] Peut expliquer la vérification de fermeture de map (pas encore vu)
+- [x] Peut décrire la gestion des erreurs (error_msg helper, pattern uniforme)
+- [x] Peut expliquer le parsing de la map (allocation dynamique, NULL terminator, verrou map_started)
+- [x] Peut expliquer la validation joueur (position centrée, vecteurs dir/plane perpendiculaires)
+- [x] Peut expliquer la vérification de fermeture de map (check_neighbors_of, get_map_char_or_space)
 
 ## 📝 Notes de Session
 
