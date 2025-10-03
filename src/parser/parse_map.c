@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:02:24 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/03 05:10:06 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 17:29:43 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  * @return int Retourne toujours 0 (succès).
  *
  */
-int	init_map(t_app *app)
+int init_map(t_app *app)
 {
 	app->map.height = 0;
 	app->map.width = 0;
@@ -40,9 +40,9 @@ int	init_map(t_app *app)
  * @param line Chaîne à mesurer (peut être NULL).
  * @return int Longueur de la ligne sans '\n', ou 0 si line est NULL.
  */
-int	get_trimmed_len(char *line)
+int get_trimmed_len(char *line)
 {
-	int	len;
+	int len;
 
 	if (!line)
 		return (0);
@@ -65,10 +65,10 @@ int	get_trimmed_len(char *line)
  * @return char* Pointeur vers la nouvelle chaîne allouée.
  *
  */
-char	*dup_map_line(t_app *app, char *line, int len)
+char *dup_map_line(t_app *app, char *line, int len)
 {
-	char	*map_line;
-	int		i;
+	char *map_line;
+	int i;
 
 	(void)app;
 	map_line = malloc(len + 1);
@@ -90,9 +90,8 @@ char	*dup_map_line(t_app *app, char *line, int len)
 /**
  * @brief Réalloue la grille de map pour garantir la capacité nécessaire.
  *
- * Utilise realloc() pour agrandir le tableau de pointeurs app->map.grid
- * afin qu'il puisse contenir au moins 'needed' entrées. En cas d'échec,
- * appelle error_msg() pour terminer proprement.
+ * Alloue un nouveau tableau plus grand, copie les anciennes lignes,
+ * puis libère l'ancien tableau. Équivalent à realloc() mais sans l'utiliser.
  *
  * @param app Pointeur vers la structure principale (pour error_msg).
  * @param old_grid Tableau actuel de pointeurs (peut être NULL au départ).
@@ -100,16 +99,27 @@ char	*dup_map_line(t_app *app, char *line, int len)
  * @return char** Pointeur vers le tableau réalloué.
  *
  */
-char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed)
+char **ensure_grid_capacity(t_app *app, char **old_grid, int needed)
 {
-	char	**new_grid;
+	char **new_grid;
+	int i;
 
 	(void)app;
-	new_grid = realloc(old_grid, sizeof(char *) * needed);
+	new_grid = malloc(sizeof(char *) * needed);
 	if (!new_grid)
 	{
-		error_msg("Memory reallocation failed for map");
+		error_msg("Memory allocation failed for map grid");
 		return (NULL);
+	}
+	i = 0;
+	if (old_grid)
+	{
+		while (old_grid[i])
+		{
+			new_grid[i] = old_grid[i];
+			i++;
+		}
+		free(old_grid);
 	}
 	return (new_grid);
 }
@@ -133,11 +143,11 @@ char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed)
  * @param line_index Index 0-based où insérer la ligne dans la grille.
  * @return int 0 si succès, 1 si line == NULL (erreur non-fatale).
  */
-int	add_map_line(t_app *app, char *line, int line_index)
+int add_map_line(t_app *app, char *line, int line_index)
 {
-	int		len;
-	char	*map_line;
-	char	**new_grid;
+	int len;
+	char *map_line;
+	char **new_grid;
 
 	if (!line)
 		return (error_msg("Null line passed to add_map_line"));
