@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/03 14:51:37 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 18:04:29 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,7 +414,7 @@ void draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit);
 
 // Projection utilities
 double calculate_wall_height(double perp_dist, int screen_h);
-int get_texture_coord_x(double wall_x, t_img *texture);
+int get_texture_coord_x(double wall_x, t_img *texture, int wall_face);
 int get_wall_color(int wall_face);
 
 // ============================================================================

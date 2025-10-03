@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   projection.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:39 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/01 13:25:42 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 18:04:31 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
  * dessiner une colonne de mur à l'écran. Centre la bande verticalement et
  * clamp les valeurs aux limites de l'écran pour éviter les dépassements.
  *
- * Calcul : 
- * 
+ * Calcul :
+ *
  * - centre = screen_h/2
  * - début = centre - height/2
  * - fin = centre + height/2
@@ -109,21 +109,24 @@ static t_img	*get_texture_from_face(t_app *app, int wall_face)
  * @param vars Tableau résultat [tex_x, step, tex_pos] (sortie).
  *
  */
-static void	init_texture_vars(t_app *app, t_ray_hit *hit, int *bounds,
-		int *vars)
+static void	init_texture_vars(t_app *app, t_ray_hit *hit, int line_height,
+		int *bounds, double *vars)
 {
 	t_img	*texture;
-	int		wall_height;
 	double	step;
 	double	tex_pos;
 
 	texture = get_texture_from_face(app, hit->wall_face);
-	vars[0] = get_texture_coord_x(hit->wall_x, texture);
-	wall_height = bounds[1] - bounds[0];
-	step = (double)texture->h / (double)wall_height;
-	tex_pos = (bounds[0] - app->win_h / 2 + wall_height / 2) * step;
-	vars[1] = (int)step;
-	vars[2] = (int)tex_pos;
+	vars[0] = get_texture_coord_x(hit->wall_x, texture, hit->wall_face);
+
+	// ✅ Utiliser line_height (hauteur totale), pas bounds[1]-bounds[0]
+	step = (double)texture->h / (double)line_height;
+
+	// Calculer l'offset si le haut est clippé
+	tex_pos = (bounds[0] - app->win_h / 2 + line_height / 2) * step;
+
+	vars[1] = step;
+	vars[2] = tex_pos;
 }
 
 /**
@@ -144,20 +147,22 @@ static void	init_texture_vars(t_app *app, t_ray_hit *hit, int *bounds,
  */
 void	draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit)
 {
-	t_img	*texture;
-	int		vars[3];
-	int		bounds[2];
-	int		y;
-	int		tex_y;
+	t_img		*texture;
+	double		vars[3];
+	int			bounds[2];
+	int			y;
+	int			tex_y;
+	int			line_height;
 
 	texture = get_texture_from_face(app, hit->wall_face);
 	bounds[0] = params[1];
 	bounds[1] = params[2];
-	init_texture_vars(app, hit, bounds, vars);
+	line_height = (int)(app->win_h / hit->perp_dist);
+	init_texture_vars(app, hit, line_height, bounds, vars);
 	y = params[1];
 	while (y <= params[2])
 	{
-		tex_y = vars[2];
+		tex_y = (int)vars[2];
 		if (tex_y >= texture->h)
 			tex_y = texture->h - 1;
 		if (tex_y < 0)

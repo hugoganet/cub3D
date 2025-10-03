@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   projection_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 14:30:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/01 13:25:11 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 18:03:56 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  *
  * Applique la projection perspective pour calculer la hauteur du mur en pixels
  * selon sa distance au joueur. La formule est : hauteur = screen_h / distance.
- * Une distance minimale (0.001) évite la division par zéro 
+ * Une distance minimale (0.001) évite la division par zéro
  * et les murs infiniment grands.
  *
  * @param perp_dist Distance perpendiculaire au mur (corrigée fish-eye).
@@ -45,16 +45,23 @@ double	calculate_wall_height(double perp_dist, int screen_h)
  * @return int Coordonnée X dans la texture (0 à texture->w-1).
  *
  */
-int	get_texture_coord_x(double wall_x, t_img *texture)
+int	get_texture_coord_x(double wall_x, t_img *texture, int wall_face)
 {
-	int	tex_x;
+    int		tex_x;
+    double	adjusted_wall_x;
 
-	tex_x = (int)(wall_x * (double)texture->w);
-	if (tex_x < 0)
-		tex_x = 0;
-	if (tex_x >= texture->w)
-		tex_x = texture->w - 1;
-	return (tex_x);
+    adjusted_wall_x = wall_x;
+
+    // Inverser pour certaines faces (ajuste selon orientation textures)
+    if (wall_face == FACE_NORTH || wall_face == FACE_EAST)
+        adjusted_wall_x = 1.0 - wall_x;
+
+    tex_x = (int)(adjusted_wall_x * (double)texture->w);
+    if (tex_x < 0)
+        tex_x = 0;
+    if (tex_x >= texture->w)
+        tex_x = texture->w - 1;
+    return (tex_x);
 }
 
 /**
