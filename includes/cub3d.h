@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 13:09:07 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 05:10:48 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,6 @@ int		app_loop(t_app *app);
 void	init_defaults(t_app *app);
 
 // Error handling
-void	error_exit(t_app *app, const char *msg);
 int		error_msg(const char *msg);
 
 // ============================================================================

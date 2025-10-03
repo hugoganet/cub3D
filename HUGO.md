@@ -2,7 +2,7 @@
 
 ## 🎯 Focus Actuel
 
-Niveau 2 - Parsing & Validation (70% complété - prochaine étape : refactoriser gestion d'erreurs avec `error_msg()`)
+Niveau 2 - Parsing & Validation (75% complété - prochaine étape : validation map closure)
 
 ## ✅ Concepts Maîtrisés
 
@@ -49,38 +49,14 @@ Niveau 2 - Parsing & Validation (70% complété - prochaine étape : refactorise
 - ✅ Validation : exactement 3 valeurs, que des chiffres, range 0-255
 - ✅ Stockage dans `t_color` (r, g, b) puis assignation `app->floor` ou `app->ceil`
 
-**⚠️ Problème identifié - Gestion d'erreurs incohérente** :
+**✅ Gestion d'erreurs refactorisée** :
 
-- 3 patterns différents dans le parser :
-  - `return -1` (parse_tex.c, parse_line_handlers.c)
-  - `return 1` (parse_color.c, map_neighbors.c)
-  - `error_exit(app, msg)` direct (validate_chars.c, find_player.c)
-- Messages d'erreur parfois absents, parfois avec `printf`, parfois avec `error_exit`
-
-**Solution décidée - Fonction `error_msg()` helper** :
-
-- Créer dans `errors.c` une fonction simple :
-
-  ```c
-  int error_msg(const char *msg)
-  {
-      ft_putendl_fd("Error", 2);
-      if (msg)
-          ft_putendl_fd((char *)msg, 2);
-      return (-1);
-  }
-  ```
-
-- **Avantages** :
-  - Pas besoin de passer `app` partout (contrairement à `error_exit`)
-  - Pattern uniforme : toutes les fonctions retournent `-1` en cas d'erreur
-  - Message spécifique affiché au point d'erreur : `return (error_msg("RGB values must be numeric"));`
-  - Programme remonte les erreurs au lieu de quitter brutalement (meilleur contrôle)
-
-- ⏸️ **Prochaine étape** :
-  1. Implémenter `error_msg()` dans `errors.c`
-  2. Refactoriser tous les fichiers parser pour l'utiliser
-  3. Uniformiser codes retour (`-1` partout, éliminer `return 1`)
+- **Problème initial** : 3 patterns différents (`return -1`, `return 1`, `error_exit()` direct)
+- **Solution implémentée** : Fonction `error_msg()` helper dans `errors.c`
+  - Affiche "Error" + message spécifique sur stderr
+  - Retourne `-1` (pattern uniforme)
+  - Pas besoin de passer `app` partout
+- **Résultat** : Tous les fichiers parser uniformisés avec `return (error_msg("..."))`
 
 **Architecture générale** :
 
@@ -152,9 +128,9 @@ Niveau 2 - Parsing & Validation (70% complété - prochaine étape : refactorise
 - ✅ Correction bug RGB invalides : ajout validation `is_valid_number()` avant `ft_atoi()`
 - ✅ Refactorisation `parse_color.c` : extraction `validate_and_convert_rgb()` (respect Norme < 25 lignes)
 - ✅ Compréhension flow parsing couleurs : extract → split → validate → convert → store
-- ⚠️ Identification problème : gestion d'erreurs incohérente (3 patterns différents)
-- 💡 Décision : créer `error_msg()` helper pour uniformiser (Solution 2)
-- ⏸️ À faire : implémenter `error_msg()` et refactoriser tout le parser
+- ✅ Identification problème : gestion d'erreurs incohérente (3 patterns différents)
+- ✅ Implémentation `error_msg()` helper + uniformisation complète du parser
+- ⏳ Prochaine étape : validation map closure (check_map_closed.c)
 
 ## 💡 Métaphores & Analogies Personnalisées
 

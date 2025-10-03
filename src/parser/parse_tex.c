@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:18:41 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 05:09:28 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static int assign_texture(t_app *app, char *line, char *path)
  * assigne ce chemin à la variable appropriée dans app->tex selon le préfixe
  * de la ligne (NO/SO/WE/EA). Libère le chemin extrait avant de retourner.
  *
- * En cas d'erreur d'allocation mémoire, appelle error_exit().
+ * En cas d'erreur d'allocation mémoire, appelle error_msg().
  * En cas de duplication de texture, retourne -1.
  *
  * @param app Pointeur vers la structure principale de l'application.

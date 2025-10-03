@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:47:45 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 05:09:28 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * - ' ' : espace (vide non traversable)
  * - 'N', 'S', 'E', 'W' : position et orientation du joueur
  *
- * Si un caractère invalide est détecté, appelle error_exit() avec
+ * Si un caractère invalide est détecté, appelle error_msg() avec
  * un message explicite.
  *
  * @param app Pointeur vers la structure principale contenant la map.

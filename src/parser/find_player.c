@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:47:30 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:49 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 05:10:03 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
  * qui incrémente un compteur et configure le joueur si trouvé.
  *
  * Valide qu'il y a exactement un joueur dans la map :
- * - Si aucun joueur : error_exit("No player found")
- * - Si plusieurs joueurs : error_exit("Multiple players found")
+ * - Si aucun joueur : error_msg("No player found")
+ * - Si plusieurs joueurs : error_msg("Multiple players found")
  *
  * @param app Pointeur vers la structure principale contenant la map.
  * @return int Retourne 0 si exactement un joueur est trouvé.

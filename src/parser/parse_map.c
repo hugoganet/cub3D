@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:02:24 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 05:10:06 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ int get_trimmed_len(char *line)
  *
  * Alloue un buffer de taille len+1 et copie exactement len caractères
  * depuis line. Termine la chaîne par '\0'. En cas d'échec d'allocation,
- * appelle error_exit() pour arrêter le programme proprement.
+ * appelle error_msg() pour arrêter le programme proprement.
  *
- * @param app Pointeur vers la structure principale (pour error_exit).
+ * @param app Pointeur vers la structure principale (pour error_msg).
  * @param line Chaîne source à dupliquer.
  * @param len Nombre de caractères à copier (excluant '\0').
  * @return char* Pointeur vers la nouvelle chaîne allouée.
@@ -92,9 +92,9 @@ char *dup_map_line(t_app *app, char *line, int len)
  *
  * Utilise realloc() pour agrandir le tableau de pointeurs app->map.grid
  * afin qu'il puisse contenir au moins 'needed' entrées. En cas d'échec,
- * appelle error_exit() pour terminer proprement.
+ * appelle error_msg() pour terminer proprement.
  *
- * @param app Pointeur vers la structure principale (pour error_exit).
+ * @param app Pointeur vers la structure principale (pour error_msg).
  * @param old_grid Tableau actuel de pointeurs (peut être NULL au départ).
  * @param needed Nombre d'entrées minimum requises dans le tableau.
  * @return char** Pointeur vers le tableau réalloué.
@@ -126,7 +126,7 @@ char **ensure_grid_capacity(t_app *app, char **old_grid, int needed)
  * par NULL, met à jour app->map.height et adapte app->map.width si la ligne
  * est plus large que la largeur courante.
  *
- * En cas d'allocation échouée, les helpers appellent error_exit() (arrêt).
+ * En cas d'allocation échouée, les helpers appellent error_msg() (arrêt).
  *
  * @param app Pointeur vers la structure principale contenant app->map.
  * @param line Chaîne à ajouter (peut contenir un '\n' final).

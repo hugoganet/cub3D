@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:48:23 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 05:10:00 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
  * contenant un caractère de joueur (N/S/E/W), vérifie que la cellule
  * n'a pas de voisin "ouvert" (i.e. non mur/non espace) et qu'elle n'est
  * pas située sur le bord de la carte. Si une cellule de joueur enfreint
- * ces règles, appelle error_exit() avec un message explicite.
+ * ces règles, appelle error_msg() avec un message explicite.
  *
  * @param app Pointeur vers la structure principale contenant la map.
- * @return int Toujours 0 si la vérification complète (error_exit termine
+ * @return int Toujours 0 si la vérification complète (error_msg termine
  *             le programme en cas d'erreur).
  */
 int check_map_closed(t_app *app)
@@ -59,7 +59,7 @@ int check_map_closed(t_app *app)
  * 3. Vérification de fermeture par des murs (check_map_closed)
  *
  * Cette fonction est le point d'entrée de la validation après le parsing.
- * Toute erreur provoque un error_exit() dans les sous-fonctions.
+ * Toute erreur provoque un error_msg() dans les sous-fonctions.
  *
  * @param app Pointeur vers la structure principale contenant la map.
  * @return int Retourne 0 si toutes les validations passent.

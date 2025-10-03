@@ -6,35 +6,11 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:24 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 13:08:10 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 05:10:36 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-/**
- * @brief Affiche un msg d'erreur, clean les ressources et termine le programme.
- *
- * Fonction centrale de gestion d'erreurs qui :
- * 1. Affiche "Error" sur stderr
- * 2. Affiche le message d'erreur optionnel sur stderr
- * 3. Appelle app_destroy() pour libérer toutes les ressources
- * 4. Termine le programme avec exit(1)
- *
- * Cette fonction ne retourne jamais (attribut noreturn implicite).
- *
- * @param app Pointeur vers la structure principale à nettoyer.
- * @param msg Message d'erreur descriptif à afficher (peut être NULL).
- *
- */
-void error_exit(t_app *app, const char *msg)
-{
-	ft_putendl_fd("Error", 2);
-	if (msg)
-		ft_putendl_fd((char *)msg, 2);
-	app_destroy(app, 1);
-	exit(1);
-}
 
 /**
  * @brief Affiche un message d'erreur sur stderr et retourne -1.
