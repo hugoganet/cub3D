@@ -118,18 +118,15 @@ Avantages:
     3. Faire les commits, PR et push depuis macOS
   - Si l'IA tente de commit depuis la VM, rappeler cette contrainte
 
-- **MLX_INIT TROUBLESHOOTING** (CRITIQUE):
-  - Si `mlx_init failed`: TOUJOURS vérifier `DISPLAY` en premier
-  - Test rapide: `env DISPLAY=:0 ./cub3D maps/sample.cub`
-  - Diagnostic: créer test minimal avec `mlx_init()` seul
-  - Root cause: MLX nécessite connexion X11 valide pour initialiser
-  - **Solution permanente**: `export DISPLAY=:0` configuré dans ~/.bashrc
+- **MLX_INIT - Configuration DISPLAY**:
+  - **Configuration permanente appliquée**: `export DISPLAY=:0` configuré dans ~/.bashrc
     - Configuration placée **au début du fichier** (ligne 6, avant le guard d'interactivité)
     - Garantit que DISPLAY est exporté même pour shells non-interactifs (nécessaire pour Node.js/scripts)
     - L'alias `cub3d` reste disponible pour lancer rapidement le programme
     - Testeurs externes (npm, Node.js exec) héritent automatiquement de DISPLAY
-    - Si nouvelle session SSH: DISPLAY est automatiquement configuré
-    - Si session existante: exécuter `source ~/.bashrc` pour appliquer
+    - DISPLAY est automatiquement configuré pour toutes les nouvelles sessions SSH
+  - **Lancement du programme**: `./cub3D maps/sample.cub` (pas besoin de `env DISPLAY=:0`)
+  - **Troubleshooting**: Si `mlx_init failed` dans une session existante, exécuter `source ~/.bashrc`
 
 
 ## 6) État actuel et prochaines étapes

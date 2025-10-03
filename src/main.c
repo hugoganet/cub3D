@@ -6,12 +6,13 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:16 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:49 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 11:27:14 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include <mlx.h>
+#include <string.h>
 
 /**
  * @brief Point d'entrée de l'application cub3D.
@@ -32,6 +33,26 @@ int main(int argc, char **argv)
 {
 	t_app app;
 
+	// Mode "parse-only": parse, valide, cleanup, et quitte sans lancer MLX
+	if (argc == 3 && strcmp(argv[1], "--parse-only") == 0)
+	{
+		ft_memset(&app, 0, sizeof(t_app));
+		init_defaults(&app);
+		if (parse_cub_file(&app, argv[2]) != 0)
+		{
+			app_destroy(&app, 1);
+			return (1);
+		}
+		if (validate_map(&app) != 0)
+		{
+			app_destroy(&app, 1);
+			return (1);
+		}
+		app_destroy(&app, 0);
+		return (0);
+	}
+
+	// Mode normal: parsing complet + initialisation MLX + boucle évènements
 	if (parsing(&app, argc, argv) != 0)
 		return (1);
 	if (app_init(&app, app.win_w, app.win_h) != 0)

@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:02:06 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/03 11:27:16 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,30 @@ void init_defaults(t_app *app)
  */
 int parse_input(int argc, char **argv)
 {
+	// Mode parse-only: ./cub3D --parse-only file.cub
+	if (argc == 3 && ft_strncmp(argv[1], "--parse-only", 12) == 0)
+	{
+		if (!argv[2] || ft_strlen(argv[2]) < 5)
+		{
+			ft_putendl_fd("Error", 2);
+			ft_putendl_fd("Invalid file path", 2);
+			return (-1);
+		}
+		if (ft_strncmp(argv[2] + ft_strlen(argv[2]) - 4, ".cub", 4) != 0)
+		{
+			ft_putendl_fd("Error", 2);
+			ft_putendl_fd("File must have .cub extension", 2);
+			return (-1);
+		}
+		return (0);
+	}
+	// Mode normal: ./cub3D file.cub
 	if (argc != 2)
 	{
 		ft_putendl_fd("Error", 2);
-		ft_putendl_fd("Usage: ./cub3D <map.cub>", 2);
+		ft_putendl_fd("Usage:", 2);
+		ft_putendl_fd("  ./cub3D <map.cub>", 2);
+		ft_putendl_fd("  ./cub3D --parse-only <map.cub>", 2);
 		return (-1);
 	}
 	if (!argv[1] || ft_strlen(argv[1]) < 5)

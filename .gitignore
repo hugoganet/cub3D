@@ -26,3 +26,5 @@ minilibx_opengl/*.dSYM/
 
 # Local tools/cache
 .claude/
+
+/tmp
