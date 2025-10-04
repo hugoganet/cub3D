@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:12 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/03 14:34:04 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/04 12:05:59 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,5 @@ int	close_window(t_app *app)
 {
 	app_destroy(app, 0);
 	exit(0);
-	// ? dead code ⬇️
 	return (0);
 }

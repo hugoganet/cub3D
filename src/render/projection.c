@@ -92,41 +92,17 @@ static t_img	*get_texture_from_face(t_app *app, int wall_face)
 		return (&app->tex.west);
 }
 
-/**
- * @brief Initialise les variables d'échantillonnage pour le texture mapping.
- *
- * Calcule les paramètres nécessaires pour mapper correctement la texture
- * sur la colonne de mur :
- * - tex_x (vars[0]) : coordonnée X dans la texture (fixe pour la colonne)
- * - step (vars[1]) : pas d'incrémentation Y dans la texture par pixel écran
- * - tex_pos (vars[2]) : position Y initiale dans la texture
- *
- * Le step est calculé comme : hauteur_texture / hauteur_mur_écran
- *
- * @param app Pointeur vers la structure principale (win_h).
- * @param hit Pointeur vers les données de collision (wall_x, wall_face).
- * @param bounds Tableau [draw_start, draw_end] définissant la hauteur.
- * @param vars Tableau résultat [tex_x, step, tex_pos] (sortie).
- *
- */
-static void	init_texture_vars(t_app *app, t_ray_hit *hit, int line_height,
-		int *bounds, double *vars)
+static void	init_texture_vars(t_app *app, t_ray_hit *hit,
+		int draw_start, double *vars)
 {
 	t_img	*texture;
-	double	step;
-	double	tex_pos;
+	int		line_height;
 
 	texture = get_texture_from_face(app, hit->wall_face);
 	vars[0] = get_texture_coord_x(hit->wall_x, texture, hit->wall_face);
-
-	// ✅ Utiliser line_height (hauteur totale), pas bounds[1]-bounds[0]
-	step = (double)texture->h / (double)line_height;
-
-	// Calculer l'offset si le haut est clippé
-	tex_pos = (bounds[0] - app->win_h / 2 + line_height / 2) * step;
-
-	vars[1] = step;
-	vars[2] = tex_pos;
+	line_height = (int)(app->win_h / hit->perp_dist);
+	vars[1] = (double)texture->h / (double)line_height;
+	vars[2] = (draw_start - app->win_h / 2 + line_height / 2) * vars[1];
 }
 
 /**
@@ -149,16 +125,11 @@ void	draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit)
 {
 	t_img		*texture;
 	double		vars[3];
-	int			bounds[2];
 	int			y;
 	int			tex_y;
-	int			line_height;
 
 	texture = get_texture_from_face(app, hit->wall_face);
-	bounds[0] = params[1];
-	bounds[1] = params[2];
-	line_height = (int)(app->win_h / hit->perp_dist);
-	init_texture_vars(app, hit, line_height, bounds, vars);
+	init_texture_vars(app, hit, params[1], vars);
 	y = params[1];
 	while (y <= params[2])
 	{

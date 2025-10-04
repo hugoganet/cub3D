@@ -47,21 +47,18 @@ double	calculate_wall_height(double perp_dist, int screen_h)
  */
 int	get_texture_coord_x(double wall_x, t_img *texture, int wall_face)
 {
-    int		tex_x;
-    double	adjusted_wall_x;
+	int		tex_x;
+	double	adjusted_wall_x;
 
-    adjusted_wall_x = wall_x;
-
-    // Inverser pour certaines faces (ajuste selon orientation textures)
-    if (wall_face == FACE_NORTH || wall_face == FACE_EAST)
-        adjusted_wall_x = 1.0 - wall_x;
-
-    tex_x = (int)(adjusted_wall_x * (double)texture->w);
-    if (tex_x < 0)
-        tex_x = 0;
-    if (tex_x >= texture->w)
-        tex_x = texture->w - 1;
-    return (tex_x);
+	adjusted_wall_x = wall_x;
+	if (wall_face == FACE_NORTH || wall_face == FACE_EAST)
+		adjusted_wall_x = 1.0 - wall_x;
+	tex_x = (int)(adjusted_wall_x * (double)texture->w);
+	if (tex_x < 0)
+		tex_x = 0;
+	if (tex_x >= texture->w)
+		tex_x = texture->w - 1;
+	return (tex_x);
 }
 
 /**
