@@ -3,62 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/03 18:04:29 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/04 12:05:49 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
-#define CUB3D_H
+# define CUB3D_H
 
-/* ========================================================================== */
-/*                               INCLUDES                                    */
-/* ========================================================================== */
+# include <stdbool.h>
+# include <stddef.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include "libft.h"
+# include "get_next_line.h"
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include "libft.h"
-#include "get_next_line.h"
-// # include <math.h>
+# define DEFAULT_WIN_WIDTH 1024
+# define DEFAULT_WIN_HEIGHT 768
 
-/* ========================================================================== */
-/*                             CONSTANTS                                     */
-/* ========================================================================== */
+# define MINIMAP_SCALE 10
+# define MINIMAP_OFFSET_X 25
+# define MINIMAP_OFFSET_Y 25
 
-// Window settings
-#define DEFAULT_WIN_WIDTH 1024
-#define DEFAULT_WIN_HEIGHT 768
+# define MINIMAP_RAY_COUNT 20
+# define MINIMAP_RAY_LENGTH 50
 
-// Minimap settings
-#define MINIMAP_SCALE 10
-#define MINIMAP_OFFSET_X 25
-#define MINIMAP_OFFSET_Y 25
+# define COLOR_WALL 0xFFFFFF
+# define COLOR_FLOOR 0x404040
+# define COLOR_PLAYER 0xFF0000
+# define COLOR_BORDER 0x808080
+# define COLOR_RAY 0x00FF00
 
-// Ray visualization settings
-#define MINIMAP_RAY_COUNT 20
-#define MINIMAP_RAY_LENGTH 50
-
-// Colors
-#define COLOR_WALL 0xFFFFFF
-#define COLOR_FLOOR 0x404040
-#define COLOR_PLAYER 0xFF0000
-#define COLOR_BORDER 0x808080
-#define COLOR_RAY 0x00FF00
-
-// Key codes (adjust according to your system)
-#define KEY_W 119
-#define KEY_A 97
-#define KEY_S 115
-#define KEY_D 100
-#define KEY_ESC 65307
-#define KEY_LEFT 65361
-#define KEY_RIGHT 65363
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_ESC 65307
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
 
 /* ========================================================================== */
 /*                            STRUCTURES                                     */
@@ -73,9 +59,9 @@
  */
 typedef struct s_vec2
 {
-	double x;
-	double y;
-} t_vec2;
+	double	x;
+	double	y;
+}	t_vec2;
 
 /**
  * @brief Structure représentant une couleur RGB.
@@ -85,10 +71,10 @@ typedef struct s_vec2
  */
 typedef struct s_color
 {
-	int r;
-	int g;
-	int b;
-} t_color;
+	int	r;
+	int	g;
+	int	b;
+}	t_color;
 
 // Graphics structures
 /**
@@ -100,14 +86,14 @@ typedef struct s_color
  */
 typedef struct s_img
 {
-	void *ptr;
-	char *addr;
-	int bpp;
-	int line_len;
-	int endian;
-	int w;
-	int h;
-} t_img;
+	void	*ptr;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+	int		w;
+	int		h;
+}	t_img;
 
 /**
  * @brief Structure contenant toutes les textures murales.
@@ -117,16 +103,16 @@ typedef struct s_img
  */
 typedef struct s_textures
 {
-	t_img north;
-	t_img south;
-	t_img west;
-	t_img east;
-	char *north_path;
-	char *south_path;
-	char *west_path;
-	char *east_path;
-	bool loaded;
-} t_textures;
+	t_img	north;
+	t_img	south;
+	t_img	west;
+	t_img	east;
+	char	*north_path;
+	char	*south_path;
+	char	*west_path;
+	char	*east_path;
+	bool	loaded;
+}	t_textures;
 
 // Game world structures
 /**
@@ -138,10 +124,10 @@ typedef struct s_textures
  */
 typedef struct s_map
 {
-	char **grid;
-	int width;
-	int height;
-} t_map;
+	char	**grid;
+	int		width;
+	int		height;
+}	t_map;
 
 /**
  * @brief Structure du joueur dans le monde 3D.
@@ -152,27 +138,20 @@ typedef struct s_map
  */
 typedef struct s_player
 {
-	t_vec2 pos;
-	t_vec2 dir;
-	t_vec2 plane;
-} t_player;
+	t_vec2	pos;
+	t_vec2	dir;
+	t_vec2	plane;
+}	t_player;
 
-// Input handling
-/**
- * @brief État des touches de contrôle du joueur.
- *
- * Structure booléenne pour suivre quelles touches sont actuellement
- * pressées. Permet la gestion de touches multiples simultanées.
- */
 typedef struct s_keys
 {
-	bool w;
-	bool a;
-	bool s;
-	bool d;
-	bool left;
-	bool right;
-} t_keys;
+	bool	w;
+	bool	a;
+	bool	s;
+	bool	d;
+	bool	left;
+	bool	right;
+}	t_keys;
 
 // Raycasting structures
 /**
@@ -183,16 +162,16 @@ typedef struct s_keys
  */
 typedef struct s_ray_vars
 {
-	int map_x;
-	int map_y;
-	double delta_dist_x;
-	double delta_dist_y;
-	int step_x;
-	int step_y;
-	double side_dist_x;
-	double side_dist_y;
-	int side;
-} t_ray_vars;
+	int		map_x;
+	int		map_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	int		step_x;
+	int		step_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	int		side;
+}	t_ray_vars;
 
 /**
  * @brief Résultat d'une collision de rayon avec un mur.
@@ -202,13 +181,13 @@ typedef struct s_ray_vars
  */
 typedef struct s_ray_hit
 {
-	double perp_dist;
-	int side;
-	int wall_face;
-	double wall_x;
-	int map_x;
-	int map_y;
-} t_ray_hit;
+	double	perp_dist;
+	int		side;
+	int		wall_face;
+	double	wall_x;
+	int		map_x;
+	int		map_y;
+}	t_ray_hit;
 
 /**
  * @brief Énumération des faces de murs pour différents ombrages.
@@ -234,11 +213,11 @@ enum e_wall_face
  */
 typedef struct s_parse_counters
 {
-	int texture_count;
-	int color_count;
-	int map_started;
-	int map_line_index;
-} t_parse_counters;
+	int	texture_count;
+	int	color_count;
+	int	map_started;
+	int	map_line_index;
+}	t_parse_counters;
 
 /**
  * @brief Structure principale de l'application cub3D.
@@ -249,20 +228,20 @@ typedef struct s_parse_counters
  */
 typedef struct s_app
 {
-	void *mlx;
-	void *win;
-	int win_w;
-	int win_h;
-	t_img frame;
-	t_textures tex;
-	t_map map;
-	t_player player;
-	t_color floor;
-	t_color ceil;
-	t_keys keys;
-	double move_speed;
-	double rot_speed;
-} t_app;
+	void		*mlx;
+	void		*win;
+	int			win_w;
+	int			win_h;
+	t_img		frame;
+	t_textures	tex;
+	t_map		map;
+	t_player	player;
+	t_color		floor;
+	t_color		ceil;
+	t_keys		keys;
+	double		move_speed;
+	double		rot_speed;
+}	t_app;
 
 /* ========================================================================== */
 /*                          FUNCTION PROTOTYPES                              */
@@ -272,161 +251,138 @@ typedef struct s_app
 //                              CORE FUNCTIONS
 // ============================================================================
 
-// Application lifecycle
-int app_init(t_app *app, int w, int h);
-void app_destroy(t_app *app, int code);
-int app_loop(t_app *app);
-void init_defaults(t_app *app);
+int		app_init(t_app *app, int w, int h);
+void	app_destroy(t_app *app, int code);
+int		app_loop(t_app *app);
+void	init_defaults(t_app *app);
 
-// Error handling
-int error_msg(const char *msg);
+int		error_msg(const char *msg);
 
 // ============================================================================
 //                              PARSING
 // ============================================================================
 
-// Main parsing functions
-int parsing(t_app *app, int argc, char **argv);
-int parse_input(int argc, char **argv);
-int parse_cub_file(t_app *app, const char *path);
-int parse_single_line(t_app *app, char *line, t_parse_counters *counters);
-int handle_texture_line(t_app *app, char *line,
-						t_parse_counters *counters);
-int handle_map_line(t_app *app, char *line, t_parse_counters *counters);
+int		parsing(t_app *app, int argc, char **argv);
+int		parse_input(int argc, char **argv);
+int		parse_cub_file(t_app *app, const char *path);
+int		parse_single_line(t_app *app, char *line, t_parse_counters *counters);
+int		handle_texture_line(t_app *app, char *line,
+			t_parse_counters *counters);
+int		handle_map_line(t_app *app, char *line, t_parse_counters *counters);
 
-// Parsing file utilities
-int is_empty_line(char *line);
-int validate_parsing_completion(t_app *app, t_parse_counters *counters);
+int		is_empty_line(char *line);
+int		validate_parsing_completion(t_app *app, t_parse_counters *counters);
 
-// Texture parsing
-int parse_texture_line(t_app *app, char *line);
-char *extract_path(char *line);
+int		parse_texture_line(t_app *app, char *line);
+char	*extract_path(char *line);
 
-// Color parsing
-int parse_color_line(t_app *app, char *line);
-int parse_rgb_values(const char *rgb_str, t_color *color);
-char *extract_rgb_string(char *line);
+int		parse_color_line(t_app *app, char *line);
+int		parse_rgb_values(const char *rgb_str, t_color *color);
+char	*extract_rgb_string(char *line);
 
-// Map parsing
-int init_map(t_app *app);
-int add_map_line(t_app *app, char *line, int line_index);
-char **ensure_grid_capacity(t_app *app, char **old_grid, int needed);
-char *dup_map_line(t_app *app, char *line, int len);
-int get_trimmed_len(char *line);
+int		init_map(t_app *app);
+int		add_map_line(t_app *app, char *line, int line_index);
+char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed);
+char	*dup_map_line(t_app *app, char *line, int len);
+int		get_trimmed_len(char *line);
 
-// Map validation
-int validate_map(t_app *app);
-int find_player(t_app *app);
-int check_valid_chars(t_app *app);
-int check_map_closed(t_app *app);
-int is_wall_or_void(t_app *app, int x, int y);
-int is_player_char(char c);
-void set_player_orientation(t_app *app, char c);
-void process_cell_for_player(t_app *app, int i, int j, int *player_count);
-void orientation_north_or_south(t_app *app, char c);
-void orientation_east_or_west(t_app *app, char c);
-int is_at_map_edge(t_app *app, int x, int y);
-int has_open_neighbor(t_app *app, int x, int y);
+int		validate_map(t_app *app);
+int		find_player(t_app *app);
+int		check_valid_chars(t_app *app);
+int		check_map_closed(t_app *app);
+int		is_wall_or_void(t_app *app, int x, int y);
+int		is_player_char(char c);
+void	set_player_orientation(t_app *app, char c);
+void	process_cell_for_player(t_app *app, int i, int j, int *player_count);
+void	orientation_north_or_south(t_app *app, char c);
+void	orientation_east_or_west(t_app *app, char c);
+int		is_at_map_edge(t_app *app, int x, int y);
+int		has_open_neighbor(t_app *app, int x, int y);
 
-// Map utility functions
-int is_walkable_char(char c);
-int in_bounds(t_app *app, int x, int y);
-char get_map_char_or_space(t_app *app, int x, int y);
+int		is_walkable_char(char c);
+int		in_bounds(t_app *app, int x, int y);
+char	get_map_char_or_space(t_app *app, int x, int y);
 
-// Parsing utilities
-int is_map_line(char *line);
-int is_color_line(char *line);
-int is_texture_line(char *line);
-int is_empty_line(char *line);
+int		is_map_line(char *line);
+int		is_color_line(char *line);
+int		is_texture_line(char *line);
 
 // ============================================================================
 //                              RENDERING
 // ============================================================================
 
-// Frame rendering
-void render_frame(t_app *app);
-void fill_background(t_app *app, int color);
+void	render_frame(t_app *app);
+void	fill_background(t_app *app, int color);
 
-// Image manipulation
-void img_put_pixel(t_img *img, int x, int y, int color);
-void draw_rect(t_app *app, int *params, int color);
+void	img_put_pixel(t_img *img, int x, int y, int color);
+void	draw_rect(t_app *app, int *params, int color);
 
-// Minimap
-void render_minimap(t_app *app);
-void draw_minimap_tile(t_app *app, int map_x, int map_y, int color);
-void draw_player_on_minimap(t_app *app);
+void	render_minimap(t_app *app);
+void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color);
+void	draw_player_on_minimap(t_app *app);
 
-// Minimap utilities
-int get_tile_color(char tile);
-void draw_minimap_border(t_app *app);
-void draw_minimap_ray(t_app *app, t_vec2 hit_point);
+int		get_tile_color(char tile);
+void	draw_minimap_border(t_app *app);
+void	draw_minimap_ray(t_app *app, t_vec2 hit_point);
 
-// Ray visualization
-void render_minimap_rays(t_app *app);
-int cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
-void get_ray_direction(t_app *app, int ray_index, int total_rays,
-					   t_vec2 *ray_dir);
-void draw_line(t_app *app, int *params, int color);
+void	render_minimap_rays(t_app *app);
+int		cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
+void	get_ray_direction(t_app *app, int ray_index, int total_rays,
+			t_vec2 *ray_dir);
+void	draw_line(t_app *app, int *params, int color);
 
-// Texture management
-int load_textures(t_app *app);
-void free_textures(t_app *app);
+int		load_textures(t_app *app);
+void	free_textures(t_app *app);
 
-// Texture utilities
-int load_single_texture(t_app *app, char *path, t_img *texture);
-int get_texture_pixel(t_img *texture, int x, int y);
-t_img *get_wall_texture(t_app *app, int side, t_vec2 ray_dir);
+int		load_single_texture(t_app *app, char *path, t_img *texture);
+int		get_texture_pixel(t_img *texture, int x, int y);
+t_img	*get_wall_texture(t_app *app, int side, t_vec2 ray_dir);
 
-int color_to_int(t_color color);
-void draw_ceiling(t_app *app);
-void draw_floor(t_app *app);
-void render_background(t_app *app);
+int		color_to_int(t_color color);
+void	draw_ceiling(t_app *app);
+void	draw_floor(t_app *app);
+void	render_background(t_app *app);
 // ============================================================================
 //                              INPUT HANDLING
 // ============================================================================
 
-int key_press(int keycode, t_app *app);
-int key_release(int keycode, t_app *app);
-int close_window(t_app *app);
-bool is_valid_position(t_app *app, double x, double y);
-void update_player_movement(t_app *app);
-void rotate_player(t_app *app, int direction);
-void move_player(t_app *app, double move_x, double move_y);
+int		key_press(int keycode, t_app *app);
+int		key_release(int keycode, t_app *app);
+int		close_window(t_app *app);
+bool	is_valid_position(t_app *app, double x, double y);
+void	update_player_movement(t_app *app);
+void	rotate_player(t_app *app, int direction);
+void	move_player(t_app *app, double move_x, double move_y);
 
 // ============================================================================
 //                              RAYCASTING
 // ============================================================================
 
-// DDA algorithm
-int cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit);
-int cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
+int		cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit);
+int		cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
 
-// 3D Raycasting
-void render_3d_view(t_app *app);
-void calculate_ray_dir(t_app *app, int x, t_vec2 *ray_dir);
-int get_wall_side(int step_x, int step_y, int side);
+void	render_3d_view(t_app *app);
+void	calculate_ray_dir(t_app *app, int x, t_vec2 *ray_dir);
+int		get_wall_side(int step_x, int step_y, int side);
 
-// 3D Projection
-void calculate_wall_bounds(int height, int screen_h, int *draw_start,
-						   int *draw_end);
-void draw_wall_column(t_app *app, int *params, int color);
-void draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit);
+void	calculate_wall_bounds(int height, int screen_h, int *draw_start,
+			int *draw_end);
+void	draw_wall_column(t_app *app, int *params, int color);
+void	draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit);
 
-// Projection utilities
-double calculate_wall_height(double perp_dist, int screen_h);
-int get_texture_coord_x(double wall_x, t_img *texture, int wall_face);
-int get_wall_color(int wall_face);
+double	calculate_wall_height(double perp_dist, int screen_h);
+int		get_texture_coord_x(double wall_x, t_img *texture, int wall_face);
+int		get_wall_color(int wall_face);
 
 // ============================================================================
 //                              UTILITIES
 // ============================================================================
 
-// String utilities
-void free_split(char **arr);
-void *gnl_free(void *p);
+void	free_split(char **arr);
+void	*gnl_free(void *p);
 
-// Color utilities
-int rgb_to_int(t_color c);
+int		rgb_to_int(t_color c);
 
-void free_map(t_app *app);
+void	free_map(t_app *app);
+
 #endif

@@ -2,8 +2,10 @@
 
 ## 🎯 Focus Actuel
 
-Niveau 6 - Minimap - COMPLÉTÉ ✅ (100%)
+🎉 **TOUS LES NIVEAUX COMPLÉTÉS** 🎉 (8/8 = 100%)
 Date : 2025-10-04
+
+**Prêt pour l'évaluation par les pairs !** ✅
 
 ## ✅ Concepts Maîtrisés
 
@@ -28,6 +30,14 @@ Date : 2025-10-04
 **Date** : 2025-10-04 (complété)
 
 ### 🗺️ Niveau 6 : Minimap - MAÎTRISÉ ✅
+
+**Date** : 2025-10-04 (complété)
+
+### ⚡ Niveau 7 : Optimisation & Performance - MAÎTRISÉ ✅
+
+**Date** : 2025-10-04 (complété)
+
+### 🐛 Niveau 8 : Debug & Edge Cases - MAÎTRISÉ ✅
 
 **Date** : 2025-10-04 (complété)
 
@@ -321,6 +331,54 @@ Date : 2025-10-04
 - ✅ Minimap DOIT être après vue 3D sinon cachée
 - ✅ Principe : comme peintre qui peint couches successives
 
+**Double Buffering** (`draw.c:img_put_pixel()`) :
+
+- ✅ Éviter `mlx_pixel_put()` : 1 appel système par pixel (480k appels → ~1-5 FPS)
+- ✅ Utiliser buffer offscreen : écriture directe RAM (ultra rapide)
+- ✅ 1 seul `mlx_put_image_to_window()` à la fin → ~60 FPS
+- ✅ Gain : 480,000 appels système → 1 seul appel
+- ✅ Différence : injouable vs fluide
+
+**Accès Direct aux Pixels** (`draw.c:img_put_pixel()`) :
+
+- ✅ Formule offset mémoire : `offset = y × line_len + x × (bpp / 8)`
+- ✅ `y × line_len` : sauter y lignes complètes
+- ✅ `x × (bpp / 8)` : avancer de x pixels dans la ligne (4 bytes par pixel RGBA)
+- ✅ `dst = img->addr + offset` : adresse exacte du pixel
+- ✅ `*(unsigned int *)dst = color` : écriture directe
+- ✅ Sans `× (bpp/8)` → corruption visuelle (mauvais pixel)
+
+**Précalculs au Démarrage** (`init.c`, `textures.c`) :
+
+- ✅ Textures chargées 1× au démarrage (`load_textures()`)
+- ✅ Frame buffer créé 1× au démarrage (`create_frame()`)
+- ✅ À chaque frame : utilisation des ressources déjà en RAM
+- ✅ Lecture disque : ~10ms, accès RAM : instantané
+- ✅ Exemple : 600 frames = 600× plus rapide avec précalcul
+- ✅ Règle : précalculer tout ce qui est constant
+
+**Gestion Mémoire** (`init.c:app_destroy()`) :
+
+- ✅ Ordre destruction = **inverse** de l'initialisation
+- ✅ Libérer enfants AVANT parent (dépendances)
+- ✅ Séquence correcte :
+  1. `free_textures()` - enfants MLX
+  2. `mlx_destroy_image(frame)` - enfant MLX
+  3. `mlx_destroy_window(win)` - enfant MLX
+  4. `mlx_destroy_display(mlx)` - parent MLX
+  5. `free(mlx)` - mémoire finale
+  6. `free_map()` - grille malloc
+- ✅ Ordre inverse → CRASH (utilise mlx déjà free)
+- ✅ Principe : démolir meubles avant structure maison
+
+**Principes d'Optimisation** :
+
+- ✅ Minimiser appels système (coûteux)
+- ✅ Accès direct mémoire > API abstraite
+- ✅ Précalculer constantes au démarrage
+- ✅ Double buffering pour rendu fluide
+- ✅ Ordre destruction : enfants → parent
+
 ## 🔄 Zones Nécessitant un Renforcement
 
 ### Session 1 - Niveau 1 (2025-10-01)
@@ -414,6 +472,32 @@ Date : 2025-10-04
 - ✅ Identification correcte : minimap avant 3D → cachée (réponse B)
 - ✅ **Résultat** : Niveau 6 (Minimap) complété à 100%
 
+### Session 6 (suite) - Niveau 7 : Optimisation & Performance (2025-10-04)
+
+- ✅ Excellente compréhension double buffering : "on écrit tout le frame, on push l'image d'un coup"
+- ✅ Compréhension différence performance : mlx_pixel_put (480k appels) vs buffer (1 appel)
+- ✅ Compréhension formule offset mémoire avec explication visuelle 2D→1D
+- ⚠️ Hésitation sur impact `× (bpp/8)` dans formule offset
+- ✅ Compréhension après schéma : sans ×4 bytes → corruption (mauvais pixel)
+- ⚠️ Difficulté initiale calcul optimisation 600× plus rapide
+- ✅ Compréhension après calcul détaillé : 600 lectures disque vs 1 lecture
+- ✅ Identification correcte ordre destruction : crash si parent détruit avant enfants (réponse C)
+- ✅ Compréhension métaphore maison : meubles (enfants) avant structure (parent)
+- ✅ **Résultat** : Niveau 7 (Optimisation & Performance) complété à 100%
+
+### Session 6 (suite) - Niveau 8 : Debug & Edge Cases (2025-10-04)
+
+- ✅ Identification correcte validation entrée : argc==2, strlen>=5, extension .cub (réponse B)
+- ✅ Identification cas limites parsing : fichier vide, map trop petite, caractères invalides (réponse C)
+- ⚠️ Difficulté initiale avec 1e30 : "je ne sais même pas ce que c'est 1e30 ??"
+- ✅ Compréhension après explication : 1e30 = 1 × 10^30 (notation scientifique)
+- ✅ Compréhension protection division par zéro : 1e30 = "distance infinie" si ray_dir=0
+- ✅ Identification correcte pratique malloc : vérifier if(!line) puis arrêter proprement (réponse B)
+- ✅ Compréhension règle d'or : TOUJOURS vérifier retours malloc, cleanup ressources, propager erreur
+- ✅ **Résultat** : Niveau 8 (Debug & Edge Cases) complété à 100%
+
+🎉 **TOUS LES 8 NIVEAUX COMPLÉTÉS** 🎉
+
 ## 💡 Métaphores & Analogies Personnalisées
 
 ### Sessions 1-2 (2025-10-01)
@@ -469,6 +553,13 @@ Projection depuis le plan caméra, pas depuis le joueur
 - La dernière couche cache les précédentes
 - Vue 3D = fond de tableau, Minimap = cadre par-dessus
 - Si on inverse : minimap peinte en premier → cachée par la 3D
+
+**Métaphore de la Maison** (ordre destruction) :
+
+- Démolir une maison 🏠 : d'abord enlever les meubles, puis démolir structure
+- Meubles = enfants (textures/frame/window), Structure = parent (mlx)
+- Si on détruit la structure d'abord → impossible d'accéder aux meubles (crash)
+- Dépendances parent-enfant : enfants ont besoin du parent pour être détruits
 
 ## 📊 Préparation à l'Évaluation
 
