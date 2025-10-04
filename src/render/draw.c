@@ -6,70 +6,22 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:35 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 13:08:10 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/04 20:09:51 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <mlx.h>
 
-/**
- * @brief Remplit entièrement une image avec une couleur unie
- *
- * Parcourt tous les pixels de l'image et applique la couleur spécifiée.
- * Utilisée pour nettoyer complètement le buffer de frame avant rendu.
- *
- * @param img Pointeur vers la structure d'image à remplir
- * @param color Couleur à appliquer (format hexadécimal)
- */
-static void	clear_frame(t_img *img, int color)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < img->h)
-	{
-		x = 0;
-		while (x < img->w)
-		{
-			img_put_pixel(img, x, y, color);
-			x++;
-		}
-		y++;
-	}
-}
-
-/**
- * @brief Prépare le buffer de frame avec plafond et sol
- *
- * Nettoie le buffer de frame et dessine l'arrière-plan basique :
- * - Moitié supérieure : couleur du plafond
- * - Moitié inférieure : couleur du sol
- * Cette fonction est une alternative simplifiée à render_background.
- *
- * @param app Structure principale de l'application
- */
-void	render_frame(t_app *app)
-{
-	int	floor_color;
-	int	y;
-	int	x;
-
-	clear_frame(&app->frame, rgb_to_int(app->ceil));
-	floor_color = rgb_to_int(app->floor);
-	y = app->frame.h / 2;
-	while (y < app->frame.h)
-	{
-		x = 0;
-		while (x < app->frame.w)
-		{
-			img_put_pixel(&app->frame, x, y, floor_color);
-			x++;
-		}
-		y++;
-	}
-}
+/* Indices pour le tableau de paramètres de ligne Bresenham */
+#define X 0
+#define Y 1
+#define END_X 2
+#define END_Y 3
+#define DELT_X 4
+#define DELT_Y 5
+#define STEP_X 6
+#define STEP_Y 7
+#define ERR 8
 
 /**
  * @brief Place un pixel coloré dans une image à une position donnée
@@ -93,29 +45,99 @@ void	img_put_pixel(t_img *img, int x, int y, int color)
 }
 
 /**
- * @brief Remplit tout l'écran avec une couleur unie
+ * @brief Dessine un rectangle rempli à l'écran
  *
- * Parcourt tous les pixels du buffer de frame et applique la couleur
- * spécifiée. Utilise les dimensions de la fenêtre (win_w, win_h).
- * Fonction utilitaire pour nettoyer complètement l'écran.
+ * Parcourt tous les pixels du rectangle et applique la couleur spécifiée.
+ * Utilise deux boucles imbriquées pour remplir ligne par ligne.
  *
  * @param app Structure principale de l'application
+ * @param rect Tableau [start_x, start_y, width, height] du rectangle
  * @param color Couleur de remplissage (format hexadécimal)
  */
-void	fill_background(t_app *app, int color)
+void	draw_rect(t_app *app, int *rect, int color)
 {
 	int	x;
 	int	y;
+	int	start_x;
+	int	start_y;
 
+	start_x = rect[0];
+	start_y = rect[1];
 	y = 0;
-	while (y < app->win_h)
+	while (y < rect[3])
 	{
 		x = 0;
-		while (x < app->win_w)
+		while (x < rect[2])
 		{
-			img_put_pixel(&app->frame, x, y, color);
+			img_put_pixel(&app->frame, start_x + x, start_y + y, color);
 			x++;
 		}
 		y++;
+	}
+}
+
+/**
+ * @brief Initialise les paramètres de Bresenham pour le tracé de ligne
+ *
+ * Calcule les deltas (dx, dELT_Y), les directions de pas (step_x, step_y)
+ * et l'erreur initiale pour l'algorithme de Bresenham.
+ *
+ * @param line Tableau des paramètres de ligne
+ */
+static void	init_bresenham(int *line)
+{
+	int	delta_x;
+	int	delta_y;
+
+	delta_x = abs(line[END_X] - line[X]);
+	delta_y = abs(line[END_Y] - line[Y]);
+	line[DELT_X] = delta_x;
+	line[DELT_Y] = delta_y;
+	if (line[X] < line[END_X])
+		line[STEP_X] = 1;
+	else
+		line[STEP_X] = -1;
+	if (line[Y] < line[END_Y])
+		line[STEP_Y] = 1;
+	else
+		line[STEP_Y] = -1;
+	line[ERR] = delta_x - delta_y;
+}
+
+/**
+ * @brief Dessine une ligne entre deux points avec l'algorithme de Bresenham
+ *
+ * Trace une ligne droite entre deux points sans anti-aliasing.
+ * L'algorithme de Bresenham évite les calculs en virgule flottante.
+ *
+ * Utilise un système d'accumulation d'erreur pour déterminer quand
+ * avancer dans la direction X ou Y, produisant une ligne visuellement
+ * droite même sur une grille de pixels discrète.
+ *
+ * @param app Structure principale de l'application
+ * @param line Tableau des paramètres [x, y, end_x, end_y, ...]
+ * @param color Couleur de la ligne (format hexadécimal)
+ */
+void	draw_line(t_app *app, int *line, int color)
+{
+	int	error_doubled;
+
+	init_bresenham(line);
+	while (1)
+	{
+		img_put_pixel(&app->frame, line[X], line[Y], color);
+		if (line[X] == line[END_X] && line[Y] == line[END_Y])
+			break ;
+		error_doubled = 2 * line[ERR];
+		if (error_doubled > -line[DELT_Y])
+		{
+			line[ERR] -= line[DELT_Y];
+			line[X] += line[STEP_X];
+		}
+		if (error_doubled < line[DELT_X])
+		{
+			line[ERR] += line[DELT_X];
+			line[Y] += line[STEP_Y];
+		}
 	}
 }

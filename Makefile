@@ -36,7 +36,6 @@ SRC	:= \
 	$(SRCDIR)/render/minimap_utils.c \
 	$(SRCDIR)/render/textures.c \
 	$(SRCDIR)/render/texture_utils.c \
-	$(SRCDIR)/render/texture_cleanup.c \
 	$(SRCDIR)/render/background.c \
 	$(SRCDIR)/parser/check_map_closed.c \
 	$(SRCDIR)/parser/find_player.c \
@@ -53,7 +52,8 @@ SRC	:= \
 	$(SRCDIR)/parser/parsing_utils.c \
 	$(SRCDIR)/parser/parse_line_handlers.c \
 	$(SRCDIR)/utils/errors.c \
-	$(SRCDIR)/utils/mem.c
+	$(SRCDIR)/utils/mem.c \
+	$(SRCDIR)/utils/free.c
 
 # Placeholders for future implementation (compiled but may be unused for now)
 SRC += \
@@ -64,8 +64,7 @@ SRC += \
 
 # Include missing render utility sources
 SRC += \
-	$(SRCDIR)/render/draw_utils.c \
-	$(SRCDIR)/render/ray_utils.c
+	$(SRCDIR)/render/frame.c
 
 OBJ	:= $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
 

@@ -3,15 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   projection.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:39 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/03 18:04:31 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/04 20:09:19 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include <math.h>
+
+/* Indices pour le tableau de paramètres de colonne */
+#define COL_X 0
+#define COL_START 1
+#define COL_END 2
+
+/* Indices pour le tableau de variables de texture */
+#define TEX_X 0
+#define TEX_STEP 1
+#define TEX_POS 2
 
 /**
  * @brief Calcule les bornes verticales de dessin d'une colonne de mur.
@@ -50,18 +60,18 @@ void	calculate_wall_bounds(int height, int screen_h, int *draw_start,
  * Utilisé dans le mode fallback (sans textures) pour le rendu des murs.
  *
  * @param app Pointeur vers la structure principale (contient frame).
- * @param params Tableau [x, draw_start, draw_end] définissant la colonne.
+ * @param col Tableau [x, start, end] définissant la colonne.
  * @param color Couleur RGB à appliquer (format 0xRRGGBB).
  *
  */
-void	draw_wall_column(t_app *app, int *params, int color)
+void	draw_wall_column(t_app *app, int *col, int color)
 {
 	int	y;
 
-	y = params[1];
-	while (y <= params[2])
+	y = col[COL_START];
+	while (y <= col[COL_END])
 	{
-		img_put_pixel(&app->frame, params[0], y, color);
+		img_put_pixel(&app->frame, col[COL_X], y, color);
 		y++;
 	}
 }
@@ -93,16 +103,17 @@ static t_img	*get_texture_from_face(t_app *app, int wall_face)
 }
 
 static void	init_texture_vars(t_app *app, t_ray_hit *hit,
-		int draw_start, double *vars)
+		int draw_start, double *tex)
 {
 	t_img	*texture;
 	int		line_height;
 
 	texture = get_texture_from_face(app, hit->wall_face);
-	vars[0] = get_texture_coord_x(hit->wall_x, texture, hit->wall_face);
+	tex[TEX_X] = get_texture_coord_x(hit->wall_x, texture, hit->wall_face);
 	line_height = (int)(app->win_h / hit->perp_dist);
-	vars[1] = (double)texture->h / (double)line_height;
-	vars[2] = (draw_start - app->win_h / 2 + line_height / 2) * vars[1];
+	tex[TEX_STEP] = (double)texture->h / (double)line_height;
+	tex[TEX_POS] = (draw_start - app->win_h / 2 + line_height / 2)
+		* tex[TEX_STEP];
 }
 
 /**
@@ -117,30 +128,30 @@ static void	init_texture_vars(t_app *app, t_ray_hit *hit,
  * 5. Incrémenter tex_y selon le step
  *
  * @param app Pointeur vers la structure principale (frame, textures).
- * @param params Tableau [x, draw_start, draw_end] définissant la colonne.
+ * @param col Tableau [x, start, end] définissant la colonne.
  * @param hit Pointeur vers les données de collision (wall_face, wall_x).
  *
  */
-void	draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit)
+void	draw_textured_wall_column(t_app *app, int *col, t_ray_hit *hit)
 {
 	t_img		*texture;
-	double		vars[3];
+	double		tex[3];
 	int			y;
 	int			tex_y;
 
 	texture = get_texture_from_face(app, hit->wall_face);
-	init_texture_vars(app, hit, params[1], vars);
-	y = params[1];
-	while (y <= params[2])
+	init_texture_vars(app, hit, col[COL_START], tex);
+	y = col[COL_START];
+	while (y <= col[COL_END])
 	{
-		tex_y = (int)vars[2];
+		tex_y = (int)tex[TEX_POS];
 		if (tex_y >= texture->h)
 			tex_y = texture->h - 1;
 		if (tex_y < 0)
 			tex_y = 0;
-		img_put_pixel(&app->frame, params[0], y,
-			get_texture_pixel(texture, vars[0], tex_y));
-		vars[2] += vars[1];
+		img_put_pixel(&app->frame, col[COL_X], y,
+			get_texture_pixel(texture, tex[TEX_X], tex_y));
+		tex[TEX_POS] += tex[TEX_STEP];
 		y++;
 	}
 }

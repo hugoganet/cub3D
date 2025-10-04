@@ -25,19 +25,19 @@
  */
 int	load_textures(t_app *app)
 {
-	if (load_single_texture(app, app->tex.north_path, &app->tex.north))
+	if (load_single_texture(app, app->tex.north_path, &app->tex.north) < 0)
 		return (1);
-	if (load_single_texture(app, app->tex.south_path, &app->tex.south))
+	if (load_single_texture(app, app->tex.south_path, &app->tex.south) < 0)
 	{
 		free_textures(app);
 		return (1);
 	}
-	if (load_single_texture(app, app->tex.west_path, &app->tex.west))
+	if (load_single_texture(app, app->tex.west_path, &app->tex.west) < 0)
 	{
 		free_textures(app);
 		return (1);
 	}
-	if (load_single_texture(app, app->tex.east_path, &app->tex.east))
+	if (load_single_texture(app, app->tex.east_path, &app->tex.east) < 0)
 	{
 		free_textures(app);
 		return (1);

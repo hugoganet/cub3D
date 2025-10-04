@@ -61,6 +61,31 @@ void	draw_minimap_border(t_app *app)
 }
 
 /**
+ * @brief Lance un rayon pour la minimap et calcule le point d'impact.
+ *
+ * Version simplifiée de cast_ray() dédiée à la minimap. Lance un rayon
+ * via DDA et convertit la distance de collision en coordonnées 2D du
+ * point d'impact sur le mur. Utilisé pour dessiner les rayons visibles
+ * sur la minimap.
+ *
+ * @param app Pointeur vers la structure principale.
+ * @param ray_dir Vecteur direction du rayon.
+ * @param hit_point Pointeur vers le vecteur résultat (coordonnées d'impact).
+ * @return int 1 si collision trouvée (toujours vrai avec cast_ray actuel).
+ *
+ */
+int	cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point)
+{
+	t_ray_hit	hit;
+
+	if (!cast_ray(app, ray_dir, &hit))
+		return (0);
+	hit_point->x = app->player.pos.x + hit.perp_dist * ray_dir.x;
+	hit_point->y = app->player.pos.y + hit.perp_dist * ray_dir.y;
+	return (1);
+}
+
+/**
  * @brief Dessine un rayon du joueur vers un point de collision
  *
  * Trace une ligne verte du joueur vers le point où le rayon a touché
@@ -71,7 +96,7 @@ void	draw_minimap_border(t_app *app)
  */
 void	draw_minimap_ray(t_app *app, t_vec2 hit_point)
 {
-	int	line_params[4];
+	int	line_params[9];
 
 	line_params[0] = MINIMAP_OFFSET_X
 		+ (int)(app->player.pos.x * MINIMAP_SCALE);

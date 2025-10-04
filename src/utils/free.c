@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture_cleanup.c                                  :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/29 14:50:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/01 18:26:28 by hugoganet        ###   ########.fr       */
+/*   Created: 2025/10/04 18:30:00 by hugoganet         #+#    #+#             */
+/*   Updated: 2025/10/04 18:30:00 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,65 @@ void	free_textures(t_app *app)
 	}
 	free_texture_paths(app);
 	app->tex.loaded = false;
+}
+
+/**
+ * @brief Libère la grille de la map 2D.
+ *
+ * Parcourt et libère chaque ligne de la grille app->map.grid, puis libère
+ * le tableau de pointeurs lui-même. Réinitialise les dimensions et le
+ * pointeur à NULL/0 pour éviter les double-free.
+ *
+ * @param app Pointeur vers la structure principale contenant la map.
+ *
+ */
+void	free_map(t_app *app)
+{
+	int	i;
+
+	if (!app->map.grid)
+		return ;
+	i = 0;
+	while (i < app->map.height)
+	{
+		free(app->map.grid[i]);
+		i++;
+	}
+	free(app->map.grid);
+	app->map.grid = NULL;
+	app->map.height = 0;
+	app->map.width = 0;
+}
+
+/**
+ * @brief Nettoie et libère toutes les ressources de l'application.
+ *
+ * Séquence de nettoyage complète dans l'ordre inverse de l'initialisation :
+ * 1. Libère les textures (images MLX + chemins)
+ * 2. Nettoie les buffers get_next_line
+ * 3. Détruit l'image offscreen
+ * 4. Détruit la fenêtre MLX
+ * 5. Détruit le display MLX et libère le pointeur
+ * 6. Libère la grille de map
+ *
+ * Peut être appelée à n'importe quel stade (gère les pointeurs NULL).
+ *
+ * @param app Pointeur vers la structure principale à nettoyer.
+ *
+ */
+void	app_destroy(t_app *app)
+{
+	free_textures(app);
+	gnl_free(NULL);
+	if (app->frame.ptr)
+		mlx_destroy_image(app->mlx, app->frame.ptr);
+	if (app->win)
+		mlx_destroy_window(app->mlx, app->win);
+	if (app->mlx)
+	{
+		mlx_destroy_display(app->mlx);
+		free(app->mlx);
+		app->mlx = NULL;
+	}
+	free_map(app);
 }

@@ -6,7 +6,7 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:57:49 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/03 14:56:30 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/04 17:54:59 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,11 @@ int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
 	if (is_texture_line(line) && !counters->map_started)
 		return (handle_texture_line(app, line, counters));
 	else if (is_color_line(line) && !counters->map_started)
-	{
-		if (parse_color_line(app, line) != 0)
-			return (-1);
-		counters->color_count++;
-	}
+		return (handle_color_line(app, line, counters));
 	else if (is_map_line(line))
 		return (handle_map_line(app, line, counters));
 	else
-	{
-		ft_putendl_fd("Error", 2);
-		ft_putstr_fd("Unknown line format: ", 2);
-		ft_putstr_fd(line, 2);
-		return (-1);
-	}
+		return (error_msg("Unknown line format"));
 	return (0);
 }
 
@@ -58,29 +49,18 @@ int	parse_single_line(t_app *app, char *line, t_parse_counters *counters)
  * @param app Pointeur vers la structure de l'application.
  * @param line Ligne à traiter.
  * @param counters Pointeur vers les compteurs de parsing.
- * @param fd Descripteur de fichier pour fermeture en cas d'erreur.
  * @return int Retourne 0 pour continuer, 1 pour ligne vide, -1 erreur.
  */
-static int	process_line(t_app *app, char *line, t_parse_counters *counters,
-						int fd)
+static int	process_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (is_empty_line(line))
 	{
 		if (counters->map_started)
-		{
-			(void)fd;
 			return (error_msg("Empty line inside map section"));
-		}
 		return (1);
 	}
 	if (parse_single_line(app, line, counters) != 0)
-	{
-		free(line);
-		gnl_free(NULL);
-		close(fd);
-		app_destroy(app, 1);
-		exit(1);
-	}
+		return (-1);
 	return (0);
 }
 
@@ -106,7 +86,7 @@ static int	read_and_process_lines(t_app *app, int fd,
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		result = process_line(app, line, counters, fd);
+		result = process_line(app, line, counters);
 		free(line);
 		if (result == 1)
 		{

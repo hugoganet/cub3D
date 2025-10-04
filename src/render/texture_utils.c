@@ -14,22 +14,6 @@
 #include <mlx.h>
 
 /**
- * @brief Affiche un message d'erreur pour le chargement de texture
- *
- * Écrit sur la sortie d'erreur standard un message formaté avec
- * le chemin de la texture problématique.
- *
- * @param path Chemin du fichier XPM défaillant
- * @param message Message d'erreur descriptif
- */
-static void	print_texture_error(char *path, char *message)
-{
-	ft_putstr_fd("Error\n", 2);
-	ft_putstr_fd(message, 2);
-	ft_putendl_fd(path, 2);
-}
-
-/**
  * @brief Charge un fichier XPM en tant qu'image MLX
  *
  * Utilise mlx_xpm_file_to_image pour charger une texture depuis un
@@ -48,10 +32,7 @@ static int	load_texture_image(t_app *app, char *path, t_img *texture)
 
 	texture->ptr = mlx_xpm_file_to_image(app->mlx, path, &width, &height);
 	if (!texture->ptr)
-	{
-		print_texture_error(path, "Failed to load texture: ");
-		return (1);
-	}
+		return (error_msg("Failed to load texture"));
 	texture->w = width;
 	texture->h = height;
 	return (0);
@@ -64,20 +45,18 @@ static int	load_texture_image(t_app *app, char *path, t_img *texture)
  * de la texture. Extrait aussi les métadonnées (bpp, line_len, endian).
  *
  * @param app Structure principale de l'application
- * @param path Chemin de la texture (pour les messages d'erreur)
  * @param texture Structure d'image contenant le pointeur MLX
  * @return int 0 si succès, 1 si échec
  */
-static int	get_texture_data(t_app *app, char *path, t_img *texture)
+static int	get_texture_data(t_app *app, t_img *texture)
 {
 	texture->addr = mlx_get_data_addr(texture->ptr, &texture->bpp,
 			&texture->line_len, &texture->endian);
 	if (!texture->addr)
 	{
-		print_texture_error(path, "Failed to get texture data: ");
 		mlx_destroy_image(app->mlx, texture->ptr);
 		texture->ptr = NULL;
-		return (1);
+		return (error_msg("Failed to get texture data"));
 	}
 	return (0);
 }
@@ -100,10 +79,10 @@ int	load_single_texture(t_app *app, char *path, t_img *texture)
 	texture->addr = NULL;
 	texture->w = 0;
 	texture->h = 0;
-	if (load_texture_image(app, path, texture))
-		return (1);
-	if (get_texture_data(app, path, texture))
-		return (1);
+	if (load_texture_image(app, path, texture) < 0)
+		return (-1);
+	if (get_texture_data(app, texture) < 0)
+		return (-1);
 	return (0);
 }
 

@@ -36,6 +36,29 @@ int	handle_texture_line(t_app *app, char *line, t_parse_counters *counters)
 }
 
 /**
+ * @brief Gère le parsing d'une ligne de définition de couleur.
+ *
+ * Vérifie que le nombre maximum de couleurs (2) n'est pas dépassé, puis
+ * délègue le parsing à parse_color_line(). Incrémente le compteur de
+ * couleurs en cas de succès. Détecte les duplications de définitions.
+ *
+ * @param app Pointeur vers la structure principale de l'application.
+ * @param line Ligne de couleur à parser (format: "F 220,100,0" ou "C 225,30,0").
+ * @param counters Pointeur vers les compteurs de parsing.
+ * @return int 0 si succès, -1 si erreur (trop de couleurs ou duplication).
+ *
+ */
+int	handle_color_line(t_app *app, char *line, t_parse_counters *counters)
+{
+	if (counters->color_count == 2)
+		return (error_msg("Only 2 color definitions are allowed"));
+	if (parse_color_line(app, line) != 0)
+		return (-1);
+	counters->color_count++;
+	return (0);
+}
+
+/**
  * @brief Gère le parsing d'une ligne de la map.
  *
  * Initialise la structure map lors de la première ligne de map rencontrée

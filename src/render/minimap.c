@@ -6,12 +6,18 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:37 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/04 20:09:41 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include <math.h>
+
+/* Indices pour le tableau de paramètres de rectangle */
+#define RECT_X 0
+#define RECT_Y 1
+#define RECT_WIDTH 2
+#define RECT_HEIGHT 3
 
 /**
  * @brief Dessine une tuile de la minimap avec bordures
@@ -29,27 +35,27 @@ void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
 {
 	int	screen_x;
 	int	screen_y;
-	int	params1[4];
-	int	params2[4];
-	int	params3[4];
+	int	tile[4];
+	int	border_h[4];
+	int	border_v[4];
 
 	screen_x = MINIMAP_OFFSET_X + map_x * MINIMAP_SCALE;
 	screen_y = MINIMAP_OFFSET_Y + map_y * MINIMAP_SCALE;
-	params1[0] = screen_x;
-	params1[1] = screen_y;
-	params1[2] = MINIMAP_SCALE;
-	params1[3] = MINIMAP_SCALE;
-	params2[0] = screen_x;
-	params2[1] = screen_y;
-	params2[2] = MINIMAP_SCALE;
-	params2[3] = 1;
-	params3[0] = screen_x;
-	params3[1] = screen_y;
-	params3[2] = 1;
-	params3[3] = MINIMAP_SCALE;
-	draw_rect(app, params1, color);
-	draw_rect(app, params2, COLOR_BORDER);
-	draw_rect(app, params3, COLOR_BORDER);
+	tile[RECT_X] = screen_x;
+	tile[RECT_Y] = screen_y;
+	tile[RECT_WIDTH] = MINIMAP_SCALE;
+	tile[RECT_HEIGHT] = MINIMAP_SCALE;
+	border_h[RECT_X] = screen_x;
+	border_h[RECT_Y] = screen_y;
+	border_h[RECT_WIDTH] = MINIMAP_SCALE;
+	border_h[RECT_HEIGHT] = 1;
+	border_v[RECT_X] = screen_x;
+	border_v[RECT_Y] = screen_y;
+	border_v[RECT_WIDTH] = 1;
+	border_v[RECT_HEIGHT] = MINIMAP_SCALE;
+	draw_rect(app, tile, color);
+	draw_rect(app, border_h, COLOR_BORDER);
+	draw_rect(app, border_v, COLOR_BORDER);
 }
 
 /**
@@ -63,21 +69,21 @@ void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color)
  */
 void	draw_player_on_minimap(t_app *app)
 {
-	int	player_params[4];
-	int	dir_params[4];
+	int	player[4];
+	int	direction[4];
 
-	player_params[0] = MINIMAP_OFFSET_X
+	player[RECT_X] = MINIMAP_OFFSET_X
 		+ (int)(app->player.pos.x * MINIMAP_SCALE) - 3;
-	player_params[1] = MINIMAP_OFFSET_Y
+	player[RECT_Y] = MINIMAP_OFFSET_Y
 		+ (int)(app->player.pos.y * MINIMAP_SCALE) - 3;
-	player_params[2] = 6;
-	player_params[3] = 6;
-	draw_rect(app, player_params, COLOR_PLAYER);
-	dir_params[0] = player_params[0] + 3 + (int)(app->player.dir.x * 10);
-	dir_params[1] = player_params[1] + 3 + (int)(app->player.dir.y * 10);
-	dir_params[2] = 2;
-	dir_params[3] = 2;
-	draw_rect(app, dir_params, 0x00FF00);
+	player[RECT_WIDTH] = 6;
+	player[RECT_HEIGHT] = 6;
+	draw_rect(app, player, COLOR_PLAYER);
+	direction[RECT_X] = player[RECT_X] + 3 + (int)(app->player.dir.x * 10);
+	direction[RECT_Y] = player[RECT_Y] + 3 + (int)(app->player.dir.y * 10);
+	direction[RECT_WIDTH] = 2;
+	direction[RECT_HEIGHT] = 2;
+	draw_rect(app, direction, 0x00FF00);
 }
 
 /**

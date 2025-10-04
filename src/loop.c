@@ -19,11 +19,10 @@
  *
  * Pipeline de rendu complet exécuté à chaque itération de mlx_loop :
  * 1. Mise à jour de la position/rotation du joueur selon les touches
- * 2. Nettoyage du buffer de frame (noir)
- * 3. Rendu du fond (plafond + sol avec couleurs unies)
- * 4. Rendu de la vue 3D (raycasting + murs texturés)
- * 5. Rendu de la minimap overlay (position + rayons)
- * 6. Affichage du buffer à l'écran (double buffering)
+ * 2. Rendu du fond (plafond + sol avec couleurs unies)
+ * 3. Rendu de la vue 3D (raycasting + murs texturés)
+ * 4. Rendu de la minimap overlay (position + rayons)
+ * 5. Affichage du buffer à l'écran (double buffering)
  *
  * @param app Pointeur vers la structure principale de l'application.
  * @return int Retourne toujours 0 (requis par MLX).
@@ -32,7 +31,6 @@
 int	app_loop(t_app *app)
 {
 	update_player_movement(app);
-	fill_background(app, 0x000000);
 	render_background(app);
 	render_3d_view(app);
 	render_minimap(app);
@@ -55,7 +53,7 @@ int	app_loop(t_app *app)
  */
 int	close_window(t_app *app)
 {
-	app_destroy(app, 0);
+	app_destroy(app);
 	exit(0);
 	return (0);
 }

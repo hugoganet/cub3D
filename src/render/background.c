@@ -6,11 +6,17 @@
 /*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:27 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/29 13:32:28 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/04 20:09:01 by hugoganet        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+/* Indices pour le tableau de paramètres de rectangle */
+#define RECT_X 0
+#define RECT_Y 1
+#define RECT_WIDTH 2
+#define RECT_HEIGHT 3
 
 /**
  * @brief Convertit une structure de couleur RGB en entier hexadécimal
@@ -44,10 +50,10 @@ void	draw_ceiling(t_app *app)
 	half_height = DEFAULT_WIN_HEIGHT / 2;
 	while (y < half_height)
 	{
-		params[0] = 0;
-		params[1] = y;
-		params[2] = DEFAULT_WIN_WIDTH;
-		params[3] = 1;
+		params[RECT_X] = 0;
+		params[RECT_Y] = y;
+		params[RECT_WIDTH] = DEFAULT_WIN_WIDTH;
+		params[RECT_HEIGHT] = 1;
 		draw_rect(app, params, ceiling_color);
 		y++;
 	}
@@ -72,10 +78,10 @@ void	draw_floor(t_app *app)
 	y = DEFAULT_WIN_HEIGHT / 2;
 	while (y < DEFAULT_WIN_HEIGHT)
 	{
-		params[0] = 0;
-		params[1] = y;
-		params[2] = DEFAULT_WIN_WIDTH;
-		params[3] = 1;
+		params[RECT_X] = 0;
+		params[RECT_Y] = y;
+		params[RECT_WIDTH] = DEFAULT_WIN_WIDTH;
+		params[RECT_HEIGHT] = 1;
 		draw_rect(app, params, floor_color);
 		y++;
 	}
