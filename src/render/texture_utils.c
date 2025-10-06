@@ -26,23 +26,23 @@
  */
 int	load_single_texture(t_app *app, char *path, t_img *texture)
 {
-    int	width;
-    int	height;
+	int	width;
+	int	height;
 
-    texture->ptr = mlx_xpm_file_to_image(app->mlx, path, &width, &height);
-    if (!texture->ptr)
-        return (-1);
-    texture->w = width;
-    texture->h = height;
-    texture->addr = mlx_get_data_addr(texture->ptr, &texture->bpp,
-            &texture->line_len, &texture->endian);
-    if (!texture->addr)
-    {
-        mlx_destroy_image(app->mlx, texture->ptr);
-        texture->ptr = NULL;
-        return (error_msg("Failed to get texture data"));
-    }
-    return (0);
+	texture->ptr = mlx_xpm_file_to_image(app->mlx, path, &width, &height);
+	if (!texture->ptr)
+		return (-1);
+	texture->w = width;
+	texture->h = height;
+	texture->addr = mlx_get_data_addr(texture->ptr, &texture->bpp,
+			&texture->line_len, &texture->endian);
+	if (!texture->addr)
+	{
+		mlx_destroy_image(app->mlx, texture->ptr);
+		texture->ptr = NULL;
+		return (error_msg("Failed to get texture data"));
+	}
+	return (0);
 }
 
 /**

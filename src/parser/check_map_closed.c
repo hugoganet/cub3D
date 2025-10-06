@@ -6,7 +6,7 @@
 /*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:48:23 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/06 13:39:11 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/06 16:44:05 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	check_map_closed(t_app *app)
 		{
 			c = app->map.grid[y][x];
 			if (c == '0' || c == 'N' || c == 'S'
-					|| c == 'E' || c == 'W')
+				|| c == 'E' || c == 'W')
 			{
 				if (check_neighbors_of(app, x, y) != 0)
 					return (-1);

@@ -6,7 +6,7 @@
 /*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/06 15:10:18 by ncrivell         ###   ########.fr       */
+/*   Updated: 2025/10/06 16:53:04 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,9 +349,18 @@ bool	is_valid_position(t_app *app, double x, double y);
 // Ray Casting Core
 
 int		cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit);
-int		cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
 void	calculate_ray_dir(t_app *app, int x, t_vec2 *ray_dir);
 int		get_wall_side(int step_x, int step_y, int side);
+
+// DDA Utilities
+
+void	init_delta_dist(t_vec2 ray_dir, t_ray_vars *vars);
+void	init_step_x(t_app *app, t_vec2 ray_dir, t_ray_vars *vars);
+void	init_step_y(t_app *app, t_vec2 ray_dir, t_ray_vars *vars);
+void	init_dda_vars(t_app *app, t_vec2 ray_dir, t_ray_vars *vars);
+int		check_wall_hit(t_app *app, t_ray_vars *vars);
+void	fill_hit_info(t_app *app, t_vec2 ray_dir, t_ray_vars *vars,
+			t_ray_hit *hit);
 
 // 3D Rendering
 
@@ -387,18 +396,6 @@ int		load_single_texture(t_app *app, char *path, t_img *texture);
 t_img	*get_wall_texture(t_app *app, int side, t_vec2 ray_dir);
 int		get_texture_pixel(t_img *texture, int x, int y);
 int		get_texture_coord_x(double wall_x, t_img *texture, int wall_face);
-
-// Minimap Rendering
-
-void	render_minimap(t_app *app);
-void	render_minimap_rays(t_app *app);
-void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color);
-void	draw_minimap_border(t_app *app);
-void	draw_player_on_minimap(t_app *app);
-void	draw_minimap_ray(t_app *app, t_vec2 hit_point);
-void	get_ray_direction(t_app *app, int ray_index, int total_rays,
-			t_vec2 *ray_dir);
-int		get_tile_color(char tile);
 
 // Drawing Primitives
 

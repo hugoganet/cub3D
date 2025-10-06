@@ -29,11 +29,15 @@ SRC	:= \
 	$(SRCDIR)/input/keys.c \
 	$(SRCDIR)/input/movement.c \
 	$(SRCDIR)/render/draw.c \
-	$(SRCDIR)/render/minimap.c \
-	$(SRCDIR)/render/minimap_utils.c \
 	$(SRCDIR)/render/textures.c \
 	$(SRCDIR)/render/texture_utils.c \
 	$(SRCDIR)/render/background.c \
+	$(SRCDIR)/render/raycasting.c \
+	$(SRCDIR)/render/projection.c \
+	$(SRCDIR)/render/projection_utils.c \
+	$(SRCDIR)/render/dda.c \
+	$(SRCDIR)/render/dda_utils.c \
+	$(SRCDIR)/render/frame.c \
 	$(SRCDIR)/parser/check_map_closed.c \
 	$(SRCDIR)/parser/find_player.c \
 	$(SRCDIR)/parser/map_neighbors.c \
@@ -50,11 +54,6 @@ SRC	:= \
 	$(SRCDIR)/utils/errors.c \
 	$(SRCDIR)/utils/mem.c \
 	$(SRCDIR)/utils/free.c \
-	$(SRCDIR)/render/raycasting.c \
-	$(SRCDIR)/render/projection.c \
-	$(SRCDIR)/render/projection_utils.c \
-	$(SRCDIR)/render/dda.c \
-	$(SRCDIR)/render/frame.c
 
 OBJ	:= $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
 
