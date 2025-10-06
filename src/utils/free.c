@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 18:30:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/04 18:30:00 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 15:09:56 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	free_textures(t_app *app)
 		app->tex.east.ptr = NULL;
 	}
 	free_texture_paths(app);
-	app->tex.loaded = false;
 }
 
 /**

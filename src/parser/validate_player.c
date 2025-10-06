@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_player.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:47:11 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:49 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 15:02:44 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,15 @@ void	process_cell_for_player(t_app *app, int i, int j, int *player_count)
 	char	c;
 
 	c = app->map.grid[i][j];
-	if (!is_player_char(c))
+	if (c != 'N' && c != 'S' && c != 'E' && c != 'W')
 		return ;
 	(*player_count)++;
 	app->player.pos.x = (double)j + 0.5;
 	app->player.pos.y = (double)i + 0.5;
-	set_player_orientation(app, c);
-}
-
-/**
- * @brief Détermine si un caractère représente un joueur.
- *
- * Vérifie si le caractère correspond à l'une des orientations de départ
- * possibles du joueur : Nord (N), Sud (S), Est (E) ou Ouest (W).
- *
- * @param c Caractère à tester.
- * @return int 1 si c est un caractère joueur, 0 sinon.
- *
- */
-int	is_player_char(char c)
-{
-	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
+	if (c == 'N' || c == 'S')
+		orientation_north_or_south(app, c);
+	if (c == 'E' || c == 'W')
+		orientation_east_or_west(app, c);
 }
 
 /**
@@ -116,23 +104,4 @@ void	orientation_east_or_west(t_app *app, char c)
 		app->player.plane.x = 0;
 		app->player.plane.y = -0.66;
 	}
-}
-
-/**
- * @brief Définit l'orientation initiale du joueur selon le caractère de spawn.
- *
- * Dispatche vers orientation_north_or_south() ou orientation_east_or_west()
- * selon le caractère de départ (N/S/E/W) trouvé dans la map. Configure les
- * vecteurs dir et plane pour le raycasting.
- *
- * @param app Pointeur vers la structure principale.
- * @param c Caractère d'orientation du joueur ('N', 'S', 'E', 'W').
- *
- */
-void	set_player_orientation(t_app *app, char c)
-{
-	if (c == 'N' || c == 'S')
-		orientation_north_or_south(app, c);
-	if (c == 'E' || c == 'W')
-		orientation_east_or_west(app, c);
 }

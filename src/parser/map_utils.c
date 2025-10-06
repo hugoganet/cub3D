@@ -3,64 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 05:15:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/03 14:55:02 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 13:39:24 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-/**
- * @brief Détermine si un caractère représente une cellule traversable.
- *
- * Une cellule est traversable si elle correspond à :
- * - Un espace vide ('0')
- * - Une position de départ du joueur ('N', 'S', 'E', 'W')
- *
- * Utilisé pour identifier les cellules qui nécessitent une vérification
- * de fermeture (doivent être entourées de murs ou d'autres cellules valides).
- *
- * @param c Le caractère à tester.
- * @return int 1 si le caractère est traversable, 0 sinon.
- *
- */
-int	is_walkable_char(char c)
-{
-	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
-		return (1);
-	return (0);
-}
-
-/**
- * @brief Vérifie si une position est dans les limites de la map.
- *
- * Valide qu'une coordonnée (x,y) se trouve à l'intérieur des bornes
- * de la grille de la map. Vérifie :
- * - Que y est positif et inférieur à la hauteur totale
- * - Que x est positif
- * - Que la ligne existe dans la grille
- * - Que x est inférieur à la longueur de la ligne
- *
- * @param app Pointeur vers la structure principale contenant la map.
- * @param x Coordonnée horizontale (colonne).
- * @param y Coordonnée verticale (ligne).
- * @return int 1 si la position est dans les limites, 0 sinon.
- *
- */
-int	in_bounds(t_app *app, int x, int y)
-{
-	if (y < 0 || y >= app->map.height)
-		return (0);
-	if (x < 0)
-		return (0);
-	if (!app->map.grid[y])
-		return (0);
-	if (x >= (int)ft_strlen(app->map.grid[y]))
-		return (0);
-	return (1);
-}
 
 /**
  * @brief Récupère le caractère à une position ou retourne un espace.
@@ -78,9 +28,55 @@ int	in_bounds(t_app *app, int x, int y)
  * @return char Le caractère à cette position, ou ' ' si hors limites.
  *
  */
-char	get_map_char_or_space(t_app *app, int x, int y)
+int	is_valid_neighbor(t_app *app, int x, int y)
 {
-	if (!in_bounds(app, x, y))
-		return (' ');
-	return (app->map.grid[y][x]);
+	if (y < 0 || y >= app->map.height)
+		return (0);
+	if (x < 0)
+		return (0);
+	if (!app->map.grid[y])
+		return (0);
+	if (x >= (int)ft_strlen(app->map.grid[y]))
+		return (0);
+	return (1);
+}
+
+/**
+ * @brief Vérifie que tous les caractères de la map sont valides.
+ *
+ * Parcourt chaque cellule de la grille app->map.grid et valide que
+ * seuls les caractères autorisés sont présents :
+ * - '0' : espace vide (sol)
+ * - '1' : mur
+ * - ' ' : espace (vide non traversable)
+ * - 'N', 'S', 'E', 'W' : position et orientation du joueur
+ *
+ * Si un caractère invalide est détecté, appelle error_msg() avec
+ * un message explicite.
+ *
+ * @param app Pointeur vers la structure principale contenant la map.
+ * @return int Retourne 0 si tous les caractères sont valides.
+ *
+ */
+int	check_valid_chars(t_app *app)
+{
+	int		i;
+	int		j;
+	char	c;
+
+	i = 0;
+	while (i < app->map.height)
+	{
+		j = 0;
+		while (app->map.grid[i] && app->map.grid[i][j])
+		{
+			c = app->map.grid[i][j];
+			if (c != '0' && c != '1' && c != ' ' && c != 'N'
+				&& c != 'S' && c != 'E' && c != 'W')
+				return (error_msg("Invalid character in map"));
+			j++;
+		}
+		i++;
+	}
+	return (0);
 }

@@ -1,5 +1,3 @@
-# cub3D - Makefile (macOS, MiniLibX, libft)
-
 NAME		:= cub3D
 
 CC			:= cc
@@ -22,7 +20,6 @@ MLX_LDIRS	:= -L$(MLX_DIR)
 MLX_FLAGS	:= $(MLX_LDIRS) -lmlx -lXext -lX11 -lm
 INCS		:= -I$(INCDIR) -I$(MLX_INC) -I$(MLX_DIR)
 
-# Also include $(MLX_DIR) to handle MLX trees where mlx.h is at repo root
 INCS := -I$(INCDIR) -I$(MLX_INC) -I$(MLX_DIR) -I$(LIBFT_DIR)/includes -I$(LIBFT_DIR)
 
 SRC	:= \
@@ -41,7 +38,6 @@ SRC	:= \
 	$(SRCDIR)/parser/find_player.c \
 	$(SRCDIR)/parser/map_neighbors.c \
 	$(SRCDIR)/parser/map_utils.c \
-	$(SRCDIR)/parser/validate_chars.c \
 	$(SRCDIR)/parser/validate_player.c \
 	$(SRCDIR)/parser/parse_file.c \
 	$(SRCDIR)/parser/parse_file_utils.c \
@@ -53,17 +49,11 @@ SRC	:= \
 	$(SRCDIR)/parser/parse_line_handlers.c \
 	$(SRCDIR)/utils/errors.c \
 	$(SRCDIR)/utils/mem.c \
-	$(SRCDIR)/utils/free.c
-
-# Placeholders for future implementation (compiled but may be unused for now)
-SRC += \
+	$(SRCDIR)/utils/free.c \
 	$(SRCDIR)/render/raycasting.c \
 	$(SRCDIR)/render/projection.c \
 	$(SRCDIR)/render/projection_utils.c \
 	$(SRCDIR)/render/dda.c \
-
-# Include missing render utility sources
-SRC += \
 	$(SRCDIR)/render/frame.c
 
 OBJ	:= $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))

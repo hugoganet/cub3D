@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_closed.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 15:48:23 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/03 14:54:39 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 13:39:11 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ static int	check_neighbors_of(t_app *app, int x, int y)
 {
 	char	n;
 
-	n = get_map_char_or_space(app, x - 1, y);
-	if (n == ' ')
+	n = is_valid_neighbor(app, x - 1, y);
+	if (!n)
 		return (error_msg("Map not closed: walkable tile adjacent to void"));
-	n = get_map_char_or_space(app, x + 1, y);
-	if (n == ' ')
+	n = is_valid_neighbor(app, x + 1, y);
+	if (!n)
 		return (error_msg("Map not closed: walkable tile adjacent to void"));
-	n = get_map_char_or_space(app, x, y - 1);
-	if (n == ' ')
+	n = is_valid_neighbor(app, x, y - 1);
+	if (!n)
 		return (error_msg("Map not closed: walkable tile adjacent to void"));
-	n = get_map_char_or_space(app, x, y + 1);
-	if (n == ' ')
+	n = is_valid_neighbor(app, x, y + 1);
+	if (!n)
 		return (error_msg("Map not closed: walkable tile adjacent to void"));
 	return (0);
 }
@@ -64,7 +64,8 @@ int	check_map_closed(t_app *app)
 		while (app->map.grid[y] && app->map.grid[y][x])
 		{
 			c = app->map.grid[y][x];
-			if (is_walkable_char(c))
+			if (c == '0' || c == 'N' || c == 'S'
+					|| c == 'E' || c == 'W')
 			{
 				if (check_neighbors_of(app, x, y) != 0)
 					return (-1);

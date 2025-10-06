@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 05:20:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/03 14:55:15 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 13:11:52 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ int	is_empty_line(char *line)
  * @return int 0 si tous les éléments requis sont présents, -1 sinon.
  *
  */
-int	validate_parsing_completion(t_app *app, t_parse_counters *counters)
+int	validate_parsing_completion(t_parse_counters *counters)
 {
-	(void)app;
 	if (counters->texture_count != 4)
 		return (error_msg("Missing texture definitions (need NO, SO, WE, EA)"));
 	if (counters->color_count != 2)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dda.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:30 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/29 13:32:31 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 16:01:37 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ int	cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit)
 {
 	t_ray_vars	vars;
 	int			wall_hit;
-
+	// ? refacto
 	init_dda_vars(app, ray_dir, &vars);
 	init_dda_vars_y(app, ray_dir, &vars);
 	wall_hit = 0;

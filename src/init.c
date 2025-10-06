@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:09 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/04 18:09:58 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 15:18:41 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
  * @return int 0 si succès, -1 si erreur d'allocation MLX.
  *
  */
-static int	create_frame(t_app *app, int w, int h)
+static int	init_offscreen_frame(t_app *app, int w, int h)
 {
 	app->frame.ptr = mlx_new_image(app->mlx, w, h);
 	if (!app->frame.ptr)
@@ -68,7 +68,7 @@ int	app_init(t_app *app, int w, int h)
 	app->win = mlx_new_window(app->mlx, w, h, "cub3D");
 	if (!app->win)
 		return (error_msg("mlx_new_window failed"));
-	if (create_frame(app, w, h) != 0)
+	if (init_offscreen_frame(app, w, h) != 0)
 		return (error_msg("mlx_new_image failed"));
 	return (0);
 }

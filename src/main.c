@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:32:16 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/04 18:17:47 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 15:21:11 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ int	main(int argc, char **argv)
 		app_destroy(&app);
 		return (1);
 	}
-	mlx_loop_hook(app.mlx, (int (*)(void *))app_loop, &app);
 	mlx_hook(app.win, 2, 1, key_press, &app);
 	mlx_hook(app.win, 3, 2, key_release, &app);
 	mlx_hook(app.win, 17, 0, close_window, &app);
+	mlx_loop_hook(app.mlx, (int (*)(void *))app_loop, &app);
 	mlx_loop(app.mlx);
 	return (0);
 }

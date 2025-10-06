@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 13:33:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/09/29 13:33:01 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 15:09:52 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,27 @@
  * texture, libère celles déjà chargées avant de retourner une erreur.
  *
  * @param app Structure principale de l'application
- * @return int 0 si succès, 1 si échec
+ * @return int 0 si succès, -1 si échec
  */
 int	load_textures(t_app *app)
 {
 	if (load_single_texture(app, app->tex.north_path, &app->tex.north) < 0)
-		return (1);
+		return (-1);
 	if (load_single_texture(app, app->tex.south_path, &app->tex.south) < 0)
 	{
 		free_textures(app);
-		return (1);
+		return (-1);
 	}
 	if (load_single_texture(app, app->tex.west_path, &app->tex.west) < 0)
 	{
 		free_textures(app);
-		return (1);
+		return (-1);
 	}
 	if (load_single_texture(app, app->tex.east_path, &app->tex.east) < 0)
 	{
 		free_textures(app);
-		return (1);
+		return (-1);
 	}
-	app->tex.loaded = true;
 	return (0);
 }
 

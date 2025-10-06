@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/04 17:39:03 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 15:10:18 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ typedef struct s_textures
 	char	*south_path;
 	char	*west_path;
 	char	*east_path;
-	bool	loaded;
 }	t_textures;
 
 // Game world structures
@@ -268,70 +267,76 @@ int		close_window(t_app *app);
 // ============================================================================
 
 // Main Parsing Entry Points
+
 int		parsing(t_app *app, int argc, char **argv);
 int		parse_input(int argc, char **argv);
 int		parse_cub_file(t_app *app, const char *path);
 int		parse_single_line(t_app *app, char *line, t_parse_counters *counters);
 
 // Line Handlers
+
 int		handle_texture_line(t_app *app, char *line,
 			t_parse_counters *counters);
 int		handle_color_line(t_app *app, char *line, t_parse_counters *counters);
 int		handle_map_line(t_app *app, char *line, t_parse_counters *counters);
 
 // Line Type Checkers
+
 int		is_empty_line(char *line);
 int		is_map_line(char *line);
 int		is_color_line(char *line);
 int		is_texture_line(char *line);
 
 // Texture Parsing
+
 int		parse_texture_line(t_app *app, char *line);
 char	*extract_path(char *line);
 
 // Color Parsing
+
 int		parse_color_line(t_app *app, char *line);
 int		parse_rgb_values(const char *rgb_str, t_color *color);
 char	*extract_rgb_string(char *line);
 
 // Map Parsing
-int		init_map(t_app *app);
+
 int		add_map_line(t_app *app, char *line, int line_index);
-char	**ensure_grid_capacity(t_app *app, char **old_grid, int needed);
-char	*dup_map_line(t_app *app, char *line, int len);
+char	**resize_map_grid(char **old_grid, int needed);
+char	*dup_map_line(char *line, int len);
 int		get_trimmed_len(char *line);
 
 // Map Validation
-int		validate_parsing_completion(t_app *app, t_parse_counters *counters);
+
+int		validate_parsing_completion(t_parse_counters *counters);
 int		validate_map(t_app *app);
 int		check_valid_chars(t_app *app);
 int		check_map_closed(t_app *app);
 
 // Player Detection & Setup
+
 int		find_player(t_app *app);
-int		is_player_char(char c);
-void	set_player_orientation(t_app *app, char c);
 void	process_cell_for_player(t_app *app, int i, int j, int *player_count);
 void	orientation_north_or_south(t_app *app, char c);
 void	orientation_east_or_west(t_app *app, char c);
 
 // Map Utilities
+
 int		is_wall_or_void(t_app *app, int x, int y);
 int		is_at_map_edge(t_app *app, int x, int y);
 int		has_open_neighbor(t_app *app, int x, int y);
-int		is_walkable_char(char c);
-int		in_bounds(t_app *app, int x, int y);
-char	get_map_char_or_space(t_app *app, int x, int y);
+int		is_valid_neighbor(t_app *app, int x, int y);
 
 // ============================================================================
 //                              INPUT HANDLING
 // ============================================================================
 
 // Keyboard Events
+
 int		key_press(int keycode, t_app *app);
 int		key_release(int keycode, t_app *app);
 
 // Player Movement
+
 void	update_player_movement(t_app *app);
 void	move_player(t_app *app, double move_x, double move_y);
 void	rotate_player(t_app *app, int direction);
@@ -342,18 +347,21 @@ bool	is_valid_position(t_app *app, double x, double y);
 // ============================================================================
 
 // Ray Casting Core
+
 int		cast_ray(t_app *app, t_vec2 ray_dir, t_ray_hit *hit);
 int		cast_minimap_ray(t_app *app, t_vec2 ray_dir, t_vec2 *hit_point);
 void	calculate_ray_dir(t_app *app, int x, t_vec2 *ray_dir);
 int		get_wall_side(int step_x, int step_y, int side);
 
 // 3D Rendering
+
 void	render_3d_view(t_app *app);
 void	calculate_wall_bounds(int height, int screen_h, int *draw_start,
 			int *draw_end);
 double	calculate_wall_height(double perp_dist, int screen_h);
 
 // Wall Drawing
+
 void	draw_wall_column(t_app *app, int *params, int color);
 void	draw_textured_wall_column(t_app *app, int *params, t_ray_hit *hit);
 int		get_wall_color(int wall_face);
@@ -363,14 +371,17 @@ int		get_wall_color(int wall_face);
 // ============================================================================
 
 // Frame Rendering
+
 void	render_frame(t_app *app);
 
 // Background Rendering
+
 void	render_background(t_app *app);
 void	draw_ceiling(t_app *app);
 void	draw_floor(t_app *app);
 
 // Texture Management
+
 int		load_textures(t_app *app);
 int		load_single_texture(t_app *app, char *path, t_img *texture);
 t_img	*get_wall_texture(t_app *app, int side, t_vec2 ray_dir);
@@ -378,6 +389,7 @@ int		get_texture_pixel(t_img *texture, int x, int y);
 int		get_texture_coord_x(double wall_x, t_img *texture, int wall_face);
 
 // Minimap Rendering
+
 void	render_minimap(t_app *app);
 void	render_minimap_rays(t_app *app);
 void	draw_minimap_tile(t_app *app, int map_x, int map_y, int color);
@@ -389,6 +401,7 @@ void	get_ray_direction(t_app *app, int ray_index, int total_rays,
 int		get_tile_color(char tile);
 
 // Drawing Primitives
+
 void	img_put_pixel(t_img *img, int x, int y, int color);
 void	draw_rect(t_app *app, int *params, int color);
 void	draw_line(t_app *app, int *params, int color);
@@ -398,15 +411,18 @@ void	draw_line(t_app *app, int *params, int color);
 // ============================================================================
 
 // Error Handling
+
 int		error_msg(const char *msg);
 
 // Memory Management
+
 void	free_map(t_app *app);
 void	free_textures(t_app *app);
 void	free_split(char **arr);
 void	*gnl_free(void *p);
 
 // Color Utilities
+
 int		color_to_int(t_color color);
 int		rgb_to_int(t_color c);
 

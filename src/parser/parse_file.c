@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:57:49 by ncrivell          #+#    #+#             */
-/*   Updated: 2025/10/04 17:54:59 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 13:12:20 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int	parse_cub_file(t_app *app, const char *path)
 		return (-1);
 	gnl_free(NULL);
 	close(fd);
-	if (validate_parsing_completion(app, &counters) != 0)
+	if (validate_parsing_completion(&counters) != 0)
 		return (-1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_line_handlers.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ncrivell <ncrivell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 00:00:00 by hugoganet         #+#    #+#             */
-/*   Updated: 2025/10/02 13:06:50 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/10/06 12:32:41 by ncrivell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,7 @@ int	handle_color_line(t_app *app, char *line, t_parse_counters *counters)
 int	handle_map_line(t_app *app, char *line, t_parse_counters *counters)
 {
 	if (!counters->map_started)
-	{
 		counters->map_started = 1;
-		init_map(app);
-	}
 	add_map_line(app, line, counters->map_line_index);
 	counters->map_line_index++;
 	return (0);
